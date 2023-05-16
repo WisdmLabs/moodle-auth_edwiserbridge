@@ -29,6 +29,7 @@ require_once(dirname(__FILE__) . '/classes/settings/class-eb-navigation.php');
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-service-settings.php');
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-summary.php');
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-synchronization-settings.php');
+require_once(dirname(__FILE__) . '/classes/settings/class-eb-sso-settings.php');
 
 /**
  * Used to create web service.

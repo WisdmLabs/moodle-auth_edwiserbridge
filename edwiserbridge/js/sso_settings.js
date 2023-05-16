@@ -29,7 +29,7 @@ define("auth_edwiserbridge/eb_sso_settings", [
 ], function($, ajax, url, str) {
     function load_settings() {
         $(document).ready(function () {
-            $('#secret_key_generate').on('click', function (event) {
+            $('#id_secret_key_generate').on('click', function (event) {
                 event.preventDefault();
                 var text = "";
                 var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
@@ -37,7 +37,7 @@ define("auth_edwiserbridge/eb_sso_settings", [
                 for (var i = 0; i < 15; i++)
                     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-                $('#id_s_auth_edwiserbridge_sharedsecret').val(text);
+                $('#id_sharedsecret').val(text);
             });
         });
     }

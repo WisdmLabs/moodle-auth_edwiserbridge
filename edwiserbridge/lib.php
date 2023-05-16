@@ -58,7 +58,7 @@ if( check_edwiser_bridge_pro_dependancy() ) {
      * Saves forntend form data with all the available data like multiple WP site and token.
      * @param object $formdata formdata
      */
-    function save_connection_form_settings($formdata) {
+    function save_connection_form_settings($formdata, $mform = false) {
         // Checking if provided data count is correct or not.
         if (count($formdata->wp_url) != count($formdata->wp_token)) {
             return;
@@ -82,7 +82,7 @@ if( check_edwiser_bridge_pro_dependancy() ) {
      *
      * @param object $formdata formdata
      */
-    function save_synchronization_form_settings($formdata) {
+    function save_synchronization_form_settings($formdata, $mform = false) {
         global $CFG;
         $synchsettings          = array();
         $connectionsettings     = unserialize($CFG->eb_connection_settings);
@@ -104,13 +104,26 @@ if( check_edwiser_bridge_pro_dependancy() ) {
         }
         set_config("eb_synch_settings", serialize($synchsettings));
     }
+    /**
+     * Save the sso settings for the individual site
+     *
+     * @param object $formdata formdata
+     */
+    function save_sso_form_settings($formdata, $mform = false) {
+        global $CFG;
 
+        set_config('sharedsecret', $formdata->sharedsecret, 'auth_edwiserbridge');
+        set_config('wpsiteurl', $formdata->wpsiteurl, 'auth_edwiserbridge');
+        set_config('logoutredirecturl', $formdata->logoutredirecturl, 'auth_edwiserbridge');
+        set_config('wploginenablebtn', $formdata->wploginenablebtn, 'auth_edwiserbridge');
+        set_config('wploginbtntext', $formdata->wploginbtntext, 'auth_edwiserbridge');
+    }
     /**
      * Save the general settings for Moodle.
      *
      * @param object $formdata formdata
      */
-    function save_settings_form_settings($formdata) {
+    function save_settings_form_settings($formdata, $mform = false) {
         global $CFG;
 
         if (isset($formdata->web_service) && isset($formdata->pass_policy) && isset($formdata->extended_username)) {

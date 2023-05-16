@@ -42,6 +42,7 @@ $string['tab_conn'] = 'Wordpress Site';
 $string['tab_synch'] = 'Synchronization';
 $string['tab_mdl_required_settings'] = 'General';
 $string['summary'] = 'Summary';
+$string['tab_sso'] = 'SSO';
 /*******/
 $string['lang_label'] = 'Language Code';
 /******* navigation menu and settings page   ********/
@@ -290,6 +291,11 @@ $string['mdl_edwiser_bridge_txt_not_avbl'] = 'Not Available';
 $string['mdl_edwiser_bridge_fetch_info'] = 'Check for update';
 $string['eb_no_sites'] = "--- No Sites Available ---";
 $string['eb_active'] = "Active";
+$string['license_expired'] = "License key expired";
+$string['license_revoked'] = "License is disbaled from edwiser.org";
+$string['license_invalid'] = "License key is invalid";
+$string['license_failed'] = "License activation failed";
+$string['license_no_activation_left'] = "license key activation limit reached";
 
 
 
@@ -434,13 +440,20 @@ $string['close_note'] = 'You can run the setup wizard again by navigating to Moo
 
 /* SSO Settings */
 $string['auth_edwiserbridge_secretkey'] = 'Secret Key';
+//old
 $string['auth_edwiserbridge_secretkey_desc'] = '<button class="btn btn-primary" id="secret_key_generate">Auto Generate</button></br>Set a unique alphanumeric password as Secret key & copy-paste it in WordPress, under the same setting (Secret Key).';
+$string['auth_edwiserbridge_secretkey_help'] = 'Set a unique alphanumeric password as Secret key & copy-paste it in WordPress, under the same setting (Secret Key).';
+$string['auth_edwiserbridge_auto_generate_key'] = 'Auto Generate';
 
 $string['auth_edwiserbridgedescription'] = 'Uses Wordpress user details to log onto Moodle.';
 $string['eb_sso_settings'] = 'Edwiser Bridge SSO Settings';
 
+//old
 $string['auth_edwiserbridge_wpsiteurl_lbl'] = 'WordPress Site URL';
 $string['auth_edwiserbridge_wpsiteurl_desc'] = 'This is necessary to login/logout from WordPress site when a user logs in or logs out from Moodle. Do not forget to add http or https before the URL.';
+
+$string['auth_edwiserbridge_wpsiteurl'] = 'WordPress Site URL';
+$string['auth_edwiserbridge_wpsiteurl_help'] = 'This is necessary to login/logout from WordPress site when a user logs in or logs out from Moodle. Do not forget to add http or https before the URL.';
 $string['auth_edwiserbridge_wpsiteurl_desc_with_warning'] = 'This is necessary to login/logout from WordPress site when a user logs in or logs out from Moodle. Do not forget to add http or https before the URL.<p><span style = "color:red">Warning: </span><a href ="http://php.net/manual/en/book.mcrypt.php" target="_blank">Mcrypt</a> PHP extension is missing! Enable this to work SSO properly.</p>';
 $string['auth_edwiserbridge_war_warning'] = 'Warning';
 $string['auth_edwiserbridge_war_mcrypt'] = 'Mcrypt';
@@ -448,19 +461,33 @@ $string['auth_edwiserbridge_war_desc'] = 'PHP extension is missing! Enable this 
 
 $string['WordPress'] = 'WordPress';
 
-
+//old
 $string['auth_edwiserbridge_logoutredirecturl_lbl'] = 'Logout Redirect URL';
 $string['auth_edwiserbridge_logoutredirecturl_desc'] = 'Users will be redirected to this URL after logout. Keep it blank for default redirection. Do not forget to add http or https before the URL.';
+$string['auth_edwiserbridge_logoutredirecturl'] = 'Logout Redirect URL';
+$string['auth_edwiserbridge_logoutredirecturl_help'] = 'Users will be redirected to this URL after logout. Keep it blank for default redirection. Do not forget to add http or https before the URL.';
+
 $string['privacy:metadata'] = 'The Edwiser Bridge SSO authentication plugin does not store any personal data.';
 
+//old
 $string['auth_edwiserbridge_wploginenablebtn_lbl'] = 'Enable WordPress Login';
 $string['auth_edwiserbridge_wploginenablebtn_desc'] = 'This will enable login with WordPress button on Moodle login page.';
+$string['auth_edwiserbridge_wploginenablebtn'] = 'Enable WordPress Login';
+$string['auth_edwiserbridge_wploginenablebtn_help'] = 'This will enable login with WordPress button on Moodle login page.';
+$string['auth_edwiserbridge_wploginenablebtn_default'] = 'Default: No';
 
+//old
 $string['auth_edwiserbridge_wploginbtntext_lbl'] = 'WordPress Login Text';
 $string['auth_edwiserbridge_wploginbtntext_desc'] = 'This text will be shown as WordPress login button text on Moodle login page.';
+$string['auth_edwiserbridge_wploginbtntext'] = 'WordPress Login Text';
+$string['auth_edwiserbridge_wploginbtntext_help'] = 'This text will be shown as WordPress login button text on Moodle login page.';
 
+//old
 $string['auth_edwiserbridge_wploginbtnicon_lbl'] = 'WordPress Login Icon';
 $string['auth_edwiserbridge_wploginbtnicon_desc'] = 'This icon will be shown as WordPress login button icon on Moodle login page.';
+$string['auth_edwiserbridge_wploginbtnicon'] = 'WordPress Login Icon';
+$string['auth_edwiserbridge_wploginbtnicon_help'] = 'This icon will be shown as WordPress login button icon on Moodle login page.';
+$string['auth_edwiserbridge_wploginlogo_desc'] = 'This logo will be shown as WordPress login button logo on Moodle login page.';
 
 /* Bulk Purchase */
 $string['menuoption'] = "local_edwiserbridge";

@@ -342,6 +342,10 @@
     color: #1AB900;
     margin: 0px 10px;
 }
+.eb_pro_license_not_active{
+    color: #bc0505;
+    margin: 0px 10px;
+}
 .eb_pro_license_btn{
     padding: 5px 10px;
     background: #2271B1;
