@@ -65,6 +65,9 @@ $mform = array(
     ),
     'summary' => array(
         'id'  => 'eb_summary_form'
+    ),
+    'sso' => array(
+        'id'  => 'eb_sso_form'
     )
 );
 
@@ -103,6 +106,18 @@ foreach ($mform as $key => $mformdata) {
     $objectname = 'edwiserbridge_' . $key . '_form';
     $object     = new $objectname($pageurl . $key, null, 'post', '', array("id" => $mformdata['id']), true, null);
 
+    $fileoptions = array(
+        'maxbytes' => 0,
+        'maxfiles' => '1',
+        'subdirs' => 0,
+        'context' => context_system::instance()
+    );
+
+    if ($key == 'sso') {
+        $data = new stdClass();
+        $data = file_prepare_standard_filemanager($data, 'wploginbtnicon', $fileoptions, context_system::instance(), 'auth_edwiserbridge', 'wploginbtnicon', 0); // 0 is the item id.
+    }
+
     if ($formdata = $object->get_data()) {
         // In this case you process validated data. $mform->get_data() returns data posted in form.
 
@@ -110,7 +125,31 @@ foreach ($mform as $key => $mformdata) {
         $functionname = 'save_' . $key . '_form_settings';
 
         if (function_exists($functionname)) {
-            $functionname($formdata);
+            $functionname($formdata, $object);
+        }
+
+        if ($key == 'sso') {
+            $data = file_postupdate_standard_filemanager($data, 'wploginbtnicon', $fileoptions, context_system::instance(), 'auth_edwiserbridge', 'wploginbtnicon', 0);
+            // save filename in database
+            $filename = '';
+            $fs = get_file_storage();
+            $file = $fs->get_area_files(
+                context_system::instance()->id,
+                'auth_edwiserbridge',
+                'wploginbtnicon',
+                0,
+                'itemid, filepath, filename, filesize'
+            );
+            foreach ($file as $f) {
+                if (!$f->is_directory()) {
+                    $filename = $f->get_filename();
+                }
+            }
+            if($filename != ''){
+                $filename = '/'.$filename;
+            }
+            set_config('wploginbtnicon', $filename, 'auth_edwiserbridge');
+            error_log("data: " . print_r($data, true));
         }
     }
 
@@ -118,6 +157,9 @@ foreach ($mform as $key => $mformdata) {
 
     // Display connection form  for the first time.
     if ($tab == $key) {
+        if ($key == 'sso') {
+            $object->set_data($data);
+        }
         $object->display();
     }
 }

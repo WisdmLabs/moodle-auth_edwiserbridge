@@ -90,13 +90,21 @@ class eb_pro_license_controller {
         $status = "";
         if ((empty($license_data->success)) && isset($license_data->error) && ($license_data->error == "expired")) {
             $status = 'expired';
+            $this->add_notice(get_string('license_expired', 'auth_edwiserbridge'));
         } elseif ($license_data->license == 'invalid' && isset($license_data->error) && $license_data->error == "revoked") {
             $status = 'disabled';
+            $this->add_notice(get_string('license_revoked', 'auth_edwiserbridge'));
         } elseif ($license_data->license == 'invalid' || (isset($license_data->activations_left) && $license_data->activations_left == "0")) {
             $status = 'invalid';
+            if(isset($license_data->activations_left) && $license_data->activations_left == "0") {
+                $this->add_notice(get_string('license_no_activation_left', 'auth_edwiserbridge'));
+            } else {
+                $this->add_notice(get_string('license_invalid', 'auth_edwiserbridge'));
+            }
         } elseif ($license_data->license == 'failed') {
             $status = 'failed';
             $GLOBALS[ 'wdm_license_activation_failed' ] = true;
+            $this->add_notice(get_string('license_failed', 'auth_edwiserbridge'));
         } else {
             $status = $license_data->license;
         }
@@ -627,5 +635,12 @@ class eb_pro_license_controller {
         } else {
             return "";
         }
+    }
+
+    /**
+     * add notice in case of license key activation failure
+     */
+    public function add_notice($msg){
+        \core\notification::add($msg, \core\output\notification::NOTIFY_ERROR);
     }
 }

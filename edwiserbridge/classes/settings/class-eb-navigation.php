@@ -63,12 +63,22 @@ class edwiserbridge_navigation_form extends moodleform {
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=synchronization",
                 'label' => get_string('tab_synch', 'auth_edwiserbridge'),
                 'css'   => 'synchronization' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
-                'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=summary",
-                'label' => get_string('summary', 'auth_edwiserbridge'),
-                'css'   => $summary,
-            ),
+            )
+        );
+
+        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
+        $license = new eb_pro_license_controller();
+        if($license->get_data_from_db() == 'available'){
+            $tabs[] = array(
+                'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=sso",
+                'label' => get_string('tab_sso', 'auth_edwiserbridge'),
+                'css'   => 'sso' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
+            );
+        }
+        $tabs[] = array(
+            'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=summary",
+            'label' => get_string('summary', 'auth_edwiserbridge'),
+            'css'   => $summary,
         );
 
         $mform->addElement('html', '<div class="eb-tabs-cont">' . $this->print_tabs($tabs) . '</div>');

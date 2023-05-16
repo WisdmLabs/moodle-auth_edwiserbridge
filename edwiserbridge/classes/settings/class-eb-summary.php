@@ -86,7 +86,7 @@ class edwiserbridge_summary_form extends moodleform {
                     'value'          => $this->get_plugin_fetch_link(),
                 ),
                 'mdl_edwiser_bridge' => array(
-                    'label'          => get_string('mdl_edwiser_bridge_lbl', 'auth_edwiserbridge'),
+                    'label'          => '<strong>' . get_string('mdl_edwiser_bridge_lbl', 'auth_edwiserbridge'). '</strong>',
                     'expected_value' => 'static',
                     'value'          => $pluginsvdata['edwiserbridge'],
                 ),
@@ -394,6 +394,7 @@ class edwiserbridge_summary_form extends moodleform {
                 <?php
             } else {
                 ?>
+                <span class="eb_pro_license_not_active"><?php echo $license_status ?></span>
                 <input type="submit" name="eb_license_activate" class="eb_pro_license_btn" value="Activate License" />
                 <?php
             }

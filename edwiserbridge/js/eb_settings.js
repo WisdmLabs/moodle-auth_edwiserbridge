@@ -187,6 +187,14 @@ define("auth_edwiserbridge/eb_settings", [
                         M.cfg.wwwroot + "/auth/edwiserbridge/edwiserbridge.php?tab=summary"
                     );
             });
+            $("#sso_submit_continue").click(function() {
+                $(this)
+                    .closest("form")
+                    .attr(
+                        "action",
+                        M.cfg.wwwroot + "/auth/edwiserbridge/edwiserbridge.php?tab=summary"
+                    );
+            });
 
             $("#settings_submit_continue").click(function() {
                 $(this)
