@@ -26,7 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-if( check_edwiser_bridge_pro_dependancy() ) {
+// if( check_edwiser_bridge_pro_dependancy() ) {
 
     $functions = array(
         'eb_create_service' => array(
@@ -164,4 +164,4 @@ if( check_edwiser_bridge_pro_dependancy() ) {
                 'type'        => 'read',
         )
     );
-}
+// }

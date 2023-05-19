@@ -56,7 +56,7 @@ trait edwiserbridge_local_update_course_enrollment_method {
         );
 
         // include manual enrollment file .
-        require_once($CFG->dirroot.'/enrol/manual/locallib.php');
+        require_once($CFG->dirroot.'/enrol/manual/lib.php');
 
         $response = array();
         foreach ($params['courseid'] as $singlecourseid) {
