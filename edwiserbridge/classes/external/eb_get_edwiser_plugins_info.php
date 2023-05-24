@@ -47,26 +47,27 @@ trait eb_get_edwiser_plugins_info {
     public static function eb_get_edwiser_plugins_info() {
         $response    = array();
         $pluginman   = \core_plugin_manager::instance();
-        $localplugin = $pluginman->get_plugins_of_type('local');
-        // $eb_version  = $localplugin['edwiserbridge']->release;
-        $plugins[]   = array(
-            'plugin_name' => 'moodle_edwiser_bridge',
-            'version'     => '2.2.0',
-        );
 
-        if (isset($localplugin['wdmgroupregistration'])) {
+        if (isset($authplugin['edwiserbridge'])) {
             $plugins[] = array(
-                'plugin_name' => 'moodle_edwiser_bridge_bp',
-                'version'     => $localplugin['wdmgroupregistration']->release,
+                'plugin_name' => 'moodle_edwiser_bridge',
+                'version'     => $authplugin['edwiserbridge']->release,
             );
         }
 
-        $authplugin = $pluginman->get_plugins_of_type('auth');
-
-        if (isset($authplugin['wdmwpmoodle'])) {
+        // check licensing
+        global $CFG;
+        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
+        $license = new \eb_pro_license_controller();
+        if($license->get_data_from_db() == 'available'){
             $plugins[] = array(
-                'plugin_name' => 'moodle_edwiser_bridge_sso',
-                'version'     => $authplugin['wdmwpmoodle']->release,
+                'plugin_name' => 'moodle_edwiser_bridge_pro',
+                'version'     => 'available',
+            );
+        } else {
+            $plugins[] = array(
+                'plugin_name' => 'moodle_edwiser_bridge_pro',
+                'version'     => 'not_available',
             );
         }
 
