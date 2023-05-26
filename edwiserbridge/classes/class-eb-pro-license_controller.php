@@ -163,7 +163,6 @@ class eb_pro_license_controller {
      * Activate license key
      */
     public function activate_license($license_key) {
-        error_log("activate_license");
         global $DB, $CFG;
         if ($license_key) {
             // delete previous license key
@@ -201,8 +200,6 @@ class eb_pro_license_controller {
 
             // Send the request & save response to $resp
             $resp = curl_exec($curl);
-            error_log('EDWISER_FORM_LICENSE_ACTIVATE_CURL_FILE: ' . __DIR__ . '/license_controller.php:' . __LINE__);
-            error_log('EDWISER_FORM_LICENSE_ACTIVATE_CURL: ' . $resp);
 
             $current_response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
@@ -344,8 +341,6 @@ class eb_pro_license_controller {
 
             // Send the request & save response to $resp
             $resp = curl_exec($curl);
-            error_log('EDWISER_FORM_LICENSE_DEACTIVATE_CURL_FILE: ' . __DIR__ . '/license_controller.php:' . __LINE__);
-            error_log('EDWISER_FORM_LICENSE_DEACTIVATE_CURL: ' . $resp);
 
             $current_response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
@@ -490,8 +485,6 @@ class eb_pro_license_controller {
                 ));
                 // Send the request & save response to $resp
                 $resp = curl_exec($curl);
-                error_log('EDWISER_FORM_LICENSE_GET_FORM_DATA_CURL_FILE: ' . __DIR__ . '/license_controller.php:' . __LINE__);
-                error_log('EDWISER_FORM_LICENSE_GET_FORM_DATA_CURL: ' . $resp);
 
                 $current_response_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
