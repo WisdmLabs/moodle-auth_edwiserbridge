@@ -96,7 +96,6 @@ trait eb_test_connection {
 
             $apihandler = api_handler_instance();
             $response   = $apihandler->connect_to_wp_with_args($params["wp_url"], $requestdata);
-            error_log(print_r($response, true));
             $status = 0;
             $msg    = isset($response["msg"]) ? $response["msg"] : 'Please check WordPress site configuration.';
 
@@ -135,7 +134,7 @@ trait eb_test_connection {
                         </div>';
             }
 
-            return array("status" => $status, "msg" => print_r($response, true));
+            return array("status" => $status, "msg" => $msg );
         }
     }
 

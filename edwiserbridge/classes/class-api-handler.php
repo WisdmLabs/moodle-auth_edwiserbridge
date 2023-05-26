@@ -102,7 +102,7 @@ class api_handler {
                 if (strpos($response, "Mod_Security") !== false) {
                     $msg = "Request blocked by Mod Security. Please whitelist the IP address of your Moodle server.";
                 }
-                return array("error" => 1, "msg" => print_r($response, true));
+                return array("error" => 1, "msg" => $msg);
             }
         }
     }

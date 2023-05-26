@@ -149,7 +149,6 @@ foreach ($mform as $key => $mformdata) {
                 $filename = '/'.$filename;
             }
             set_config('wploginbtnicon', $filename, 'auth_edwiserbridge');
-            error_log("data: " . print_r($data, true));
         }
     }
 

@@ -510,7 +510,9 @@ $string['api_creation_error'] = "User creation error status";
 $string['api_firstname'] = "User First Name";
 $string['api_lastname'] = "User Last Name";
 
-$string['edwiserbridgepropluginrequired'] = "You have installed latest version of Edwiser Bridge plugin, but we have noticed you are still using older version of edwiser bridge plugins. please remove older version of moodle edwiser bridge, moodle single sign on and moodle bulk purchase plugin and then enable edwiser bridge pro plugin.";
+$string['edwiserbridgepropluginrequired'] = " You have tried to install latest version of Edwiser Bridge plugin, but we have noticed you are still using older version of edwiser bridge plugins. please remove older version of moodle edwiser bridge, moodle single sign on and moodle bulk purchase plugin and then try to install the Edwiser Bridge plugin again.";
 $string['fromhere'] = "From here";
 
 $string['settings_migration'] = "Edwiser Bridge SSO Settings are now migrated to Edwiser Settings. Please visit Edwiser Settings to configure SSO.";
+$string['pluginrequirementsnotmet'] = "Edwiser Bridge SSO plugin requirements are not met. Please install latest version of Edwiser Bridge plugin.";
+$string['backtopluginoverview'] = "Back to plugin overview page";

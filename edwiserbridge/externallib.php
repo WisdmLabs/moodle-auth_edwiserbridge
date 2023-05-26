@@ -166,11 +166,9 @@ class local_wdmgroupregistration_external extends external_api
                 if(isset($cohortDetails->unenroll) && $cohortDetails->unenroll == 1){
                     $enrol = enrol_get_plugin('cohort');
                     $instances = enrol_get_instances($courseid, false);
-                    error_log("instances: " . print_r($instances, true));
                     $instanceId = 0;
                     foreach ($instances as $instance) {
                         if ($instance->enrol === 'cohort' && $instance->customint1 == $cohortid) {
-                            error_log("instance id: " . $instance->id);
                             $enrol->delete_instance($instance);
                         }
                     }
