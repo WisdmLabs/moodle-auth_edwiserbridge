@@ -512,3 +512,5 @@ $string['api_lastname'] = "User Last Name";
 
 $string['edwiserbridgepropluginrequired'] = "You have installed latest version of Edwiser Bridge plugin, but we have noticed you are still using older version of edwiser bridge plugins. please remove older version of moodle edwiser bridge, moodle single sign on and moodle bulk purchase plugin and then enable edwiser bridge pro plugin.";
 $string['fromhere'] = "From here";
+
+$string['settings_migration'] = "Edwiser Bridge SSO Settings are now migrated to Edwiser Settings. Please visit Edwiser Settings to configure SSO.";

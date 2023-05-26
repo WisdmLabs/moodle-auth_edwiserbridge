@@ -401,10 +401,10 @@ if( check_edwiser_bridge_pro_dependancy() ) {
             array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_courses'),
         );
 
-        $pluginman   = \core_plugin_manager::instance();
-        $localplugin = $pluginman->get_plugins_of_type('local');
-        $bulkpurchase = array();
-        if (isset($localplugin['wdmgroupregistration'])) {
+        global $CFG;
+        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
+        $license = new \eb_pro_license_controller();
+        if($license->get_data_from_db() == 'available'){
             $bulkpurchase = array(
                 array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_add_cohort_members'),
                 array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_create_cohorts'),
@@ -416,14 +416,12 @@ if( check_edwiser_bridge_pro_dependancy() ) {
                 array('externalserviceid' => $serviceid, 'functionname' => 'eb_delete_cohort'),
                 array('externalserviceid' => $serviceid, 'functionname' => 'eb_manage_user_cohort_enrollment')
             );
-        }
-
-        $authplugin = $pluginman->get_plugins_of_type('auth');
-        $ssofunctions = array();
-        if (isset($authplugin['wdmwpmoodle'])) {
             $ssofunctions = array(
                 array('externalserviceid' => $serviceid, 'functionname' => 'wdm_sso_verify_token'),
             );
+        }else{
+            $bulkpurchase = array();
+            $ssofunctions = array();
         }
 
         $functions = array_merge($functions, $bulkpurchase, $ssofunctions);

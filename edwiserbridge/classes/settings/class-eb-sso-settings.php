@@ -103,11 +103,11 @@ class edwiserbridge_sso_form extends moodleform {
 
             $wplogin = get_config('auth_edwiserbridge', 'wploginenablebtn');
             $wplogin = $wplogin == 0 ? 0 : 1;
-            $mform->setDefault("sharedsecret", get_config('auth_edwiserbridge', 'sharedsecret'));
-            $mform->setDefault("wpsiteurl", get_config('auth_edwiserbridge', 'wpsiteurl'));
-            $mform->setDefault("logoutredirecturl", get_config('auth_edwiserbridge', 'logoutredirecturl'));
+            $mform->setDefault("sharedsecret", get_config('auth_edwiserbridge', 'sharedsecret') ? get_config('auth_edwiserbridge', 'sharedsecret') : '');
+            $mform->setDefault("wpsiteurl", get_config('auth_edwiserbridge', 'wpsiteurl') ? get_config('auth_edwiserbridge', 'wpsiteurl') : '');
+            $mform->setDefault("logoutredirecturl", get_config('auth_edwiserbridge', 'logoutredirecturl') ? get_config('auth_edwiserbridge', 'logoutredirecturl') : '');
             $mform->setDefault("wploginenablebtn", $wplogin);
-            $mform->setDefault("wploginbtntext", get_config('auth_edwiserbridge', 'wploginbtntext'));
+            $mform->setDefault("wploginbtntext", get_config('auth_edwiserbridge', 'wploginbtntext') ? get_config('auth_edwiserbridge', 'wploginbtntext') : '');
             
             $mform->addElement(
                 'html',
