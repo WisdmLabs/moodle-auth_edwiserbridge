@@ -48,6 +48,7 @@ trait eb_get_edwiser_plugins_info {
         $response    = array();
         $pluginman   = \core_plugin_manager::instance();
 
+        $authplugin = $pluginman->get_plugins_of_type('auth');
         if (isset($authplugin['edwiserbridge'])) {
             $plugins[] = array(
                 'plugin_name' => 'moodle_edwiser_bridge',

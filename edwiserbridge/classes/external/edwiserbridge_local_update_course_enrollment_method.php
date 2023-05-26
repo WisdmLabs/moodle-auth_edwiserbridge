@@ -56,30 +56,39 @@ trait edwiserbridge_local_update_course_enrollment_method {
         );
 
         // include manual enrollment file .
-        require_once($CFG->dirroot.'/enrol/manual/lib.php');
+        require_once($CFG->dirroot.'/enrol/manual/locallib.php');
 
+        $enroll_plugins = enrol_get_plugins(true);
         $response = array();
-        foreach ($params['courseid'] as $singlecourseid) {
-            // Add enrolment instance.
-            $enrolinstance = new \enrol_manual_plugin();
-            // $course = $DB->get_record('course', ['id' => $cm->course]);
-            $course = $DB->get_record('course', ['id' => $singlecourseid]);
-            $status = $enrolinstance->add_instance($course);
+        if(isset($enroll_plugins['manual'])){
+            foreach ($params['courseid'] as $singlecourseid) {
+                // Add enrolment instance.
+                $enrolinstance = new \enrol_manual_plugin();
+                // $course = $DB->get_record('course', ['id' => $cm->course]);
+                $course = $DB->get_record('course', ['id' => $singlecourseid]);
+                $status = $enrolinstance->add_instance($course);
 
-            $instance = enrol_get_instances($course->id, false);
-            //get manual enrolment instance id.
-            //other plugin instances are also available
-            foreach ($instance as $instances) { //CHANGE YET TO COMMIT
-                if($instances->enrol == 'manual'){
-                    $instanceid = $instances->id;
+                $instance = enrol_get_instances($course->id, false);
+                //get manual enrolment instance id.
+                //other plugin instances are also available
+                foreach ($instance as $instances) { //CHANGE YET TO COMMIT
+                    if($instances->enrol == 'manual'){
+                        $instanceid = $instances->id;
+                    }
                 }
+                $enrolinstance->update_status($instance[$instanceid], ENROL_INSTANCE_ENABLED);
+                
+                $response[] = array(
+                    'courseid' => $singlecourseid,
+                    'status' => 1
+                ); 
             }
-            $enrolinstance->update_status($instance[$instanceid], ENROL_INSTANCE_ENABLED);
-            
+        } else{
             $response[] = array(
-                'courseid' => $singlecourseid,
-                'status' => 1
-            ); 
+                'courseid' => 0,
+                'status' => 0,
+                'message' => 'plugin_not_installed'
+            );
         }
 
         return $response;
@@ -118,7 +127,8 @@ trait edwiserbridge_local_update_course_enrollment_method {
                 array(
                     'courseid' => new external_value(PARAM_INT, 'id of course'),
                     'status' => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
-                )
+                    'message' => new external_value(PARAM_TEXT, 'message', VALUE_OPTIONAL),
+                ),
             )
         );
     }
