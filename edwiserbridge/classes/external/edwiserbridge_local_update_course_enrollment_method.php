@@ -64,7 +64,7 @@ trait edwiserbridge_local_update_course_enrollment_method {
             foreach ($params['courseid'] as $singlecourseid) {
                 // Add enrolment instance.
                 $enrolinstance = new \enrol_manual_plugin();
-                // $course = $DB->get_record('course', ['id' => $cm->course]);
+
                 $course = $DB->get_record('course', ['id' => $singlecourseid]);
                 $status = $enrolinstance->add_instance($course);
 
@@ -126,8 +126,8 @@ trait edwiserbridge_local_update_course_enrollment_method {
             new external_single_structure(
                 array(
                     'courseid' => new external_value(PARAM_INT, 'id of course'),
-                    'status' => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
-                    'message' => new external_value(PARAM_TEXT, 'message', VALUE_OPTIONAL),
+                    'status'   => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
+                    'message'  => new external_value(PARAM_TEXT, 'message', VALUE_OPTIONAL),
                 ),
             )
         );

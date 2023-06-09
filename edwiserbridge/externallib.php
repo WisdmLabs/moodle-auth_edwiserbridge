@@ -98,21 +98,19 @@ class auth_sso_token_verify_external extends external_api
         return new external_single_structure(
             array(
                 'success' => new external_value(PARAM_BOOL, 'true if the token matches otherwise false'),
-                'msg' => new external_value(PARAM_RAW, 'Sucess faile message'),
+                'msg'     => new external_value(PARAM_RAW, 'Sucess faile message'),
                 )
         );
     }
 }
 
-class local_wdmgroupregistration_external extends external_api
-{
+class auth_wdmgroupregistration_external extends external_api {
 
     /**
      * Returns description of method parameters
      * @return external_function_parameters
      */
-    public static function eb_manage_cohort_enrollment_parameters()
-    {
+    public static function eb_manage_cohort_enrollment_parameters() {
         return new external_function_parameters(
             array(
                 'cohort' => new external_multiple_structure(
@@ -132,8 +130,7 @@ class local_wdmgroupregistration_external extends external_api
      * Function responsible for enrolling cohort in course
      * @return string welcome message
      */
-    public static function eb_manage_cohort_enrollment($cohort)
-    {
+    public static function eb_manage_cohort_enrollment($cohort) {
         global $USER, $DB;
 
         //Parameter validation
@@ -143,7 +140,6 @@ class local_wdmgroupregistration_external extends external_api
             self::eb_manage_cohort_enrollment_parameters(),
             array('cohort' => $cohort)
         );
-
 
         //Context validation
         //OPTIONAL but in most web service it should present
@@ -155,7 +151,6 @@ class local_wdmgroupregistration_external extends external_api
         if (!has_capability('moodle/user:viewdetails', $context)) {
             throw new moodle_exception('cannotviewprofile');
         }
-
 
         foreach ($params['cohort'] as $cohortDetails) {
             $cohortDetails = (object)$cohortDetails;
@@ -210,22 +205,15 @@ class local_wdmgroupregistration_external extends external_api
      * Returns description of method result value
      * @return external_description
      */
-    public static function eb_manage_cohort_enrollment_returns()
-    {
+    public static function eb_manage_cohort_enrollment_returns() {
         return new external_value(PARAM_INT, 'Id of the instance');
     }
-
-
-
-
-
 
     /**
      * Returns description of method parameters
      * @return external_function_parameters
      */
-    public static function eb_delete_cohort_parameters()
-    {
+    public static function eb_delete_cohort_parameters() {
         return new external_function_parameters(
             array(
                 'cohort' => new external_multiple_structure(
@@ -243,18 +231,15 @@ class local_wdmgroupregistration_external extends external_api
      * Function responsible for enrolling cohort in course
      * @return string welcome message
      */
-    public static function eb_delete_cohort($cohort)
-    {
+    public static function eb_delete_cohort($cohort) {
         global $USER, $DB;
 
         //Parameter validation
         //REQUIRED
-
         $params = self::validate_parameters(
             self::eb_delete_cohort_parameters(),
             array('cohort' => $cohort)
         );
-
 
         //Context validation
         //OPTIONAL but in most web service it should present
@@ -291,8 +276,7 @@ class local_wdmgroupregistration_external extends external_api
      * Returns description of method result value
      * @return external_description
      */
-    public static function eb_delete_cohort_returns()
-    {
+    public static function eb_delete_cohort_returns() {
         return new external_single_structure(
             array(
                 'status'  => new external_value(PARAM_TEXT, 'This will return 1 if successful connection and 0 on failure')
@@ -300,28 +284,22 @@ class local_wdmgroupregistration_external extends external_api
         );
     }
 
-
-
-
-
-
-        /**
+    /**
      * Returns description of method parameters
      * @return external_function_parameters
      */
-    public static function eb_manage_user_cohort_enrollment_parameters()
-    {
+    public static function eb_manage_user_cohort_enrollment_parameters() {
         return new external_function_parameters(
             array(
                 'cohort_id' => new external_value(PARAM_INT, get_string('api_cohort_id', 'auth_edwiserbridge'), VALUE_REQUIRED),
-                'users' => new external_multiple_structure(
+                'users'     => new external_multiple_structure(
                     new external_single_structure(
                         array(
                             'firstname' => new external_value(PARAM_TEXT, get_string('api_firstname', 'auth_edwiserbridge'), VALUE_REQUIRED),
-                            'lastname' => new external_value(PARAM_TEXT, get_string('api_lastname', 'auth_edwiserbridge'), VALUE_REQUIRED),
-                            'password' => new external_value(PARAM_TEXT, get_string('api_password', 'auth_edwiserbridge'), VALUE_REQUIRED),
-                            'username' => new external_value(PARAM_TEXT, get_string('api_username', 'auth_edwiserbridge'), VALUE_REQUIRED),
-                            'email' => new external_value(PARAM_TEXT, get_string('api_email', 'auth_edwiserbridge'), VALUE_REQUIRED)
+                            'lastname'  => new external_value(PARAM_TEXT, get_string('api_lastname', 'auth_edwiserbridge'), VALUE_REQUIRED),
+                            'password'  => new external_value(PARAM_TEXT, get_string('api_password', 'auth_edwiserbridge'), VALUE_REQUIRED),
+                            'username'  => new external_value(PARAM_TEXT, get_string('api_username', 'auth_edwiserbridge'), VALUE_REQUIRED),
+                            'email'     => new external_value(PARAM_TEXT, get_string('api_email', 'auth_edwiserbridge'), VALUE_REQUIRED)
                         )
                     )
                 )
@@ -333,54 +311,34 @@ class local_wdmgroupregistration_external extends external_api
      * Function responsible for enrolling cohort in course
      * @return string welcome message
      */
-    public static function eb_manage_user_cohort_enrollment($cohort_id, $users)
-    {
+    public static function eb_manage_user_cohort_enrollment($cohort_id, $users) {
         global $USER, $DB, $CFG;
         $error          = 0;
         $error_msg      = '';
         $users_response = array();
-        //Parameter validation
-        //REQUIRED
-
-    // $serialize = serialize($users);
-
-        // throw new invalid_parameter_exception('category not exists: category '. ''/*$serialize */." ::: ");
-
 
         $params = self::validate_parameters(
             self::eb_manage_user_cohort_enrollment_parameters(),
             array('cohort_id' => $cohort_id, 'users' => $users)
         );
 
-
-        // throw new invalid_parameter_exception('category not exists: category '. ''/*$serialize */." ::: ");
-
-
         // Check 
         if (!$DB->record_exists('cohort', array('id' => $params['cohort_id']))) {
             $error      = 1;
             $error_msg  = 'Cohort_does_not_exist';
-
         } else {
-
             foreach ($params['users'] as $user) {
                 // Create user if the new user
                 
-                $enrolled       = 0;
-                // $creation_error = 0;
+                $enrolled      = 0;
                 $existing_user = $DB->get_record('user', array('email' => $user['email']), '*');
 
-
                 // check if email exists if yes then dont create new user
-                // if ($DB->record_exists('user', array('email' => $user['email']))) {
                 if (isset($existing_user->id)) {
-
                     $user_id = $existing_user->id;
-
                 } else {
                     // create new user
                     // check if the user name is available for new user.
-
                     $o_user_name = $user['username'];
                     $append = 1;
 
@@ -392,7 +350,6 @@ class local_wdmgroupregistration_external extends external_api
                     $user['confirmed']  = 1;
                     $user['mnethostid'] = $CFG->mnet_localhost_id;
                     $user_id = user_create_user($user, 1, false);
-                    // $user_id = user_create_user($user['user_name'], $updatepassword, false);
 
                     if (!$user_id) {
 
@@ -407,11 +364,9 @@ class local_wdmgroupregistration_external extends external_api
                             )
                         );
 
-
                         // Unable to create user.
                         continue;
                     }
-
                 }
 
                 $cohort = array(
@@ -419,18 +374,15 @@ class local_wdmgroupregistration_external extends external_api
                     'usertype' => array('type' => 'id', 'value' => $user_id)
                 );
 
-
                 $flag = 'aaa';
 
                 // Add User to cohort.
-                // $add_cohort_members_response = core_cohort_external::add_cohort_members(array($cohort));
                 if (!$DB->record_exists('cohort_members', array('cohortid' => $params['cohort_id'], 'userid' => $user_id))) {
-                $flag = 'bbbb';
+                    $flag = 'bbbb';
 
                     cohort_add_member($params['cohort_id'], $user_id);
                     $enrolled = 1;
                 }
-
 
                 array_push(
                     $users_response,
@@ -444,26 +396,8 @@ class local_wdmgroupregistration_external extends external_api
                         'creation_error' => 0
                     )
                 );
-
-
-
-
-                // update user role 
-                /*core_role_external::assign_roles(
-                    array(
-                        array(
-                            'roleid'    => 5,
-                            'userid'    => $user_id,
-                            'contextid' => 1
-                        )
-                    )
-                );*/
-
-
             }  
         }
-
-
 
         return array(
             'error'     => $error,
@@ -472,38 +406,30 @@ class local_wdmgroupregistration_external extends external_api
         );
     }
 
-
-
-
     /**
      * Returns description of method result value
      * @return external_description
      */
-    public static function eb_manage_user_cohort_enrollment_returns()
-    {
+    public static function eb_manage_user_cohort_enrollment_returns() {
 
         return new external_function_parameters(
             array(
                 'error'     => new external_value(PARAM_INT, get_string('api_error', 'auth_edwiserbridge')),
                 'error_msg' => new external_value(PARAM_TEXT, get_string('api_error_msg', 'auth_edwiserbridge')),
-                // 'total_users' => new external_value(PARAM_INT, ''),
-                'users' => new external_multiple_structure(
+                'users'     => new external_multiple_structure(
                     new external_single_structure(
                         array(
                             'user_id'        => new external_value(PARAM_INT, get_string('api_user_id', 'auth_edwiserbridge')),
-                            'username'        => new external_value(PARAM_TEXT, get_string('api_username', 'auth_edwiserbridge')),
-                            'password'        => new external_value(PARAM_TEXT, get_string('api_password', 'auth_edwiserbridge')),
+                            'username'       => new external_value(PARAM_TEXT, get_string('api_username', 'auth_edwiserbridge')),
+                            'password'       => new external_value(PARAM_TEXT, get_string('api_password', 'auth_edwiserbridge')),
                             'email'          => new external_value(PARAM_TEXT, get_string('api_email', 'auth_edwiserbridge')),
                             'enrolled'       => new external_value(PARAM_INT, get_string('api_enrolled', 'auth_edwiserbridge')),
                             'cohort_id'      => new external_value(PARAM_INT, get_string('api_cohort_id', 'auth_edwiserbridge')),
-                            // 'existing_user' => new external_value(PARAM_INT, get_string('web_service_email', 'auth_edwiserbridge')),
                             'creation_error' => new external_value(PARAM_INT, get_string('api_creation_error', 'auth_edwiserbridge'))
                         )
                     )
                 )
             )
         );
-
     }
-
 }

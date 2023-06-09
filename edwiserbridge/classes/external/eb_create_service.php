@@ -70,11 +70,11 @@ trait eb_create_service {
     public static function eb_create_service_returns() {
         return new external_single_structure(
             array(
-                'token'     => new external_value(PARAM_TEXT, get_string('web_service_token', 'auth_edwiserbridge')),
-                'site_url'  => new external_value(PARAM_TEXT, get_string('moodle_url', 'auth_edwiserbridge')),
-                'service_id'  => new external_value(PARAM_INT, get_string('web_service_id', 'auth_edwiserbridge')),
-                'status'  => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
-                'msg'  => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
+                'token'      => new external_value(PARAM_TEXT, get_string('web_service_token', 'auth_edwiserbridge')),
+                'site_url'   => new external_value(PARAM_TEXT, get_string('moodle_url', 'auth_edwiserbridge')),
+                'service_id' => new external_value(PARAM_INT, get_string('web_service_id', 'auth_edwiserbridge')),
+                'status'     => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
+                'msg'        => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
             )
         );
     }

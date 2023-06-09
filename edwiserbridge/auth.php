@@ -122,9 +122,6 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         return false;
     }
 
-
-
-
     public function eb_send_curl_request($request_data)
     {
         $request_url = $this->config->wpsiteurl;
@@ -144,9 +141,6 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         curl_setopt( $curl, CURLOPT_POSTFIELDS, $request_data );
         $response = curl_exec( $curl );
     }
-
-
-
 
     /**
      * Function to login user into wp site.

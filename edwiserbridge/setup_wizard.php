@@ -48,10 +48,7 @@ if ( ! empty( $progress ) ) {
     }
 }
 
-
 // Check if the get parameter have same progress.
-
-
 
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('ui');
@@ -64,14 +61,10 @@ $stringmanager = get_string_manager();
 $strings = $stringmanager->load_component_strings('auth_edwiserbridge', 'en');
 $PAGE->requires->strings_for_js(array_keys($strings), 'auth_edwiserbridge');
 
-
-
 // Require Login.
 require_login();
 $context = context_system::instance();
 $baseurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php';
-
-
 
 /*
  * Necessary page requirements.
@@ -89,8 +82,6 @@ $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
 $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
 
-
-
 // Actual page template output starts here. 
 
 // Output page header.
@@ -102,7 +93,6 @@ echo $OUTPUT->container_start();
 // This outputs setup wizard template.
 // This will use classes/class-setup-wizard.php file.
 $setupwizard->eb_setup_wizard_template();
-
 
 // End page container
 echo $OUTPUT->container_end();

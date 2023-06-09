@@ -144,8 +144,8 @@ trait eb_test_connection {
     public static function eb_test_connection_parameters() {
         return new external_function_parameters(
             array(
-                'wp_url'   => new external_value(PARAM_TEXT, get_string('web_service_wp_url', 'auth_edwiserbridge')),
-                'wp_token' => new external_value(PARAM_TEXT, get_string('web_service_wp_token', 'auth_edwiserbridge')),
+                'wp_url'          => new external_value(PARAM_TEXT, get_string('web_service_wp_url', 'auth_edwiserbridge')),
+                'wp_token'        => new external_value(PARAM_TEXT, get_string('web_service_wp_token', 'auth_edwiserbridge')),
                 'test_connection' => new external_value(PARAM_TEXT, get_string('web_service_test_conn', 'auth_edwiserbridge'), VALUE_DEFAULT, "moodle")
             )
         );

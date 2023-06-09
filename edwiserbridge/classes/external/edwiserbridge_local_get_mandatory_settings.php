@@ -96,12 +96,12 @@ trait edwiserbridge_local_get_mandatory_settings {
     public static function edwiserbridge_local_get_mandatory_settings_returns() {
         return new external_single_structure(
             array(
-                'rest_protocol'             => new external_value(PARAM_TEXT, get_string('web_service_rest_protocol', 'auth_edwiserbridge')),
-                'web_service'               => new external_value(PARAM_RAW, get_string('web_service_web_service', 'auth_edwiserbridge')),
-                'allow_extended_char'       => new external_value(PARAM_RAW, get_string('web_service_extended_char', 'auth_edwiserbridge')),
-                'password_policy'           => new external_value(PARAM_RAW, get_string('web_service_password_policy', 'auth_edwiserbridge')),
-                'lang_code'                 => new external_value(PARAM_RAW, get_string('web_service_lang_code', 'auth_edwiserbridge')),
-                'student_role_id'           => new external_value(PARAM_RAW, get_string('web_service_student_role_id', 'auth_edwiserbridge')),
+                'rest_protocol'       => new external_value(PARAM_TEXT, get_string('web_service_rest_protocol', 'auth_edwiserbridge')),
+                'web_service'         => new external_value(PARAM_RAW, get_string('web_service_web_service', 'auth_edwiserbridge')),
+                'allow_extended_char' => new external_value(PARAM_RAW, get_string('web_service_extended_char', 'auth_edwiserbridge')),
+                'password_policy'     => new external_value(PARAM_RAW, get_string('web_service_password_policy', 'auth_edwiserbridge')),
+                'lang_code'           => new external_value(PARAM_RAW, get_string('web_service_lang_code', 'auth_edwiserbridge')),
+                'student_role_id'     => new external_value(PARAM_RAW, get_string('web_service_student_role_id', 'auth_edwiserbridge')),
             )
         );
     }

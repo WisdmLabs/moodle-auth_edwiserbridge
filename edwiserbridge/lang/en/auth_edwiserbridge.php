@@ -100,8 +100,8 @@ $string['new_web_service_desc'] = 'Create new web service';
 $string['new_web_new_service'] = 'Create new web service';
 
 $string['new_service_inp_lbl'] = 'Name for the Web Service';
-$string['new_serivce_user_lbl'] = 'Select User';
-$string['existing_serice_lbl'] = 'Select web service';
+$string['new_service_user_lbl'] = 'Select User';
+$string['existing_service_lbl'] = 'Select web service';
 $string['token_dropdown_lbl'] = 'Select Token';
 
 $string['web_service_token'] = 'Token generated after creating service';
@@ -131,16 +131,16 @@ $string['site_url'] = 'Site URL';
 /*********************************/
 
 /*********** Settings page validation and Modal strings************/
-$string['create_service_shortname_err'] = 'Unable to create the webservice please contact plugin owner.';
+$string['create_service_shortname_err'] = 'Unable to create the web service please contact plugin owner.';
 $string['create_service_name_err'] = 'This name is already in use please use different name.';
-$string['create_service_creation_err'] = 'Unable to create the webservice please contact plugin owner.';
+$string['create_service_creation_err'] = 'Unable to create the web service please contact plugin owner.';
 $string['empty_userid_err'] = 'Please select the user.';
-$string['eb_link_success'] = 'Web service sucessfully linked.';
+$string['eb_link_success'] = 'Web service successfully linked.';
 $string['eb_link_err'] = 'Unable to link the web service.';
 $string['eb_service_select_err'] = 'Please select valid external web service.';
 $string['eb_service_info_error'] = ' service functions missing in your currently selected service, Please Update service to add all missing webservice functions.';
 
-$string['dailog_title'] = 'Token And Url';
+$string['dialog_title'] = 'Token And Url';
 $string['site_url'] = 'Site Url ';
 $string['token'] = 'Token ';
 $string['copy'] = 'Copy';
@@ -184,8 +184,8 @@ $string["web_service_total_users"] = "Total number of users present in Moodle.";
 
 $string["web_service_id"] = "User Id.";
 $string["web_service_username"] = "Username of the user.";
-$string["web_service_firstname"] = "Firstname of the user.";
-$string["web_service_lastname"] = "Lastname of the user.";
+$string["web_service_firstname"] = "First name of the user.";
+$string["web_service_lastname"] = "Last name of the user.";
 $string["web_service_email"] = "Email of the user.";
 $string['eb_plugin_name'] = "Plugin Name";
 $string['eb_plugin_version'] = "Plugin Version";
@@ -193,7 +193,7 @@ $string['web_service_rest_protocol'] = "Check if rest protocol is enabled.";
 $string['web_service_web_service'] = "Check if web services setting is enabled.";
 $string['web_service_extended_char'] = "Check if extended characters are allowed in username.";
 $string['web_service_password_policy'] = "Check if password policy is enabled.";
-$string['web_service_lang_code'] = "check what is the default lnguage code for the site.";
+$string['web_service_lang_code'] = "check what is the default language code for the site.";
 $string['web_service_student_role_id'] = "Default role id of student role.";
 
 $string["web_service_courseid"] = "Course ID.";
@@ -220,14 +220,14 @@ $string["extended_char_username_cb"] = "Allow extended characters in usernames."
 $string["extended_char_username_cb_desc"] = 'Enable this setting to allow students to use any characters in their usernames (note this does not affect their actual names). The default is "false" which restricts usernames to be alphanumeric lowercase characters, underscore (_), hyphen (-), period (.) or at symbol (@).';
 
 $string["web_service_cb"] = "Enable Web Services.";
-$string["web_service_cb_desc"] = "Recomended:yes";
+$string["web_service_cb_desc"] = "Recommended:yes";
 
 $string["web_rest_protocol_cb"] = "Enable REST Protocol.";
-$string["web_rest_protocol_cb_desc"] = "Recomended:yes";
+$string["web_rest_protocol_cb_desc"] = "Recommended:yes";
 /**********************************/
 
 /********  Summary page  ********/
-$string['sum_rest_proctocol'] = 'Rest Protocol';
+$string['sum_rest_protocol'] = 'Rest Protocol';
 $string['sum_web_services'] = 'Web Service';
 $string['sum_pass_policy'] = 'Password Policy';
 $string['sum_extended_char'] = 'Allow Extended Characters In Username';
@@ -236,7 +236,7 @@ $string['sum_token_link'] = 'Token Linked';
 $string['web_service_status'] = 'Web Service Function';
 $string['web_service_cap'] = 'Capability';
 
-$string['sum_error_rest_proctocol'] = 'Error: Please enable Rest Protocol';
+$string['sum_error_rest_protocol'] = 'Error: Please enable Rest Protocol';
 $string['sum_error_web_services'] = 'Error: Please enable Web Service';
 $string['sum_error_pass_policy'] = 'Error: Please disable Password Policy';
 $string['sum_error_extended_char'] = 'Error: Please enable Allow Extended Characters in username';
@@ -274,8 +274,8 @@ $string['privacy:metadata:wp_site'] = 'In order to integrate with a WordPress si
 $string['privacy:metadata:wp_site:userid'] = 'The userid is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site.';
 $string['privacy:metadata:wp_site:email'] = 'Your email is sent to the WordPress site to perform any of the actions mentioned in above site description on WordPress site';
 $string['privacy:metadata:wp_site:username'] = 'The username is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
-$string['privacy:metadata:wp_site:firstname'] = 'The firstname is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
-$string['privacy:metadata:wp_site:lastname'] = 'The lastname is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
+$string['privacy:metadata:wp_site:firstname'] = 'The first name is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
+$string['privacy:metadata:wp_site:lastname'] = 'The last name is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
 $string['privacy:metadata:wp_site:password'] = 'The password is sent from Moodle to perform any of the actions mentioned in above site description on WordPress site';
 
 // Plugin stats.
@@ -286,13 +286,13 @@ $string['mdl_edwiser_bridge_bp_lbl'] = 'Edwiser Bridge Bulk Purchase Moodle:';
 $string['mdl_edwiser_bridge_sso_lbl'] = 'Edwiser Bridge Single Sign On Moodle:';
 $string['mdl_edwiser_bridge_txt_latest'] = 'Latest';
 $string['mdl_edwiser_bridge_txt_download'] = 'Download';
-$string['mdl_edwiser_bridge_txt_download_help'] = 'Click here to downaload the plugin file.';
+$string['mdl_edwiser_bridge_txt_download_help'] = 'Click here to download the plugin file.';
 $string['mdl_edwiser_bridge_txt_not_avbl'] = 'Not Available';
 $string['mdl_edwiser_bridge_fetch_info'] = 'Check for update';
 $string['eb_no_sites'] = "--- No Sites Available ---";
 $string['eb_active'] = "Active";
 $string['license_expired'] = "License key expired";
-$string['license_revoked'] = "License is disbaled from edwiser.org";
+$string['license_revoked'] = "License is disabled from edwiser.org";
 $string['license_invalid'] = "License key is invalid";
 $string['license_failed'] = "License activation failed";
 $string['license_no_activation_left'] = "license key activation limit reached";
@@ -323,7 +323,7 @@ $string['setup_faq_steps'] = 'After download please follow the steps below;';
 
 
 
-$string['setup_faq_step1'] = 'Login to your WordPress site with Adminstrative access';
+$string['setup_faq_step1'] = 'Login to your WordPress site with Administrative access';
 $string['setup_faq_step2'] = 'Navigate to Admin dashboard > Plugins > Install plugins ';
 $string['setup_faq_step3'] = 'Upload the Edwiser Bridge FREE WordPress plugin here';
 $string['setup_faq_step4'] = 'We will assist you with the rest of the setup from there';
@@ -343,7 +343,7 @@ $string['setup_mdl_plugin_check2'] = 'Enabling Web Service';
 $string['setup_mdl_plugin_check3'] = 'Disable Password Policy';
 $string['setup_mdl_plugin_check4'] = 'Allow extended characters in usernames';
 $string['setup_mdl_settings_success_msg'] = 'The mandatory Moodle settings has been enabled successfully!';
-$string['setup_enble_settings'] = 'Enable the Settings';
+$string['setup_enable_settings'] = 'Enable the Settings';
 
 
 
@@ -361,7 +361,7 @@ $string['name'] = 'Name';
 $string['url'] = 'URL';
 
 
-$string['setup_permalink_note1'] = 'Check and confirm if the permalink sturcture is set to ';
+$string['setup_permalink_note1'] = 'Check and confirm if the permalink structure is set to ';
 $string['es_postname'] = '‘Postname’.';
 $string['setup_permalink_click'] = 'Click on the ';
 $string['setup_permalink_note2'] = ' link. It will open in a new tab and check the permalink structure.';
@@ -422,7 +422,7 @@ $string['user_unenrollment_tip'] = 'It will auto unenroll the users from Moodle 
 $string['user_creation_tip'] = 'This will auto-create user in linked Wordpress site.';
 $string['user_deletion_tip'] = 'Deletes the user in the linked Wordpress site when deleted in Moodle Site.';
 $string['user_update_tip'] = "This will update user first name, last name and password and won't update Username and Email.";
-$string['course_creation_tip'] = 'This will draft the course on the linked WordPress site and the course will have to publised.';
+$string['course_creation_tip'] = 'This will draft the course on the linked WordPress site and the course will have to published.';
 $string['course_deletion_tip'] = 'It will mark the course as deleted in the linked WordPress site.';
 // $string['mdl_url_tip'] = 'Setup a name for the Web Service for e.g. "EdwiserBridge"';
 // $string['msl_acc_token_tip'] = 'Setup a name for the Web Service for e.g. "EdwiserBridge"';
@@ -435,7 +435,7 @@ $string['close_quest'] = 'Are you sure you want to close the Edwiser Bridge Mood
 $string['yes'] = 'Yes';
 $string['no'] = 'No';
 $string['note'] = 'Note';
-$string['close_note'] = 'You can run the setup wizard again by navigating to Moodle Adminstration > Plugins > Edwiser Bridge > Run Setup wizard.';
+$string['close_note'] = 'You can run the setup wizard again by navigating to Moodle Administration > Plugins > Edwiser Bridge > Run Setup wizard.';
 
 
 /* SSO Settings */
@@ -501,7 +501,7 @@ $string['api_error'] = "Response error status";
 $string['api_error_msg'] = "Response error message";
 $string['api_user_id'] = "User Id";
 $string['api_username'] = "User Name";
-$string['api_password'] = "Password useed to create the User. ";
+$string['api_password'] = "Password used to create the User. ";
 $string['api_email'] = "User Email";
 $string['api_enrolled'] = "User ENrolled status";
 $string['api_cohort_id'] = "Cohort id";

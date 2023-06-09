@@ -9,8 +9,6 @@ class customException extends Exception {
     }
 }
 
-// $email = "someone@example...com";
-
 try {
   //check if
     if(filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {

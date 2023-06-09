@@ -140,7 +140,6 @@ class auth_edwiserbridge_observer {
 
                     // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
-                        // if (isset($_POST['newpassword']) && $_POST['newpassword']) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
                         $enciv    = substr(hash('sha256', $value["wp_token"]), 0, 16);
                         $password = openssl_encrypt($newpassword, $encmethod, $enckey, 0, $enciv);
@@ -199,7 +198,6 @@ class auth_edwiserbridge_observer {
 
                     // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
-                        // if (isset($_POST['newpassword']) && $_POST['newpassword']) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
                         $enciv = substr(hash('sha256', $value["wp_token"]), 0, 16);
                         $password = openssl_encrypt($newpassword, $encmethod, $enckey, 0, $enciv);
@@ -269,7 +267,6 @@ class auth_edwiserbridge_observer {
 
                     // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
-                        // if (isset($_POST['newpassword1']) && $_POST['newpassword1']) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
                         $enciv    = substr(hash('sha256', $value["wp_token"]), 0, 16);
                         $password = openssl_encrypt($newpassword, $encmethod, $enckey, 0, $enciv);

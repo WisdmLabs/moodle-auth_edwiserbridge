@@ -90,6 +90,4 @@ if ( check_edwiser_bridge_pro_dependancy() ) {
         $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settings_link . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }
-    
-
 }
