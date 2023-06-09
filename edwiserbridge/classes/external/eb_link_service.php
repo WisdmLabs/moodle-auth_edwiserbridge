@@ -81,8 +81,8 @@ trait eb_link_service {
     public static function eb_link_service_returns() {
         return new external_single_structure(
             array(
-                'status'  => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
-                'msg'  => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
+                'status' => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
+                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
             )
         );
     }

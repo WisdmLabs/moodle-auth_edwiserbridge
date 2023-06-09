@@ -88,7 +88,7 @@ trait edwiserbridge_local_get_course_enrollment_method {
             new external_single_structure(
                 array(
                     'courseid' => new external_value(PARAM_INT, 'id of course'),
-                    'enabled' => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
+                    'enabled'  => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
                 )
             )
         );

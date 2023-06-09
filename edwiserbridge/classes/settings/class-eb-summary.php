@@ -98,10 +98,10 @@ class edwiserbridge_summary_form extends moodleform {
             ),
             'summary_setting_section' => array(
                 'webserviceprotocols' => array(
-                    'label'          => get_string('sum_rest_proctocol', 'auth_edwiserbridge'),
+                    'label'          => get_string('sum_rest_protocol', 'auth_edwiserbridge'),
                     'expected_value' => 'dynamic',
                     'value'          => 1,
-                    'error_msg'      => get_string('sum_error_rest_proctocol', 'auth_edwiserbridge'),
+                    'error_msg'      => get_string('sum_error_rest_protocol', 'auth_edwiserbridge'),
                     'error_link'     => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=settings"
                 ),
                 'enablewebservices'   => array(

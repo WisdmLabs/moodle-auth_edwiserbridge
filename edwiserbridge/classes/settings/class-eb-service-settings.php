@@ -47,7 +47,7 @@ class edwiserbridge_service_form extends moodleform {
         $select = $mform->addElement(
             'select',
             'eb_sevice_list',
-            get_string('existing_serice_lbl', 'auth_edwiserbridge'),
+            get_string('existing_service_lbl', 'auth_edwiserbridge'),
             $existingservices
         );
         $mform->addHelpButton('eb_sevice_list', 'eb_mform_service_desc', 'auth_edwiserbridge');
@@ -66,7 +66,7 @@ class edwiserbridge_service_form extends moodleform {
         $select = $mform->addElement(
             'select',
             'eb_auth_users_list',
-            get_string('new_serivce_user_lbl', 'auth_edwiserbridge'),
+            get_string('new_service_user_lbl', 'auth_edwiserbridge'),
             $authusers,
             array('class' => '')
         );

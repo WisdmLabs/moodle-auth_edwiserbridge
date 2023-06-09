@@ -42,10 +42,7 @@ function check_edwiser_bridge_pro_dependancy() {
 }
 
 function edwiser_bridge_pro_dependancy_notice(){
-    $msg = get_string('edwiserbridgepropluginrequired', 'auth_edwiserbridge');
-    $pluginoverviewurl = new moodle_url('/admin/plugins.php', array('plugin' => 'overview'));
-    $msg .= ' <a href="'.$pluginoverviewurl.'">'.get_string('fromhere', 'auth_edwiserbridge').'</a>';
-    \core\notification::add($msg, \core\output\notification::NOTIFY_ERROR);
+    
 }
 
 if( check_edwiser_bridge_pro_dependancy() ) {
@@ -287,7 +284,7 @@ if( check_edwiser_bridge_pro_dependancy() ) {
     function eb_get_administrators() {
         $admins          = get_admins();
         $settingsarr      = array();
-        $settingsarr[''] = get_string('new_serivce_user_lbl', 'auth_edwiserbridge');
+        $settingsarr[''] = get_string('new_service_user_lbl', 'auth_edwiserbridge');
 
         foreach ($admins as $value) {
             $settingsarr[$value->id] = $value->email;
@@ -302,7 +299,7 @@ if( check_edwiser_bridge_pro_dependancy() ) {
         global $DB;
         $settingsarr           = array();
         $result                = $DB->get_records("external_services", null, '', 'id, name');
-        $settingsarr['']       = get_string('existing_serice_lbl', 'auth_edwiserbridge');
+        $settingsarr['']       = get_string('existing_service_lbl', 'auth_edwiserbridge');
         $settingsarr['create'] = ' - ' . get_string('new_web_new_service', 'auth_edwiserbridge') . ' - ';
 
         foreach ($result as $value) {
@@ -519,7 +516,18 @@ if( check_edwiser_bridge_pro_dependancy() ) {
         send_stored_file( $file, 0, 0, $forcedownload, $options );
     }
 } else {
-    edwiser_bridge_pro_dependancy_notice();
+    $msg = get_string('edwiserbridgepropluginrequired', 'auth_edwiserbridge');
+    $pluginoverviewurl = new moodle_url('/admin/plugins.php', array('plugin' => 'overview'));
+    $msg .= ' <a href="'.$pluginoverviewurl.'">'.get_string('backtopluginoverview', 'auth_edwiserbridge').'</a>';
+    
+    // abort installation. and redirect to plugin overview page.
+    
+    // uninstall plugin.
+    $plugin_manager  = core_plugin_manager::instance();
+
+    $plugin_manager->cancel_plugin_installation('auth_edwiserbridge');
+
+    throw new moodle_exception( $msg );
 }
 
 /**

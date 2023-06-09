@@ -54,21 +54,11 @@ trait edwiserbridge_local_setup_test_connection {
             self::edwiserbridge_local_setup_test_connection_parameters(),
             array(
                 'wp_url' => $wpurl,
-                // "wp_token" => $wptoken
             )
         );
 
         $status = 0;
         $msg    = get_string('setup_test_conn_error', 'auth_edwiserbridge');
-
-
-        // $requestdata = array(
-        //     'action'     => "test_connection",
-        //     'secret_key' => $params["wp_token"]
-        // );
-
-        // $apihandler = api_handler_instance();
-        // $response   = $apihandler->connect_to_wp_with_args($params["wp_url"] . '/wp-json', array());
 
         $requesturl = $params["wp_url"] . '/wp-json';
 
@@ -106,7 +96,6 @@ trait edwiserbridge_local_setup_test_connection {
         return new external_function_parameters(
             array(
                 'wp_url'   => new external_value(PARAM_RAW, get_string('web_service_wp_url', 'auth_edwiserbridge')),
-                // 'wp_token' => new external_value(PARAM_TEXT, get_string('web_service_wp_token', 'auth_edwiserbridge'))
             )
         );
     }

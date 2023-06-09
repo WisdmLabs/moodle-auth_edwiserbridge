@@ -31,7 +31,7 @@ define("auth_edwiserbridge/eb_setup_wizard", [
         init: function($params) {
 	// function load_settings() {
         // var translation = str.get_strings([
-        //     { key: "dailog_title", component: "auth_edwiserbridge" },
+        //     { key: "dialog_title", component: "auth_edwiserbridge" },
         //     { key: "site_url", component: "auth_edwiserbridge" },
         //     { key: "token", component: "auth_edwiserbridge" },
         //     { key: "copy", component: "auth_edwiserbridge" },

@@ -94,7 +94,7 @@ trait eb_get_edwiser_plugins_info {
                     new external_single_structure(
                         array(
                             'plugin_name' => new external_value(PARAM_TEXT, get_string('eb_plugin_name', 'auth_edwiserbridge')),
-                            'version' => new external_value(PARAM_TEXT, get_string('eb_plugin_version', 'auth_edwiserbridge')),
+                            'version'     => new external_value(PARAM_TEXT, get_string('eb_plugin_version', 'auth_edwiserbridge')),
                         )
                     )
                 ),

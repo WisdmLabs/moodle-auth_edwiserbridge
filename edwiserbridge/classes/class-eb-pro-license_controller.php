@@ -64,11 +64,11 @@ class eb_pro_license_controller {
      */
     public $wdm_edwiserform_data = array (
         'plugin_short_name' => 'Moodle Edwiser Bridge', //Plugins short name appears on the License Menu Page
-        'plugin_slug' => 'moodle_edwiser_bridge', //this slug is used to store the data in db. License is checked using two options viz edd_<slug>_license_key and edd_<slug>_license_status
-        'plugin_version' => '3.0.0', //Current Version of the plugin. This should be similar to Version tag mentioned in Plugin headers
-        'plugin_name' => 'Moodle Edwiser Bridge', //Under this Name product should be created on WisdmLabs Site
-        'store_url' => 'https://dev1.edwiser.org/check-update', //Url where program pings to check if update is available and license validity
-        'author_name' => 'WisdmLabs', //Author Name
+        'plugin_slug'       => 'moodle_edwiser_bridge', //this slug is used to store the data in db. License is checked using two options viz edd_<slug>_license_key and edd_<slug>_license_status
+        'plugin_version'    => '3.0.0', //Current Version of the plugin. This should be similar to Version tag mentioned in Plugin headers
+        'plugin_name'       => 'Moodle Edwiser Bridge', //Under this Name product should be created on WisdmLabs Site
+        'store_url'         => 'https://dev1.edwiser.org/check-update', //Url where program pings to check if update is available and license validity
+        'author_name'       => 'WisdmLabs', //Author Name
     );
 
     /**
@@ -208,8 +208,6 @@ class eb_pro_license_controller {
 
             $license_data = json_decode($resp);
 
-            // echo '<pre>'; print_r($license_data); echo '</pre>';
-
             $valid_response_code = array( '200', '301' );
 
             $isDataAvailable = $this->check_if_no_data($license_data, $current_response_code, $valid_response_code);
@@ -245,8 +243,6 @@ class eb_pro_license_controller {
 
                 $DB->insert_record('config_plugins', $dataobject);
             }
-
-            // $this->updateNumberOfSitesUsingLicense($license_data);
 
             $license_status = $this->update_status($license_data);
             $this->set_transient_on_activation($license_status);
@@ -349,8 +345,6 @@ class eb_pro_license_controller {
 
             $license_data = json_decode($resp);
 
-           // echo '<pre>'; print_r($license_data); echo '</pre>';
-
             $valid_response_code = array( '200', '301' );
 
             $isDataAvailable = $this->check_if_no_data($license_data, $current_response_code, $valid_response_code);
@@ -435,8 +429,6 @@ class eb_pro_license_controller {
         if (null !== self::$responseData) {
             return self::$responseData;
         }
-
-        //$get_trans = get_transient('wdm_' . $plugin_slug . '_license_trans');
 
         $trans_expired = false;
 
@@ -594,9 +586,6 @@ class eb_pro_license_controller {
     public function get_site_data() {
 
         global $DB, $CFG;
-
-        //$sites       = get_option('wdm_' . $plugin_slug . '_license_key_sites');
-        //$max         = get_option('wdm_' . $plugin_slug . '_license_max_site');
 
         $sites = $DB->get_field_select('config_plugins', 'value', 'name = :name', array('name' => 'wdm_' . $this->plugin_slug . '_license_key_sites'), IGNORE_MISSING);
 

@@ -76,8 +76,8 @@ trait eb_get_service_info {
     public static function eb_get_service_info_returns() {
         return new external_single_structure(
             array(
-                'status'  => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
-                'msg'  => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
+                'status' => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
+                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
             )
         );
     }

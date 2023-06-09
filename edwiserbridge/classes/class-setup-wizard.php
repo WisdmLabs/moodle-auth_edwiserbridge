@@ -163,11 +163,9 @@ class eb_setup_wizard {
                         if ( $current_step === $key ) {
                             $class = 'eb-setup-step-active';
                             $html  = '</i><i class="fa-solid fa-circle-chevron-right eb_setup_sidebar_progress_icons"></i>';
-                            // $completed = 0;
-                            
                         } 
 
-                        if ( /*empty( $current_step ) &&*/ $key === $progress ) {
+                        if ( $key === $progress ) {
                             $completed = 0;
                         }
 
@@ -409,65 +407,42 @@ class eb_setup_wizard {
         <div class="eb_setup_installation_guide es-w-80">
             <div>
                 <p class="eb_setup_p"> <?php echo get_string( 'setup_installation_note1', 'auth_edwiserbridge' ); ?> </p>
-
                 <div class="eb_setup_p_wrap">
-
                     <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> <?php echo get_string( 'modulename', 'auth_edwiserbridge') . ' ' . get_string( 'setup_free', 'auth_edwiserbridge') . ' ' . get_string( 'setup_wp_plugin', 'auth_edwiserbridge' ); ?> </p>
-
                     <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> <?php echo get_string( 'modulename', 'auth_edwiserbridge') . ' ' . get_string( 'setup_free', 'auth_edwiserbridge' ) . ' ' . get_string( 'setup_mdl_plugin', 'auth_edwiserbridge' ); ?> </p>
-
                 </div>
-
-
                 <span class="eb_setup_p"> <?php echo get_string( 'setup_installation_note2', 'auth_edwiserbridge' ); ?> </span>
-
                 <div class="eb_setup_btn_wrap">
                     <button class="eb_setup_btn eb_setup_save_and_continue" data-step='<?php echo $step ?>' data-next-step='<?php echo $next_step ?>' data-is-next-sub-step='<?php echo $is_next_sub_step ?>'> <?php echo get_string( 'setup_continue_btn', 'auth_edwiserbridge' ); ?> </button>
                 </div>
-
             </div>
-
             <div>
                 <div class='es-p-t-10'>
                     <div class='accordion'> <i class="fa-solid fa-circle-question"></i> <!-- <span class="dashicons dashicons-editor-help"></span> --> <?php echo get_string( 'setup_installation_faq', 'auth_edwiserbridge' ); ?> <i class="fa-solid fa-chevron-down"></i> <i class="fa-solid fa-chevron-up"></i> <!-- <span class="dashicons dashicons-arrow-down-alt2"></span><span class="dashicons dashicons-arrow-up-alt2"></span> --></div>
-
                     <div class="panel">
-
                         <div>
                             <!-- <button class="eb_setup_sec_btn"> <?php echo get_string( 'setup_faq_download_plugin', 'auth_edwiserbridge' ); ?> </button> -->
                             <a class="eb_setup_sec_btn" href='https://downloads.wordpress.org/plugin/edwiser-bridge.zip'> <?php echo get_string( 'setup_faq_download_plugin', 'auth_edwiserbridge' ); ?> </a>
                         </div>
-
                         <p>
                             <p class='es-p-t-10'> <?php echo get_string( 'setup_faq_steps', 'auth_edwiserbridge' ); ?> </p>
-
                             <ol>
                                 <li class='es-p-b-10'> <?php echo get_string( 'setup_faq_step1', 'auth_edwiserbridge' ); ?></li>
                                 <li class='es-p-b-10'><?php echo get_string( 'setup_faq_step2', 'auth_edwiserbridge' ); ?></li>
                                 <li class='es-p-b-10'><?php echo get_string( 'setup_faq_step3', 'auth_edwiserbridge' ); ?></li>
                                 <li class='es-p-b-10'><?php echo get_string( 'setup_faq_step4', 'auth_edwiserbridge' ); ?> 🙂</li>
                             </ol>
-
                         </p>
                     </div>
                 </div>
             </div>
-    
-    
         </div>
-
         <?php
-
         if ( $ajax ) {
             return ob_get_clean();
              
         }
     }
-
-    
-   
-
-
 
     public function eb_setup_plugin_configuration($ajax = 1){
         global $CFG;
@@ -535,7 +510,7 @@ class eb_setup_wizard {
                 <div <?php echo $all_enabled === 1 ? 'style="display:none;"' : '' ?> >
                     <span class="eb_enable_plugin_settings_label"> <?php echo get_string( 'setup_mdl_plugin_note2', 'auth_edwiserbridge' ); ?> </span>
 
-                    <button class="eb_setup_btn eb_enable_plugin_settings" data-step='<?php echo $step ?>' data-next-step='<?php echo $next_step ?>' data-is-next-sub-step='<?php echo $is_next_sub_step ?>' > <?php echo get_string( 'setup_enble_settings', 'auth_edwiserbridge' ); ?> </button>
+                    <button class="eb_setup_btn eb_enable_plugin_settings" data-step='<?php echo $step ?>' data-next-step='<?php echo $next_step ?>' data-is-next-sub-step='<?php echo $is_next_sub_step ?>' > <?php echo get_string( 'setup_enable_settings', 'auth_edwiserbridge' ); ?> </button>
                 </div>
 
                 <div class="eb_setup_btn_wrap">
@@ -556,9 +531,6 @@ class eb_setup_wizard {
             return ob_get_clean();
         }
     }
-
-
-
 
     /**
      *
@@ -663,7 +635,6 @@ class eb_setup_wizard {
         $btnclass = 'disabled';
         $is_next_sub_step  = 1;
         $sites = get_site_list();
-        // $sites1 = get_connection_settings();
 
         $next_step = $this->get_next_step( $step );
         $prevstep = $this->get_prev_step( $step );
@@ -701,13 +672,8 @@ class eb_setup_wizard {
                 $class = '';
             }
 
-
-
-
             $options .=  '<option data-name="'. $value .'" data-url="'. $url .'" value="' . $key . '" '. $selected . '>'. $value .'</option>';
         }
-        
-
 
         ?>
         <div class="eb_setup_wordpress_site_details es-w-80">
@@ -728,7 +694,6 @@ class eb_setup_wizard {
                             <?php echo $options; ?>
                         </select>
                         
-
                     </div>
 
                     <div class="eb_setup_wp_site_details_inp eb_setup_conn_url_inp_wrap <?php echo $class; ?>">
@@ -783,7 +748,6 @@ class eb_setup_wizard {
 
         $sitename =  $CFG->eb_setup_wp_site_name;
 
-        // $sites = get_site_list();
         $sites = get_connection_settings();
         $sites = $sites['eb_connection_settings'];
 
@@ -798,9 +762,6 @@ class eb_setup_wizard {
             $url = $url . '/wp-admin/options-permalink.php';
         }
 
-
-        // $url = $url . '/wp-admin/options-permalink.php';
-
         ?>
         <div class='eb_setup_check_permalink es-w-80'>
             <div>
@@ -812,9 +773,7 @@ class eb_setup_wizard {
                     <div class=""> <?php echo get_string( 'setup_permalink_note3', 'auth_edwiserbridge'); ?> </div>
                 </div>
 
-
                 <div>
-
                     <div class="eb_setup_btn_wrap">
                         <a class="eb_setup_sec_btn" href="<?php echo $prevurl; ?>"> <?php echo get_string( 'back', 'auth_edwiserbridge' ); ?> </a>
                         <!-- <button class="eb_setup_sec_btn"> <?php echo get_string( 'back', 'auth_edwiserbridge' ); ?> </button> -->
@@ -846,7 +805,6 @@ class eb_setup_wizard {
         $is_next_sub_step  = 1;
         $sitename =  $CFG->eb_setup_wp_site_name;
 
-        // $sites = get_site_list();
         $sites = get_connection_settings();
         $sites = $sites['eb_connection_settings'];
 
@@ -908,9 +866,6 @@ class eb_setup_wizard {
         }
     }
 
-
-
-
     public function eb_setup_user_and_course_sync($ajax = 1) {
         global $CFG;
 
@@ -965,7 +920,6 @@ class eb_setup_wizard {
                     <p> <?php echo get_string( 'setup_sync_note1', 'auth_edwiserbridge' ); ?> </p>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" name='eb_setup_sync_all' id='eb_setup_sync_all' > -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' name='eb_setup_sync_all' id='eb_setup_sync_all' <?php echo $sum == 7 ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -977,7 +931,6 @@ class eb_setup_wizard {
                     <hr>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_user_enrollment' id='eb_setup_sync_user_enrollment'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class="eb_setup_sync_cb" name='eb_setup_sync_user_enrollment' id='eb_setup_sync_user_enrollment' <?php echo $oldsettings['course_enrollment'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -988,7 +941,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_user_unenrollment' id='eb_setup_sync_user_unenrollment'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class='eb_setup_sync_cb' name='eb_setup_sync_user_unenrollment' id='eb_setup_sync_user_unenrollment' <?php echo $oldsettings['course_un_enrollment'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -999,7 +951,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_user_creation' id='eb_setup_sync_user_creation'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class="eb_setup_sync_cb" name='eb_setup_sync_user_creation' id='eb_setup_sync_user_creation' <?php echo $oldsettings['user_creation'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -1010,7 +961,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_user_deletion' id='eb_setup_sync_user_deletion'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class="eb_setup_sync_cb" name='eb_setup_sync_user_deletion' id='eb_setup_sync_user_deletion' <?php echo $oldsettings['user_deletion'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -1021,7 +971,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_user_update' id='eb_setup_sync_user_update'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class="eb_setup_sync_cb" name='eb_setup_sync_user_update' id='eb_setup_sync_user_update' <?php echo $oldsettings['user_updation'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -1033,7 +982,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_course_creation' id='eb_setup_sync_course_creation'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class='eb_setup_sync_cb' name='eb_setup_sync_course_creation' id='eb_setup_sync_course_creation' <?php echo $oldsettings['course_creation'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -1045,7 +993,6 @@ class eb_setup_wizard {
                     </div>
 
                     <div class="eb_setup_inp_wrap">
-                        <!-- <input type="checkbox" class="eb_setup_sync_cb" name='eb_setup_sync_course_deletion' id='eb_setup_sync_course_deletion'> -->
                         <label class='esw-cb-container' >
                             <input type='checkbox' class="eb_setup_sync_cb" name='eb_setup_sync_course_deletion' id='eb_setup_sync_course_deletion' <?php echo $oldsettings['course_deletion'] ? 'checked' : '' ?>>
                             <span class='esw-cb-checkmark'></span>
@@ -1078,8 +1025,6 @@ class eb_setup_wizard {
         }
 
     }
-
-
 
     public function eb_setup_complete_details( $ajax = 1 ) {
         global $CFG;
@@ -1115,7 +1060,6 @@ class eb_setup_wizard {
             $wp_url = $wp_url . '/wp-admin/admin.php?page=eb-setup-wizard&current_step=test_connection';
         }
 
-
         ?>
         <div class="eb_setup_complete_details es-w-80">
             <div>
@@ -1126,7 +1070,6 @@ class eb_setup_wizard {
                     <div class='' > <?php echo get_string( 'setup_completion_note1', 'auth_edwiserbridge'); ?> </div>
 
                 </div>
-
 
                 <div class="eb_setup_complete_card_wrap">
 
@@ -1162,7 +1105,6 @@ class eb_setup_wizard {
 
                     </div>
 
-
                     <div class="eb_setup_separator">
                         <div class="eb_setup_hr"><hr></div>
                         <div> <span> <?php echo get_string( 'or', 'auth_edwiserbridge'); ?> </span> </div>
@@ -1176,11 +1118,9 @@ class eb_setup_wizard {
 
                 </div>
 
-
                 <div>
 
                     <p class=""> <?php echo get_string( 'setup_completion_note4', 'auth_edwiserbridge'); ?> </p>
-                    
 
                     <div class="eb_setup_btn_wrap">
 
@@ -1251,8 +1191,6 @@ class eb_setup_wizard {
         return ob_get_clean();
     }
 
-
-
     /**
      * Setup Wizard close setup.
      */
@@ -1298,9 +1236,6 @@ class eb_setup_wizard {
         return ob_get_clean();
     }
 
-
-
-
     /**
      * Setup Wizard close setup.
      */
@@ -1325,7 +1260,4 @@ class eb_setup_wizard {
         <?php
         return ob_get_clean();
     }
-
-
-
 }

@@ -28,8 +28,6 @@ if (!empty($wdm_data)) {
     die();
 }
 
-
-
 // check passthrough key is set or not
 function checkPassthroughKeyIsSet()
 {
@@ -47,9 +45,6 @@ function checkPassthroughKeyIsSet()
 
     return $PASSTHROUGH_KEY;
 }
-
-
-
 
 if ($temp_url == null) {
     $temp_url = get_config('auth_edwiserbridge', 'wpsiteurl');
@@ -71,9 +66,6 @@ if (!isset($PASSTHROUGH_KEY)) {
     redirect($wordpress_url);
     return;
 }
-
-
-
 
 /**
  * Handler for decrypting incoming data (specially handled base-64) in which is encoded a string of key=value pairs.
@@ -220,10 +212,6 @@ if (!empty($user_id) && $user_id !== 0) {
 
 }
 redirect($SESSION->wantsurl);
-
-
-
-
 
 // user_session_wdmwpmoodle
 // Set wdm_user session

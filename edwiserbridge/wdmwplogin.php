@@ -17,12 +17,9 @@ function wdmRedirectToRoot()
     redirect( $SESSION->wantsurl );
 }
 
-
-
 // Requested to wp login.
 $wdmaction = optional_param('wdmaction', '', PARAM_ALPHA);
 if ( !empty( $wdmaction ) && $wdmaction === 'login' ) {
-
 
     // User is not logged in or is a guest user.
     if ( ! isloggedin() || isguestuser() ) {
@@ -39,11 +36,9 @@ if ( !empty( $wdmaction ) && $wdmaction === 'login' ) {
         wdmRedirectToRoot();
     }
 
-
     // All checks are passed. Redirect to wp site for login.
     $verify_code = optional_param('verify_code', '', PARAM_RAW);
     $redirect_to = strtok( $wpsiteurl, '?' ) .'?wdmaction=login&mdl_uid=' . $mdl_uid . '&verify_code=' . $verify_code;
-
 
     redirect( $redirect_to );
 }

@@ -211,7 +211,7 @@ trait edwiserbridge_local_setup_wizard_save_and_continue {
         new external_single_structure(
             array(
                 'html_data' => new external_value(PARAM_RAW, 'Setup wizards next step html content'),
-                'title' => new external_value(PARAM_RAW, 'Setup wizards next step title'),
+                'title'     => new external_value(PARAM_RAW, 'Setup wizards next step title'),
             )
         );
     }

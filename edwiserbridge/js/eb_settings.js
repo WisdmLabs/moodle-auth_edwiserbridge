@@ -29,7 +29,7 @@ define("auth_edwiserbridge/eb_settings", [
 ], function($, ajax, url, str) {
     function load_settings() {
         var translation = str.get_strings([
-            { key: "dailog_title", component: "auth_edwiserbridge" },
+            { key: "dialog_title", component: "auth_edwiserbridge" },
             { key: "site_url", component: "auth_edwiserbridge" },
             { key: "token", component: "auth_edwiserbridge" },
             { key: "copy", component: "auth_edwiserbridge" },
