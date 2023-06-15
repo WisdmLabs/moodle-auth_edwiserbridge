@@ -90,4 +90,28 @@ if ( check_edwiser_bridge_pro_dependancy() ) {
         $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settings_link . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }
+
+    $settings->add(
+        new admin_setting_heading(
+            'auth_edwiserbridge/eb_settings_msg',
+            '',
+            '<div class="eb_settings_btn_cont" style="padding:20px;">' . get_string('eb_settings_msg', 'auth_edwiserbridge')
+                . '<a target="_blank" class="eb_settings_btn" style="padding: 7px 18px; border-radius: 4px; color: white;
+            background-color: #2578dd; margin-left: 5px;" href="' . $CFG->wwwroot . '/local/edwiserbridge/setup_wizard.php'
+                . '" >' . get_string('click_here', 'auth_edwiserbridge') . '</a></div>'
+        )
+    );
+    
+    // Adding this field so that the setting page will be shown after installation.
+    $settings->add(
+        new admin_setting_configcheckbox(
+            'auth_edwiserbridge/eb_setup_wizard_field',
+            get_string(
+                'eb_dummy_msg',
+                'auth_edwiserbridge'
+            ),
+            ' ',
+            1
+        )
+    );
 }

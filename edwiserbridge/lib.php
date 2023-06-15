@@ -527,6 +527,10 @@ if( check_edwiser_bridge_pro_dependancy() ) {
 
     $plugin_manager->cancel_plugin_installation('auth_edwiserbridge');
 
+    $plugin_manager::reset_caches();
+
+    purge_all_caches();
+
     throw new moodle_exception( $msg );
 }
 
