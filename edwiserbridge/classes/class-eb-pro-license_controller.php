@@ -67,7 +67,7 @@ class eb_pro_license_controller {
         'plugin_slug'       => 'moodle_edwiser_bridge', //this slug is used to store the data in db. License is checked using two options viz edd_<slug>_license_key and edd_<slug>_license_status
         'plugin_version'    => '3.0.0', //Current Version of the plugin. This should be similar to Version tag mentioned in Plugin headers
         'plugin_name'       => 'Moodle Edwiser Bridge', //Under this Name product should be created on WisdmLabs Site
-        'store_url'         => 'https://dev1.edwiser.org/check-update', //Url where program pings to check if update is available and license validity
+        'store_url'         => 'https://edwiser.org/check-update', //Url where program pings to check if update is available and license validity
         'author_name'       => 'WisdmLabs', //Author Name
     );
 
