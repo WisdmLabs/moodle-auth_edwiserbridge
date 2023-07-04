@@ -97,7 +97,7 @@ if ( check_edwiser_bridge_pro_dependancy() ) {
             '',
             '<div class="eb_settings_btn_cont" style="padding:20px;">' . get_string('eb_settings_msg', 'auth_edwiserbridge')
                 . '<a target="_blank" class="eb_settings_btn" style="padding: 7px 18px; border-radius: 4px; color: white;
-            background-color: #2578dd; margin-left: 5px;" href="' . $CFG->wwwroot . '/local/edwiserbridge/setup_wizard.php'
+            background-color: #2578dd; margin-left: 5px;" href="' . $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php'
                 . '" >' . get_string('click_here', 'auth_edwiserbridge') . '</a></div>'
         )
     );
