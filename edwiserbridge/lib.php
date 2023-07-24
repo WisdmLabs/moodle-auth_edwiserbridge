@@ -263,15 +263,12 @@ if( check_edwiser_bridge_pro_dependancy() ) {
      */
     function check_if_request_is_from_wp() {
         $required    = 0;
-        $enrollments = optional_param('enrolments', 0, PARAM_INT);
-        $cohort = optional_param('cohort', 0, PARAM_INT);
 
-        if ($enrollments && !empty($enrollments)) {
+        // using this condition because param enrollments and cohort are multi dimensional array and it is not working with optional_param or optional_param_array.
+        if(isset($_POST['enrolments']) || isset($_POST['cohort'])){
             $required = 1;
         }
-        if ($cohort && !empty($cohort)) {
-            $required = 1;
-        }
+
         return $required;
     }
 
