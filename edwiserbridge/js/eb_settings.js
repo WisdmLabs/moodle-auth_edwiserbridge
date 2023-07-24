@@ -1060,16 +1060,17 @@ define("auth_edwiserbridge/eb_settings", [
                 event.preventDefault();
 
                 var copyText = $(this).data('copy');
-                var temp = document.createElement("textarea");
-                temp.textContent = copyText;
 
+                // Create a temporary textarea element
+                var temp = document.createElement("textarea");
+                temp.style.position = 'fixed'; // Prevent scrolling to the bottom when appending to the body
+                temp.value = copyText;
+
+                // Append the textarea to the body
                 document.body.appendChild(temp);
-                var selection = document.getSelection();
-                var range = document.createRange();
-                //  range.selectNodeContents(textarea);
-                range.selectNode(temp);
-                selection.removeAllRanges();
-                selection.addRange(range);
+
+                temp.select();
+                temp.setSelectionRange(0, copyText.length);
 
                 document.execCommand("copy");
                 temp.remove();
