@@ -255,22 +255,11 @@ class edwiserbridge_summary_form extends moodleform {
     private function get_plugin_version_data() {
         $pluginsdata = array();
         $pluginman   = \core_plugin_manager::instance();
-        $localplugin = $pluginman->get_plugins_of_type('local');
-
-        $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
-        if (isset($localplugin['edwiserbridge'])) {
-            $pluginsdata['edwiserbridge'] = $localplugin['edwiserbridge']->release;
-        }
-
-        $pluginsdata['wdmgroupregistration'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
-        if (isset($localplugin['wdmgroupregistration'])) {
-            $pluginsdata['wdmgroupregistration'] = $localplugin['wdmgroupregistration']->release;
-        }
 
         $authplugin                 = $pluginman->get_plugins_of_type('auth');
-        $pluginsdata['wdmwpmoodle'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
-        if (isset($authplugin['wdmwpmoodle'])) {
-            $pluginsdata['wdmwpmoodle'] = $authplugin['wdmwpmoodle']->release;
+        $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
+        if (isset($authplugin['edwiserbridge'])) {
+            $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
         }
 
         $fetchdata = optional_param('tab', '', PARAM_RAW);
@@ -279,10 +268,6 @@ class edwiserbridge_summary_form extends moodleform {
 
         $versioninfo = array(
             'edwiserbridge'        => $pluginsdata['edwiserbridge'] . "<span style='padding-left:1rem;color:limegreen;'>"
-                . get_string('mdl_edwiser_bridge_txt_latest', 'auth_edwiserbridge') . " </span>",
-            'wdmgroupregistration' => $pluginsdata['wdmgroupregistration'] . "<span style='padding-left:1rem;color:limegreen;'>"
-                . get_string('mdl_edwiser_bridge_txt_latest', 'auth_edwiserbridge') . " </span>",
-            'wdmwpmoodle'          => $pluginsdata['wdmwpmoodle'] . "<span style='padding-left:1rem;color:limegreen;'>"
                 . get_string('mdl_edwiser_bridge_txt_latest', 'auth_edwiserbridge') . " </span>",
         );
 
@@ -295,24 +280,6 @@ class edwiserbridge_summary_form extends moodleform {
                     . $remotedata->moodle_edwiser_bridge->version . ")<a href='"
                     . $remotedata->moodle_edwiser_bridge->url . "' title='"
                     . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
-                    . get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge') . "</a></span>";
-            }
-            if (
-                isset($remotedata->moodle_edwiser_bridge_bp->version) &&
-                version_compare($pluginsdata['wdmgroupregistration'], $remotedata->moodle_edwiser_bridge_bp->version, "<")
-            ) {
-                $versioninfo['wdmgroupregistration'] = $pluginsdata['wdmgroupregistration'] . "<span  style='padding-left:1rem;'>("
-                    . $remotedata->moodle_edwiser_bridge_bp->version . ")<a href='" . $remotedata->moodle_edwiser_bridge_bp->url
-                    . "' title='" . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
-                    . get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge') . "</a></span>";
-            }
-            if (
-                isset($remotedata->moodle_edwiser_bridge_sso->version) &&
-                version_compare($pluginsdata['wdmwpmoodle'], $remotedata->moodle_edwiser_bridge_sso->version, "<")
-            ) {
-                $versioninfo['wdmwpmoodle'] = $pluginsdata['wdmwpmoodle'] . "<span  style='padding-left:1rem;'>("
-                    . $remotedata->moodle_edwiser_bridge_sso->version . ")<a href='" . $remotedata->moodle_edwiser_bridge_sso->url
-                    . "' title='" . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
                     . get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge') . "</a></span>";
             }
         }
