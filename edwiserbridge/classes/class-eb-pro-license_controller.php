@@ -63,10 +63,10 @@ class eb_pro_license_controller {
      * After you are done with adding Licensing
      */
     public $wdm_edwiserform_data = array (
-        'plugin_short_name' => 'Moodle Edwiser Bridge', //Plugins short name appears on the License Menu Page
+        'plugin_short_name' => 'Edwiser Bridge - Moodle', //Plugins short name appears on the License Menu Page
         'plugin_slug'       => 'moodle_edwiser_bridge', //this slug is used to store the data in db. License is checked using two options viz edd_<slug>_license_key and edd_<slug>_license_status
         'plugin_version'    => '3.0.0', //Current Version of the plugin. This should be similar to Version tag mentioned in Plugin headers
-        'plugin_name'       => 'Moodle Edwiser Bridge', //Under this Name product should be created on WisdmLabs Site
+        'plugin_name'       => 'Edwiser Bridge - Moodle', //Under this Name product should be created on WisdmLabs Site
         'store_url'         => 'https://edwiser.org/check-update', //Url where program pings to check if update is available and license validity
         'author_name'       => 'WisdmLabs', //Author Name
     );

@@ -490,7 +490,7 @@ $string['auth_edwiserbridge_wploginbtnicon_help'] = 'This icon will be shown as 
 $string['auth_edwiserbridge_wploginlogo_desc'] = 'This logo will be shown as WordPress login button logo on Moodle login page.';
 
 /* Bulk Purchase */
-$string['menuoption'] = "local_edwiserbridge";
+$string['menuoption'] = "auth_edwiserbridge";
 $string['privacy:metadata'] = 'The wdm Group Registration local plugin does not store any personal data.';
 $string['edwiserbridge:add'] = 'Add edwiserbridge';
 
