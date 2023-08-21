@@ -18,7 +18,7 @@
  * Version information
  * This version is compatible with WordPress plugin Edwiser Bridge Single Sign On (version 1.2 or higher)
  *
- * @version    1.3.9
+ * @version    3.0.0
  * @package    auth_edwiserbridge
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,7 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2023042006;    // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2023082100;    // The current plugin version (Date: YYYYMMDDXX).
 $plugin->release   = '3.0.0';
 $plugin->requires  = '2016052318'; // Requires this Moodle version (Moodle V3.1.0).
 $plugin->maturity  = MATURITY_STABLE;

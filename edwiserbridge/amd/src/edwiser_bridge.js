@@ -15,7 +15,7 @@
 /**
  * Js file to handle edwiser bridge.
  *
- * @package     local_edwiserbridge
+ * @package     auth_edwiserbridge
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
