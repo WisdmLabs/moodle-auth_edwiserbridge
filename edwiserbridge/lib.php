@@ -44,6 +44,32 @@ function check_edwiser_bridge_pro_dependancy() {
 function edwiser_bridge_pro_dependancy_notice(){
     
 }
+global $PAGE;
+if ( isset($PAGE) && $PAGE->pagelayout == 'admin'){
+    $update_available = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
+    $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
+    if ($update_available && !$dismiss) {
+        $update_msg = get_config('auth_edwiserbridge', 'edwiserbridge_update_msg');
+
+        global $CFG;
+        $update_url = new moodle_url(
+            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
+        );
+
+        $dismiss_url = new moodle_url(
+            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey(), 'dismiss' => 1 )
+        );
+
+        $update_msg = str_replace( 'UPDATE_URL', $update_url, $update_msg );
+
+        $update_msg .= '<br><br><a href="'.$dismiss_url.'">'.get_string('dismiss', 'auth_edwiserbridge').'</a>';
+
+        // add notification.
+        \core\notification::add($update_msg, \core\output\notification::NOTIFY_ERROR);
+    }
+}
 
 if( check_edwiser_bridge_pro_dependancy() ) {
 
@@ -601,4 +627,67 @@ function enable_edwiserbridge_plugin() {
     }
     \core\session\manager::gc(); // Remove stale sessions.
     core_plugin_manager::reset_caches();
+}
+
+/**
+ * Check plugin update.
+ */
+function auth_edwiserbridge_check_plugin_update(){
+    if (!function_exists('curl_version')) {
+        return false;
+    }
+
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json",
+        CURLOPT_TIMEOUT => 100,
+        CURLOPT_SSL_VERIFYHOST => 0,
+        CURLOPT_SSL_VERIFYPEER => 0,
+    ));
+    //construct a user agent string
+    global $CFG;
+    $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Update Checker';
+
+    curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+    $output = curl_exec($curl);
+    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    if (200 === $httpcode) {
+        $data = array(
+            'time' => time() + (60 * 60 * 24),
+            'data' => $output,
+        );
+        set_config('edwiserbridge_plugins_versions', json_encode($data), 'auth_edwiserbridge');
+    }
+    $output = json_decode($output);
+
+    $pluginsdata = array();
+    $pluginman   = \core_plugin_manager::instance();
+
+    $authplugin                 = $pluginman->get_plugins_of_type('auth');
+    $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
+    if (isset($authplugin['edwiserbridge'])) {
+        $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
+        $pluginsdata['edwiserbridge'] = "2.9.9"; // for testing
+    }
+
+    if (false !== $output && isset($remotedata->moodle_edwiser_bridge->version) && version_compare($pluginsdata['edwiserbridge'], $remotedata->moodle_edwiser_bridge->version, "<")) {
+        global $CFG;
+        $update_url = new moodle_url(
+            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
+        );
+
+        $msg = get_string('plugin_update_msg', 'auth_edwiserbridge') . " <a href='"
+            . $remotedata->moodle_edwiser_bridge->url . "' title='"
+            . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
+            . get_string('plugin_download', 'auth_edwiserbridge') . "</a> " . get_string('plugin_or', 'auth_edwiserbridge') . " <a href='" . $update_url . "' >"
+            . get_string('plugin_update', 'auth_edwiserbridge') . "</a>";
+        
+        set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
+        set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
+        set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');
+        set_config('edwiserbridge_update_data', json_encode($remotedata->moodle_edwiser_bridge), 'auth_edwiserbridge');
+    }
 }

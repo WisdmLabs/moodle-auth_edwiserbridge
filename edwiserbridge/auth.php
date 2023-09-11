@@ -68,6 +68,11 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         }
         $user = $DB->get_record('user', array('username' => $username, 'password' => $password, 'mnethostid' => $CFG->mnet_localhost_id));
 
+        if (!empty($user->suspended)) {
+            error_log("user_login: suspended");
+            return false;
+        }
+        
         if ($user) {
             return true;
         }
