@@ -44,32 +44,8 @@ function check_edwiser_bridge_pro_dependancy() {
 function edwiser_bridge_pro_dependancy_notice(){
     
 }
-global $PAGE;
-if ( isset($PAGE) && $PAGE->pagelayout == 'admin'){
-    $update_available = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
-    $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
-    if ($update_available && !$dismiss) {
-        $update_msg = get_config('auth_edwiserbridge', 'edwiserbridge_update_msg');
 
-        global $CFG;
-        $update_url = new moodle_url(
-            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
-            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
-        );
-
-        $dismiss_url = new moodle_url(
-            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
-            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey(), 'dismiss' => 1 )
-        );
-
-        $update_msg = str_replace( 'UPDATE_URL', $update_url, $update_msg );
-
-        $update_msg .= '<br><br><a href="'.$dismiss_url.'">'.get_string('dismiss', 'auth_edwiserbridge').'</a>';
-
-        // add notification.
-        \core\notification::add($update_msg, \core\output\notification::NOTIFY_ERROR);
-    }
-}
+auth_edwiserbridge_show_plugin_update_notification();
 
 if( check_edwiser_bridge_pro_dependancy() ) {
 
@@ -673,21 +649,63 @@ function auth_edwiserbridge_check_plugin_update(){
     }
 
     if (false !== $output && isset($remotedata->moodle_edwiser_bridge->version) && version_compare($pluginsdata['edwiserbridge'], $remotedata->moodle_edwiser_bridge->version, "<")) {
-        global $CFG;
-        $update_url = new moodle_url(
-            $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
-            array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
-        );
+        auth_edwiserbridge_prepare_plugin_update_notification($remotedata->moodle_edwiser_bridge);
+    }
+}
 
-        $msg = get_string('plugin_update_msg', 'auth_edwiserbridge') . " <a href='"
-            . $remotedata->moodle_edwiser_bridge->url . "' title='"
-            . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
-            . get_string('plugin_download', 'auth_edwiserbridge') . "</a> " . get_string('plugin_or', 'auth_edwiserbridge') . " <a href='" . $update_url . "' >"
-            . get_string('plugin_update', 'auth_edwiserbridge') . "</a>";
-        
-        set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
-        set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
-        set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');
-        set_config('edwiserbridge_update_data', json_encode($remotedata->moodle_edwiser_bridge), 'auth_edwiserbridge');
+/**
+ * Prepare Plugin update notification 
+ */
+function auth_edwiserbridge_prepare_plugin_update_notification($update_data){
+    global $CFG;
+    ob_start();
+    ?>
+    <div class="eb-plugin-update-notice">
+        <p class="eb-plugin-update-notice-heading"><?php echo get_string('plugin_update_notification_title', 'auth_edwiserbridge'); ?></p>
+        <p class="eb-plugin-update-notice-body"><?php echo get_string('plugin_update_notification_body', 'auth_edwiserbridge'); ?> <a class="eb-plugin-update-changelog" target="_blank" href="https://wordpress.org/plugins/edwiser-bridge/#developers"><?php echo get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'); ?></a></p>
+        <p class="eb-plugin-update-action">
+            <a href="<?php echo $update_data->url ?>" title="<?php echo get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'); ?>"><?php echo get_string('plugin_download', 'auth_edwiserbridge'); ?></a>
+            <span> | </span>
+            <a href="UPDATE_URL" title="<?php echo get_string('plugin_update_help_text', 'auth_edwiserbridge'); ?>"><?php echo get_string('plugin_update', 'auth_edwiserbridge'); ?></a>
+        </p>
+        <a class="eb-plugin-update-dismiss" href="DISMISS_URL"><span aria-hidden="true" class="edw-icon edw-icon-Cancel large"></span></a>
+    </div>
+    <?php
+    $msg = ob_get_clean();
+    set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
+    set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
+    set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');
+    set_config('edwiserbridge_update_data', json_encode($update_data), 'auth_edwiserbridge');
+}
+
+/**
+ * Show plugin update notification
+ */
+function auth_edwiserbridge_show_plugin_update_notification(){
+    global $PAGE;
+    if ( isset($PAGE) && $PAGE->pagelayout == 'admin'){
+        $update_available = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
+        $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
+        if ($update_available && !$dismiss) {
+            $update_msg = get_config('auth_edwiserbridge', 'edwiserbridge_update_msg');
+
+            global $CFG;
+            $update_url = new moodle_url(
+                $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+                array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
+            );
+
+            $dismiss_url = new moodle_url(
+                $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+                array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey(), 'dismiss' => 1 )
+            );
+
+            $update_msg = str_replace( 'UPDATE_URL', $update_url, $update_msg );
+
+            $update_msg = str_replace( 'DISMISS_URL', $dismiss_url, $update_msg );
+
+            // add notification.
+            \core\notification::add($update_msg, \core\output\notification::NOTIFY_INFO);
+        }
     }
 }

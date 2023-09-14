@@ -458,7 +458,6 @@ class update {
                 }
                 $errormsg .= html_writer::end_tag($tag);
             }
-            $silent or mtrace(PHP_EOL.' <- '. $errormsg . ' ->', '');
         } else {
             $url = $plugin->version->url;
             $zip = $this->get_remote_plugin_zip(
@@ -660,7 +659,6 @@ class update {
                 }
                 $errormsg .= html_writer::end_tag($tag);
             }
-            mtrace(PHP_EOL.' <- '. $errormsg . ' ->', '');
         } else {
             $url = EB_PLUGIN_UPDATE . '/download/' . $plugin->package;
             $zip = $this->get_remote_plugin_zip(
@@ -670,7 +668,6 @@ class update {
             );
         }
         if (!$zip) {
-            mtrace(get_string('error'));
             return false;
         }
 

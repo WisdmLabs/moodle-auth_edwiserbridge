@@ -518,13 +518,17 @@ $string['pluginrequirementsnotmet'] = "Edwiser Bridge SSO plugin requirements ar
 $string['backtopluginoverview'] = "Back to plugin overview page";
 
 // Plugin update notification
-$string['plugin_update_notification'] = "Show plugin update notification";
-$string['plugin_update_msg'] = "A new version of Edwiser Bridge plugin is available. Please update to the latest version to get the latest features and bug fixes.";
+$string['plugin_update_notification_title'] = "Edwiser Bridge - New update available!";
+$string['plugin_update_notification_body'] = "A new version of Edwiser Bridge plugin is available. Please update to the latest version to get the latest features.";
+$string['plugin_update_notification_changelog'] = " View Changelog";
+$string['plugin_download'] = "Download";
 $string['plugin_update'] = "Update Now";
 $string['plugin_update_help_text'] = "Click here to automatically update plugin";
-$string['plugin_download'] = "Download";
 $string['plugin_update_dismiss'] = "Dismiss";
-$string['plugin_or'] = "or";
+$string['plugin_update_notification'] = "Show plugin update notification";
+
+
+
 $string['errors'] = 'Errors';
 $string['invalidzip'] = 'Invalid zip file. <b>{$a}</b>';
 $string['errorfetching'] = 'Error fetching plugin ZIP. <b>{$a}</b>';

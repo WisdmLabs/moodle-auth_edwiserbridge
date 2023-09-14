@@ -292,17 +292,7 @@ class edwiserbridge_summary_form extends moodleform {
                     . get_string('plugin_update_help_text', 'auth_edwiserbridge') . "' >"
                     . get_string('plugin_update', 'auth_edwiserbridge') . "</a></span>";
                 
-                // plugin update notification
-                $msg = get_string('plugin_update_msg', 'auth_edwiserbridge') . " <a href='"
-                    . $remotedata->moodle_edwiser_bridge->url . "' title='"
-                    . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
-                    . get_string('plugin_download', 'auth_edwiserbridge') . "</a> " . get_string('plugin_or', 'auth_edwiserbridge') . " <a href='UPDATE_URL' >"
-                    . get_string('plugin_update', 'auth_edwiserbridge') . "</a>";
-                
-                set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
-                set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
-                set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');
-                set_config('edwiserbridge_update_data', json_encode($remotedata->moodle_edwiser_bridge), 'auth_edwiserbridge');
+                auth_edwiserbridge_prepare_plugin_update_notification($remotedata->moodle_edwiser_bridge);
             }
         }
         return $versioninfo;
