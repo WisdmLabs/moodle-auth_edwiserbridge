@@ -634,7 +634,10 @@ class update {
             if ($validated) {
                 echo $this->plugins_management_confirm_buttons($continue, null, $return);
             } else {
-                echo $this->plugins_management_confirm_buttons(null, $download, $return);
+                echo html_writer::start_tag('a', array('class' => 'btn btn-secondary', 'href' => $download));
+                echo get_string('download', 'core');
+                echo html_writer::end_tag('a');
+                echo $this->plugins_management_confirm_buttons(null, null, $return);
             }
             echo $output->footer();
         }

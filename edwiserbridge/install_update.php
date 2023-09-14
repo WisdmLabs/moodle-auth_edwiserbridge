@@ -88,13 +88,6 @@ $edwiserpluginupdate->upgrade_install_plugin(
             'sesskey' => $sesskey
         )
     ),
-    new moodle_url(
-        $PAGE->url,
-        array(
-            'installupdate' => $installupdate,
-            'download' => 1,
-            'sesskey' => $sesskey
-        )
-    ),
+    $plugin->url,
     new moodle_url('/my')
 );

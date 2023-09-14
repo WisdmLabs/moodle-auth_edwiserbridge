@@ -523,6 +523,7 @@ $string['plugin_update_notification_body'] = "A new version of Edwiser Bridge pl
 $string['plugin_update_notification_changelog'] = " View Changelog";
 $string['plugin_download'] = "Download";
 $string['plugin_update'] = "Update Now";
+$string['plugin_or'] = "or";
 $string['plugin_update_help_text'] = "Click here to automatically update plugin";
 $string['plugin_update_dismiss'] = "Dismiss";
 $string['plugin_update_notification'] = "Show plugin update notification";

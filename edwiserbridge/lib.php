@@ -668,7 +668,7 @@ function auth_edwiserbridge_prepare_plugin_update_notification($update_data){
             <span> | </span>
             <a href="UPDATE_URL" title="<?php echo get_string('plugin_update_help_text', 'auth_edwiserbridge'); ?>"><?php echo get_string('plugin_update', 'auth_edwiserbridge'); ?></a>
         </p>
-        <a class="eb-plugin-update-dismiss" href="DISMISS_URL"><span aria-hidden="true" class="edw-icon edw-icon-Cancel large"></span></a>
+        <a class="eb-plugin-update-dismiss" href="DISMISS_URL">x</a>
     </div>
     <?php
     $msg = ob_get_clean();
