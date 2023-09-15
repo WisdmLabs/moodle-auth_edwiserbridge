@@ -45,8 +45,6 @@ function edwiser_bridge_pro_dependancy_notice(){
     
 }
 
-auth_edwiserbridge_show_plugin_update_notification();
-
 if( check_edwiser_bridge_pro_dependancy() ) {
 
     require_once(dirname(__FILE__) . "/classes/class-api-handler.php");
@@ -682,8 +680,16 @@ function auth_edwiserbridge_prepare_plugin_update_notification($update_data){
  * Show plugin update notification
  */
 function auth_edwiserbridge_show_plugin_update_notification(){
-    global $PAGE;
-    if ( isset($PAGE) && $PAGE->pagelayout == 'admin'){
+    global $PAGE, $ME;
+
+    // to resolve duplicate notification issue.
+    global $eb_notice;
+    if( isset($eb_notice) && $eb_notice ){
+        return;
+    }
+    $eb_notice = true;
+
+    if ( isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false ){
         $update_available = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
         $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
         if ($update_available && !$dismiss) {
