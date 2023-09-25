@@ -128,7 +128,7 @@ trait edwiserbridge_local_update_course_enrollment_method {
                     'courseid' => new external_value(PARAM_INT, 'id of course'),
                     'status'   => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
                     'message'  => new external_value(PARAM_TEXT, 'message', VALUE_OPTIONAL),
-                ),
+                )
             )
         );
     }

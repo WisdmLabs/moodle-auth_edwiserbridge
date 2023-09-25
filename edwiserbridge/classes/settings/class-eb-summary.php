@@ -260,7 +260,6 @@ class edwiserbridge_summary_form extends moodleform {
         $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
         if (isset($authplugin['edwiserbridge'])) {
             $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
-            $pluginsdata['edwiserbridge'] = "2.9.9"; // for testing
         }
 
         $fetchdata = optional_param('tab', '', PARAM_RAW);

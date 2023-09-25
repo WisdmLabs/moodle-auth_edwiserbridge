@@ -97,7 +97,7 @@ class edwiserbridge_sso_form extends moodleform {
                 'wploginbtnicon_filemanager',
                 get_string('auth_edwiserbridge_wploginbtnicon', 'auth_edwiserbridge'),
                 null,
-                array('maxbytes' => 1024 * 1024, 'accepted_types' => array('.png', '.jpg', '.jpeg'), 'maxfiles' => 1),
+                array('maxbytes' => 1024 * 1024, 'accepted_types' => array('.png', '.jpg', '.jpeg'), 'maxfiles' => 1)
             );
             $mform->addHelpButton('wploginbtnicon_filemanager', 'auth_edwiserbridge_wploginbtnicon', 'auth_edwiserbridge');
 

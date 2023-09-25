@@ -643,7 +643,6 @@ function auth_edwiserbridge_check_plugin_update(){
     $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
     if (isset($authplugin['edwiserbridge'])) {
         $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
-        $pluginsdata['edwiserbridge'] = "2.9.9"; // for testing
     }
 
     if (false !== $output && isset($remotedata->moodle_edwiser_bridge->version) && version_compare($pluginsdata['edwiserbridge'], $remotedata->moodle_edwiser_bridge->version, "<")) {
