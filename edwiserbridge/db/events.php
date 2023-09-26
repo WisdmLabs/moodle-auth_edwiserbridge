@@ -57,5 +57,10 @@ $observers = array(
     array(
         'eventname' => 'core\event\course_deleted',
         'callback'  => 'auth_edwiserbridge_observer::course_deleted',
-    )
+    ),
+    // page view event
+    array(
+        'eventname' => '\core\event\dashboard_viewed',
+        'callback'  => 'auth_edwiserbridge_observer::dashboard_viewed',
+    ),
 );

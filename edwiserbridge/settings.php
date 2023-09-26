@@ -29,6 +29,9 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 global $CFG, $PAGE;
 
+// plugin update notification.
+auth_edwiserbridge_show_plugin_update_notification();
+
 if ( check_edwiser_bridge_pro_dependancy() ) {
     $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
     $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/sso_settings.js'));

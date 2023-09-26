@@ -76,3 +76,66 @@
 #admin-ebexistingserviceselect {
     display: none;
 }
+
+.eb-plugin-update-notice{
+    position: relative;
+}
+.eb-plugin-update-notice-heading{
+    color: #133F3F;
+    font-family: Open Sans;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.eb-plugin-update-notice-body{
+    color: #333;
+    font-family: Open Sans;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.eb-plugin-update-changelog{
+    color: #333;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.eb-plugin-update-dismiss{
+    top: 0;
+    position: absolute;
+    right: -40px;
+    text-decoration: none;
+    color: #242424;
+}
+.eb-plugin-update-dismiss:hover{
+    text-decoration: none;
+    color: #242424;
+}
+.eb-plugin-update-action{
+    color: #0041C9;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 6px;
+}
+.eb-plugin-update-action span{
+    color: #333;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.eb-plugin-update-notice p{
+    margin-bottom: 3px;
+}
+
+.alert-dismissible:has(.eb-plugin-update-notice) .close{
+    display: none !important;
+}

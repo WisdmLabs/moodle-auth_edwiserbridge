@@ -383,4 +383,25 @@ class auth_edwiserbridge_observer {
             }
         }
     }
+
+    /**
+     * Dashboard viewed event.
+     * 
+     * @param \core\event\dashboard_viewed $event event.
+     */
+    public static function dashboard_viewed(\core\event\dashboard_viewed $event) {
+        global $CFG;
+        
+        // check if user is admin or not.
+        if (!is_siteadmin()) {
+            return;
+        }
+
+        $transient = get_config('auth_edwiserbridge', 'plugin_update_transient');
+        if ( $transient < time()) {
+            auth_edwiserbridge_check_plugin_update();
+            set_config('plugin_update_transient', time() + (7 * 24 * 60 * 60), 'auth_edwiserbridge');
+            error_log('Plugin update transient set');
+        }
+    }
 }

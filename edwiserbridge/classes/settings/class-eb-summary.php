@@ -276,11 +276,22 @@ class edwiserbridge_summary_form extends moodleform {
                 isset($remotedata->moodle_edwiser_bridge->version) &&
                 version_compare($pluginsdata['edwiserbridge'], $remotedata->moodle_edwiser_bridge->version, "<")
             ) {
+                global $CFG;
+                $update_url = new moodle_url(
+                    $CFG->wwwroot . '/auth/edwiserbridge/install_update.php',
+                    array( 'installupdate' => 'auth_edwiserbridge', 'sesskey' => sesskey() )
+                );
+
                 $versioninfo['edwiserbridge'] = $pluginsdata['edwiserbridge'] . "<span  style='padding-left:1rem;'>("
                     . $remotedata->moodle_edwiser_bridge->version . ")<a href='"
                     . $remotedata->moodle_edwiser_bridge->url . "' title='"
                     . get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge') . "'>"
-                    . get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge') . "</a></span>";
+                    . get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge') . "</a> "
+                    . get_string('plugin_or', 'auth_edwiserbridge') . " <a href='" . $update_url . "' title='"
+                    . get_string('plugin_update_help_text', 'auth_edwiserbridge') . "' >"
+                    . get_string('plugin_update', 'auth_edwiserbridge') . "</a></span>";
+                
+                auth_edwiserbridge_prepare_plugin_update_notification($remotedata->moodle_edwiser_bridge);
             }
         }
         return $versioninfo;

@@ -56,17 +56,17 @@ trait eb_get_courses {
             array('offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_courses" => $totalcourses)
         );
 
-        $query = "SELECT id, fullname, category as categoryid FROM {course} WHERE 1";
+        $query = "SELECT id, fullname, category as categoryid FROM {course}";
 
         if (!empty($params['search_string'])) {
             $searchstring = "%" . $params['search_string'] . "%";
-            $query .= " AND (fullname LIKE '$searchstring')";
+            $query .= " WHERE (fullname LIKE '$searchstring')";
         }
 
         $courses = $DB->get_records_sql($query, null, $offset, $limit);
        $coursecount = 0;
         if (!empty($params['total_courses'])) {
-           $coursecount = $DB->get_record_sql("SELECT count(*) total_count FROM {course} WHERE 1");
+           $coursecount = $DB->get_record_sql("SELECT count(*) total_count FROM {course}");
            $coursecount =$coursecount->total_count;
         }
 
