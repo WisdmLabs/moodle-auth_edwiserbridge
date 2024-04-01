@@ -50,7 +50,7 @@ trait eb_get_site_data {
             self::eb_get_site_data_parameters(),
             array('site_index' => $siteindex)
         );
-        return get_synch_settings($params['site_index']);
+        return auth_edwiserbridge_get_synch_settings($params['site_index']);
     }
 
     /**

@@ -71,7 +71,7 @@ class edwiserbridge_summary_form extends moodleform {
             $tokenfield = $token;
             if (!empty($service)) {
                 // If the token available then show the token.
-                $tokenfield = eb_create_token_field($service, $token);
+                $tokenfield = auth_edwiserbridge_create_token_field($service, $token);
             }
         } else {
             $missingcapmsg = "<span class='summ_error'>User don't have web service access capabilities,

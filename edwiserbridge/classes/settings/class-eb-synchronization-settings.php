@@ -35,9 +35,9 @@ class edwiserbridge_synchronization_form extends moodleform {
      */
     public function definition() {
         $mform         = $this->_form;
-        $sites         = get_site_list();
+        $sites         = auth_edwiserbridge_get_site_list();
         $sitekeys      = array_keys($sites);
-        $defaultvalues = get_synch_settings($sitekeys[0]);
+        $defaultvalues = auth_edwiserbridge_get_synch_settings($sitekeys[0]);
 
         $mform->addElement('select', 'wp_site_list', get_string('site-list', 'auth_edwiserbridge'), $sites);
 

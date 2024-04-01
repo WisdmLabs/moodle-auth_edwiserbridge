@@ -62,7 +62,7 @@ trait eb_test_connection {
             $msg = "Connection Successful";
             $warnings = array();
             
-            $defaultvalues = get_connection_settings();
+            $defaultvalues = auth_edwiserbridge_get_connection_settings();
 
             $site_match = false;
             $token_match = false;
@@ -77,7 +77,7 @@ trait eb_test_connection {
             // get webservice id by token 
             global $DB;
             $serviceid = $DB->get_field('external_tokens', 'externalserviceid', array('token' => $params["wp_token"]));
-            $count = eb_get_service_list($serviceid);
+            $count = auth_edwiserbridge_get_service_list($serviceid);
             if ($count == 1) {
                 $status = 0;
                 $msg = $count . " Web service functions is missing.";
@@ -94,7 +94,7 @@ trait eb_test_connection {
                 'secret_key' => $params["wp_token"]
             );
 
-            $apihandler = api_handler_instance();
+            $apihandler = auth_edwiserbridge_api_handler_instance();
             $response   = $apihandler->connect_to_wp_with_args($params["wp_url"], $requestdata);
             $status = 0;
             $msg    = isset($response["msg"]) ? $response["msg"] : 'Please check WordPress site configuration.';

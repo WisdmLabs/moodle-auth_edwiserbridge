@@ -35,7 +35,7 @@ class edwiserbridge_sso_form extends moodleform {
      */
     public function definition() {
         $mform         = $this->_form;
-        $sites         = get_site_list();
+        $sites         = auth_edwiserbridge_get_site_list();
         $sitekeys      = array_keys($sites);
 
         global $CFG;

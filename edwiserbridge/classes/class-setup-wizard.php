@@ -548,7 +548,7 @@ class eb_setup_wizard {
 
         $next_step = $this->get_next_step( $step );
 
-        $existingservices = eb_get_existing_services();
+        $existingservices = auth_edwiserbridge_get_existing_services();
         $selectedservice =  isset( $CFG->ebexistingserviceselect ) ? $CFG->ebexistingserviceselect : '';
  
 
@@ -634,7 +634,7 @@ class eb_setup_wizard {
         $class    = 'eb_setup_wp_site_details_wrap';
         $btnclass = 'disabled';
         $is_next_sub_step  = 1;
-        $sites = get_site_list();
+        $sites = auth_edwiserbridge_get_site_list();
 
         $next_step = $this->get_next_step( $step );
         $prevstep = $this->get_prev_step( $step );
@@ -642,7 +642,7 @@ class eb_setup_wizard {
 
         $sitename =  isset( $CFG->eb_setup_wp_site_name ) ? $CFG->eb_setup_wp_site_name : '';
 
-        $wpsites = get_connection_settings();
+        $wpsites = auth_edwiserbridge_get_connection_settings();
         $wpsites = $wpsites['eb_connection_settings'];
 
         if ( ! empty( $sitename ) ) {
@@ -748,7 +748,7 @@ class eb_setup_wizard {
 
         $sitename =  $CFG->eb_setup_wp_site_name;
 
-        $sites = get_connection_settings();
+        $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
 
         $url = '';
@@ -805,7 +805,7 @@ class eb_setup_wizard {
         $is_next_sub_step  = 1;
         $sitename =  $CFG->eb_setup_wp_site_name;
 
-        $sites = get_connection_settings();
+        $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
 
         $name = '';
@@ -1038,7 +1038,7 @@ class eb_setup_wizard {
         $next_step = $this->get_next_step( $step );
         $sitename =  $CFG->eb_setup_wp_site_name;
 
-        $sites = get_connection_settings();
+        $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
 
 

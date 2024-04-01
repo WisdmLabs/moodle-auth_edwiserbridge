@@ -224,6 +224,8 @@ $string["web_service_cb_desc"] = "Recommended:yes";
 
 $string["web_rest_protocol_cb"] = "Enable REST Protocol.";
 $string["web_rest_protocol_cb_desc"] = "Recommended:yes";
+$string["enable_auto_update_check"] = "Enable Auto Update Check.";
+$string["enable_auto_update_check_desc"] = "This will enable auto update check for the plugin. When enabled, the plugin will check for updates automatically and show a notification in the Moodle admin dashboard.";
 /**********************************/
 
 /********  Summary page  ********/

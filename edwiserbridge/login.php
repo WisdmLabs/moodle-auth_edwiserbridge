@@ -111,7 +111,7 @@ if ( !empty( $user_id ) && $user_id !== 0 ) {
     $sess_key = 'eb_sso_user_session_id';
 
     $record   = get_wdm_user_session($user_id, $sess_key);
-    $rawdata  = isset($record->value) ? $record->value : '';
+    $rawdata  = isset($record) ? $record : '';
     $userdata = decrypt_string($rawdata, $PASSTHROUGH_KEY);
     $hash     = get_key_value( $userdata, 'wp_one_time_hash' );
 
@@ -139,7 +139,7 @@ if (!empty($user_id) && $user_id !== 0) {
     $sess_key = 'eb_sso_user_session_id';
 
     $record  = get_wdm_user_session($user_id, $sess_key);
-    $rawdata = isset($record->value) ? $record->value : '';
+    $rawdata = isset($record) ? $record : '';
     
     remove_wdm_user_session($user_id);
 
@@ -220,6 +220,9 @@ function get_wdm_user_session($user_id, $sess_key)
     global $DB, $CFG;
     $table = 'user_preferences';
     $record = $DB->get_record($table, array('userid'=>$user_id, 'name'=>$sess_key));
+
+    $record = get_user_preferences($sess_key, '', $user_id);
+
     return $record;
 }
 
@@ -234,8 +237,7 @@ function remove_wdm_user_session($user_id)
 {
     global $DB, $CFG;
 
-    $table = 'user_preferences';
-    $DB->delete_records($table, array('userid'=>$user_id, 'name'=>'eb_sso_user_session_id'));
+    unset_user_preference('eb_sso_user_session_id', $user_id);
 }
 
 function unsetPostMethod()

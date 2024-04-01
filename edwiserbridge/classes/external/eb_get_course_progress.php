@@ -68,7 +68,7 @@ trait eb_get_course_progress {
             array($params['user_id'])
         );
 
-        $enrolledcourses  = get_array_of_enrolled_courses($params['user_id'], 1);
+        $enrolledcourses  = auth_edwiserbridge_get_array_of_enrolled_courses($params['user_id'], 1);
         $processedcourses = $enrolledcourses;
 
         $response = array();
@@ -84,7 +84,7 @@ trait eb_get_course_progress {
                     'completion' => ceil($progress),
                 );
 
-                $processedcourses = remove_processed_coures($value->course, $processedcourses);
+                $processedcourses = auth_edwiserbridge_remove_processed_coures($value->course, $processedcourses);
             }
         }
 
@@ -99,7 +99,7 @@ trait eb_get_course_progress {
                     'completion' => $progress,
                 );
 
-                $processedcourses = remove_processed_coures($value, $processedcourses);
+                $processedcourses = auth_edwiserbridge_remove_processed_coures($value, $processedcourses);
             }
         }
         return $response;

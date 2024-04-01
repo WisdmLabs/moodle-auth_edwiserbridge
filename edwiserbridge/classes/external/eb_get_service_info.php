@@ -50,7 +50,7 @@ trait eb_get_service_info {
         $response['status'] = 1;
         $response['msg']    = '';
 
-        $count = eb_get_service_list($serviceid);
+        $count = auth_edwiserbridge_get_service_list($serviceid);
         if ($count) {
             $response['status'] = 0;
             $response['msg'] = $count . get_string('eb_service_info_error', 'auth_edwiserbridge');

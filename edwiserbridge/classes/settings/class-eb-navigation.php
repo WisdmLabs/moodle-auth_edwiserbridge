@@ -39,7 +39,7 @@ class edwiserbridge_navigation_form extends moodleform {
 
         $currenttab = optional_param('tab', '', PARAM_TEXT);
 
-        $summarystatus = 'eb-tabs eb_summary_tab summary_tab_' . eb_get_summary_status();
+        $summarystatus = 'eb-tabs eb_summary_tab summary_tab_' . auth_edwiserbridge_get_summary_status();
 
         $summary = 'summary' === $currenttab ? 'active-tab ' . $summarystatus : $summarystatus;
 

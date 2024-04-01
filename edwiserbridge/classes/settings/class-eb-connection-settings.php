@@ -34,7 +34,7 @@ class edwiserbridge_connection_form extends moodleform {
      * Defining connection settings form.
      */
     public function definition() {
-        $defaultvalues = get_connection_settings();
+        $defaultvalues = auth_edwiserbridge_get_connection_settings();
         $mform = $this->_form;
         $repeatarray = array();
 

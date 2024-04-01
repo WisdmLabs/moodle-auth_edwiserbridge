@@ -122,7 +122,7 @@ foreach ($mform as $key => $mformdata) {
         // In this case you process validated data. $mform->get_data() returns data posted in form.
 
         // Calling the save function for each tabn if present.
-        $functionname = 'save_' . $key . '_form_settings';
+        $functionname = 'auth_edwiserbridge_save_' . $key . '_form_settings';
 
         if (function_exists($functionname)) {
             $functionname($formdata, $object);

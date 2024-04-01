@@ -108,7 +108,7 @@ trait edwiserbridge_local_setup_wizard_save_and_continue {
             case 'wordpress_site_details':
                 if ( isset( $data->site_name ) && ! empty( $data->site_name ) && isset( $data->url ) && ! empty( $data->url ) ) {
                     // Get existing data
-                    $sites = get_connection_settings();
+                    $sites = auth_edwiserbridge_get_connection_settings();
                     $connectionsettings = $sites['eb_connection_settings'];
 
 

@@ -37,8 +37,8 @@ class edwiserbridge_service_form extends moodleform {
         global $CFG;
 
         $mform            = $this->_form;
-        $existingservices = eb_get_existing_services();
-        $authusers        = eb_get_administrators();
+        $existingservices = auth_edwiserbridge_get_existing_services();
+        $authusers        = auth_edwiserbridge_get_administrators();
         $token            = isset($CFG->edwiser_bridge_last_created_token) ? $CFG->edwiser_bridge_last_created_token : ' - ';
         $service          = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
         $tokenfield       = '';
@@ -102,7 +102,7 @@ class edwiserbridge_service_form extends moodleform {
 
         if (!empty($service)) {
             // If the token available then show the token.
-            $tokenfield = eb_create_token_field($service, $token);
+            $tokenfield = auth_edwiserbridge_create_token_field($service, $token);
         }
 
         // 5th field Token

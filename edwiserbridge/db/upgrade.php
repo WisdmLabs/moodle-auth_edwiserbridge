@@ -25,14 +25,14 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 function xmldb_auth_edwiserbridge_upgrade() {
 
-    if ( ! check_edwiser_bridge_pro_dependancy() ) {
+    if ( ! auth_edwiserbridge_check_pro_dependancy() ) {
         edwiser_bridge_pro_dependancy_notice();
     }
     //enable plugin in the default authentication method
-    enable_edwiserbridge_plugin();
+    auth_edwiserbridge_enable_plugin();
     
     // check and upgrade webservice functions.
-    check_and_update_webservice_functions_edwiserbridge();
+    auth_edwiserbridge_check_and_update_webservice_functions();
 
     return true; // return true to continue, it is must.
 }

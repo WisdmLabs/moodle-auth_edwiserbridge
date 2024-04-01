@@ -55,11 +55,11 @@ class auth_edwiserbridge_observer {
             'email'      => $userdata[$event->relateduserid]->email
         );
 
-        if (check_if_request_is_from_wp()) {
+        if (auth_edwiserbridge_check_if_request_is_from_wp()) {
             return;
         }
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -93,11 +93,11 @@ class auth_edwiserbridge_observer {
         );
 
         // Checks if the request is from the wordpress site or from te Moodle site itself.
-        if (check_if_request_is_from_wp()) {
+        if (auth_edwiserbridge_check_if_request_is_from_wp()) {
             return;
         }
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -127,7 +127,7 @@ class auth_edwiserbridge_observer {
         // Open SSL encryption initialization.
         $encmethod = 'AES-128-CTR';
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -180,7 +180,7 @@ class auth_edwiserbridge_observer {
         // Open SSL encryption initialization.
         $encmethod = 'AES-128-CTR';
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
 
             $sites = unserialize($CFG->eb_connection_settings);
@@ -245,7 +245,7 @@ class auth_edwiserbridge_observer {
         // We will use token as the key as it is present on both sites.
         // Open SSL encryption initialization.
         $encmethod = 'AES-128-CTR';
-        $apihandler  = api_handler_instance();
+        $apihandler  = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
 
             $sites = unserialize($CFG->eb_connection_settings);
@@ -299,7 +299,7 @@ class auth_edwiserbridge_observer {
             'user_id' => $event->relateduserid
         );
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -325,7 +325,7 @@ class auth_edwiserbridge_observer {
         // Get course info.
         $course = get_course($event->courseid);
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -364,7 +364,7 @@ class auth_edwiserbridge_observer {
             'course_id' => $event->objectid,
         );
 
-        $apihandler = api_handler_instance();
+        $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
             $synchconditions = unserialize($CFG->eb_synch_settings);
@@ -398,10 +398,9 @@ class auth_edwiserbridge_observer {
         }
 
         $transient = get_config('auth_edwiserbridge', 'plugin_update_transient');
-        if ( $transient < time()) {
+        if ( $transient < time() && isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check ) {
             auth_edwiserbridge_check_plugin_update();
             set_config('plugin_update_transient', time() + (7 * 24 * 60 * 60), 'auth_edwiserbridge');
-            error_log('Plugin update transient set');
         }
     }
 }
