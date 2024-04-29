@@ -79,7 +79,7 @@ v3.0.0 - Plugin Released
 
 # Required version of Moodle
 
-This version works with Moodle 3.10 version and above until the next release.
+This version works with Moodle 3.11 version and above until the next release.
 
 Please ensure that your hardware and software complies with 'Requirements' in 'Installing Moodle' on
 'https://docs.moodle.org/39/en/Step-by-step_Installation_Guide_for_Ubuntu'.
@@ -112,8 +112,8 @@ Together we could make this solution better for your Moodle.
 
  = Minimum Requirements =
 * PHP version 5.6 or greater
-* WordPress 5.8 or higher
-* Moodle 3.10 or higher
+* WordPress 5.9 or higher
+* Moodle 3.11 or higher
 
  =  Automatic Installation  =
 * Go to the Plugins menu from the dashboard.
