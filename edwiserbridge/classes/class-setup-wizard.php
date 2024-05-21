@@ -206,8 +206,9 @@ class eb_setup_wizard {
         $step  = 'installation_guide';
 
         // Handle page refresh.
-        if (isset($_GET['current_step']) && ! empty($_GET['current_step'])) {
-            $step = $_GET['current_step'];
+        $currentstep = optional_param('current_step', '', PARAM_TEXT);
+        if (isset($currentstep) && !empty($currentstep)) {
+            $step = $currentstep;
         } else if (isset($CFG->eb_setup_progress) && !empty($CFG->eb_setup_progress) && !isset($step)) {
             $step = $this->get_next_step($CFG->eb_setup_progress);
         } else {

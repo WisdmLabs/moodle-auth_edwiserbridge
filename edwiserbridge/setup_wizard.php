@@ -40,7 +40,8 @@ if ( ! empty( $progress ) ) {
 
     $nextstep = $setupwizard->get_next_step( $progress );
 
-    if (!isset( $_GET['current_step'])) {
+    $currentstep = optional_param('current_step', '', PARAM_TEXT);
+    if (empty($currentstep)) {
         $redirecturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
         redirect ($redirecturl);
     }
