@@ -70,8 +70,8 @@ trait setup_wizard_save_and_continue {
 
         $data = json_decode( $data );
 
-        $currentstep = $data->currentstep;
-        $nextstep = $data->nextstep;
+        $currentstep = $data->current_step;
+        $nextstep = $data->next_step;
         $isnextsubstep = $data->is_next_sub_step;
 
         $setupwizardhandler = new \eb_setup_wizard();
