@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,12 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser RemUI
- * @package   auth_edwiserbridge
- * @copyright (c) 2020 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Plugin update class.
+ * Functionality to manage plugin updates.
+ *
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge;
@@ -26,7 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/markdown/MarkdownInterface.php');
 require_once($CFG->libdir . '/markdown/Markdown.php');
-// require_once($CFG->dirroot . '/theme/remui/classes/controller/LicenseController.php');
 
 define('EB_PLUGINS_LIST', "https://edwiser.org/edwiserupdates.json");
 define('EB_PLUGIN_UPDATE', "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json");
@@ -43,9 +45,7 @@ use stdClass;
 use curl;
 
 /**
- * RemUI one click update class
- * @copyright (c) 2020 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Class update
  */
 class update {
 
@@ -63,7 +63,7 @@ class update {
 
     /**
      * Refresh update cache
-     * @var boolean
+     * @var bool
      */
     public $refresh = false;
 
@@ -169,7 +169,7 @@ class update {
         }
 
         // Sanitize and validate the URL.
-        $url = str_replace(array("\r", "\n"), '', $url);
+        $url = str_replace(["\r", "\n"], '', $url);
 
         if (!preg_match('|^https?://|i', $url)) {
             $this->errors[] = 'Error fetching plugin ZIP: unsupported transport protocol: '.$url;
@@ -325,9 +325,9 @@ class update {
     public function fetch_plugins_update() {
         global $CFG;
 
-        $plugin_data = get_config('auth_edwiserbridge', 'edwiserbridge_update_data');
+        $plugindata = get_config('auth_edwiserbridge', 'edwiserbridge_update_data');
 
-        return array('auth_edwiserbridge' => json_decode($plugin_data));
+        return ['auth_edwiserbridge' => json_decode($plugindata)];
     }
 
     /**
@@ -345,7 +345,7 @@ class update {
 
         $ok = get_string('ok', 'core');
 
-        $silent or mtrace(get_string('packagesvalidating', 'core_plugin', $plugin->component), ' ... ');
+        $silent || mtrace(get_string('packagesvalidating', 'core_plugin', $plugin->component), ' ... ');
 
         list($plugintype, $pluginname) = core_component::normalize_component($plugin->component);
 
@@ -353,8 +353,8 @@ class update {
         $zipcontents = $this->unzip_plugin_file($pluginman, $zipfile, $tmp, $pluginname);
 
         if (empty($zipcontents)) {
-            $silent or mtrace(get_string('error'));
-            $silent or mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile));
+            $silent || mtrace(get_string('error'));
+            $silent || mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile));
             return false;
         }
 
@@ -362,13 +362,13 @@ class update {
         $validator->assert_plugin_type($plugintype);
         $validator->assert_moodle_version($CFG->version);
 
-        // TODO Check for missing dependencies during validation.
+        // Check for missing dependencies during validation.
         $result = $validator->execute();
-        $result ? ($silent or mtrace($ok)) : ($silent or mtrace(get_string('error')));
+        $result ? ($silent || mtrace($ok)) : ($silent || mtrace(get_string('error')));
 
         if (!$silent) {
             foreach ($validator->get_messages() as $message) {
-                if ($message->level === $validator::WARNING || $message->level === $validator::ERROR and !CLI_SCRIPT) {
+                if ($message->level === $validator::WARNING || $message->level === $validator::ERROR && !CLI_SCRIPT) {
                     mtrace('  <strong>['.$validator->message_level_name($message->level).']</strong>', ' ');
                 } else {
                     mtrace('  ['.$validator->message_level_name($message->level).']', ' ');
@@ -402,9 +402,9 @@ class update {
             }
         }
         if (!$result) {
-            $silent or mtrace(get_string('packagesvalidatingfailed', 'core_plugin'));
+            $silent || mtrace(get_string('packagesvalidatingfailed', 'core_plugin'));
         }
-        $silent or mtrace(PHP_EOL, '');
+        $silent || mtrace(PHP_EOL, '');
         return $result;
     }
 
@@ -440,12 +440,12 @@ class update {
         $ok = get_string('ok', 'core');
 
         // Let admins know they can expect more verbose output.
-        $silent or mtrace(get_string('packagesdebug', 'core_plugin'), PHP_EOL);
+        $silent || mtrace(get_string('packagesdebug', 'core_plugin'), PHP_EOL);
 
         // Download all ZIP packages if we do not have them yet.
-        $zip = array();
+        $zip = [];
 
-        $silent or mtrace(get_string('packagesdownloading', 'core_plugin', $plugin->component), ' ... ');
+        $silent || mtrace(get_string('packagesdownloading', 'core_plugin', $plugin->component), ' ... ');
 
         if (!isset($plugin->version->url) || trim($plugin->version->url) == '') {
             $zip = false;
@@ -467,18 +467,18 @@ class update {
             );
         }
         if (!$zip) {
-            $silent or mtrace(get_string('errorfetching', 'auth_edwiserbridge', ''));
+            $silent || mtrace(get_string('errorfetching', 'auth_edwiserbridge', ''));
             return false;
         }
 
-        $silent or mtrace($ok);
+        $silent || mtrace($ok);
 
         $temp = make_request_directory();
         $zips = $this->verify_zip($pluginman, $zip, $temp, $plugin->component);
         $zipfile = $zip;
 
         if (!$zips) {
-            $silent or mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile), PHP_EOL);
+            $silent || mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile), PHP_EOL);
             return false;
         }
         if (count($zips) == 1) {
@@ -512,7 +512,7 @@ class update {
 
         foreach ($zips as $zipfile => $plugin) {
             // Extract all ZIP packs do the dirroot.
-            $silent or mtrace(get_string('packagesextracting', 'core_plugin', $plugin->component), ' ... ');
+            $silent || mtrace(get_string('packagesextracting', 'core_plugin', $plugin->component), ' ... ');
             list($plugintype, $pluginname) = core_component::normalize_component($plugin->component);
 
             $target = $pluginman->get_plugintype_root($plugintype);
@@ -521,8 +521,8 @@ class update {
                 $pluginman->remove_plugin_folder($plugininfo);
             }
             if (!$this->unzip_plugin_file($pluginman, $zipfile, $target, $pluginname)) {
-                $silent or mtrace(get_string('error'));
-                $silent or mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile), PHP_EOL);
+                $silent || mtrace(get_string('error'));
+                $silent || mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile), PHP_EOL);
                 if (function_exists('opcache_reset')) {
                     opcache_reset();
                 }
@@ -530,7 +530,7 @@ class update {
             }
         }
 
-        $silent or mtrace($ok);
+        $silent || mtrace($ok);
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
@@ -555,11 +555,11 @@ class update {
         $out = html_writer::start_div('plugins-management-confirm-buttons');
 
         if (!empty($continue)) {
-            $out .= $OUTPUT->single_button($continue, get_string('continue'), 'post', array('class' => 'continue'));
+            $out .= $OUTPUT->single_button($continue, get_string('continue'), 'post', ['class' => 'continue']);
         }
 
         if (!empty($download)) {
-            $out .= $OUTPUT->single_button($download, get_string('download'), 'post', array('class' => 'download'));
+            $out .= $OUTPUT->single_button($download, get_string('download'), 'post', ['class' => 'download']);
         }
 
         if (empty($cancel)) {
@@ -615,7 +615,7 @@ class update {
             // Do not throw away the existing $PAGE->url parameters such as.
             // confirmupgrade or confirmrelease if $PAGE->url is a superset of the.
             // URL we must go to.
-            $mustgoto = new moodle_url('/admin/index.php', array('cache' => 0, 'confirmplugincheck' => 0));
+            $mustgoto = new moodle_url('/admin/index.php', ['cache' => 0, 'confirmplugincheck' => 0]);
             if ($mustgoto->compare($PAGE->url, URL_MATCH_PARAMS)) {
                 redirect($PAGE->url);
             } else {
@@ -628,13 +628,13 @@ class update {
             if ($heading) {
                 echo $output->heading($heading, 3);
             }
-            echo html_writer::start_tag('pre', array('class' => 'plugin-install-console'));
+            echo html_writer::start_tag('pre', ['class' => 'plugin-install-console']);
             $validated = $this->install_plugin($installable, false, false);
             echo html_writer::end_tag('pre');
             if ($validated) {
                 echo $this->plugins_management_confirm_buttons($continue, null, $return);
             } else {
-                echo html_writer::start_tag('a', array('class' => 'btn btn-secondary', 'href' => $download));
+                echo html_writer::start_tag('a', ['class' => 'btn btn-secondary', 'href' => $download]);
                 echo get_string('download', 'core');
                 echo html_writer::end_tag('a');
                 echo $this->plugins_management_confirm_buttons(null, null, $return);

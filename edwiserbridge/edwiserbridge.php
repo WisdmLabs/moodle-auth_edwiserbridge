@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,18 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser Bridge - WordPress and Moodle integration.
- * File displays the edwiser bridge settings.
+ * Edwiser Bridge plugin settings page.
+ * Functionality to manage and display settings page.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 
 require('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
@@ -50,26 +48,26 @@ $baseurl = $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=connection
 /*
 * Creating array of the objects which will be created.
 */
-$mform = array(
-    'service' => array(
-        'id'  => 'eb_service_form'
-    ),
-    'connection' => array(
-        'id'  => 'eb_connection_form'
-    ),
-    'synchronization' => array(
-        'id'  => 'eb_synch_form'
-    ),
-    'settings' => array(
-        'id'  => 'eb_settings_form'
-    ),
-    'summary' => array(
-        'id'  => 'eb_summary_form'
-    ),
-    'sso' => array(
-        'id'  => 'eb_sso_form'
-    )
-);
+$mform = [
+    'service' => [
+        'id'  => 'eb_service_form',
+    ],
+    'connection' => [
+        'id'  => 'eb_connection_form',
+    ],
+    'synchronization' => [
+        'id'  => 'eb_synch_form',
+    ],
+    'settings' => [
+        'id'  => 'eb_settings_form',
+    ],
+    'summary' => [
+        'id'  => 'eb_summary_form',
+    ],
+    'sso' => [
+        'id'  => 'eb_sso_form',
+    ],
+];
 
 $mformnavigation = new edwiserbridge_navigation_form();
 
@@ -77,8 +75,6 @@ $mformnavigation = new edwiserbridge_navigation_form();
  * Necessary page requirements.
  */
 $PAGE->set_pagelayout('admin');
-
-// $PAGE->set_pagelayout("popup");
 
 $PAGE->set_context($context);
 $PAGE->set_url('/auth/edwiserbridge/edwiserbridge.php?tab=settings');
@@ -104,18 +100,26 @@ $pageurl = $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=';
 foreach ($mform as $key => $mformdata) {
     // Create object.
     $objectname = 'edwiserbridge_' . $key . '_form';
-    $object     = new $objectname($pageurl . $key, null, 'post', '', array("id" => $mformdata['id']), true, null);
+    $object     = new $objectname($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
 
-    $fileoptions = array(
+    $fileoptions = [
         'maxbytes' => 0,
         'maxfiles' => '1',
         'subdirs' => 0,
-        'context' => context_system::instance()
-    );
+        'context' => context_system::instance(),
+    ];
 
     if ($key == 'sso') {
         $data = new stdClass();
-        $data = file_prepare_standard_filemanager($data, 'wploginbtnicon', $fileoptions, context_system::instance(), 'auth_edwiserbridge', 'wploginbtnicon', 0); // 0 is the item id.
+        $data = file_prepare_standard_filemanager(
+            $data,
+            'wploginbtnicon',
+            $fileoptions,
+            context_system::instance(),
+            'auth_edwiserbridge',
+            'wploginbtnicon',
+            0 // 0 is the item id.
+        );
     }
 
     if ($formdata = $object->get_data()) {
@@ -129,8 +133,15 @@ foreach ($mform as $key => $mformdata) {
         }
 
         if ($key == 'sso') {
-            $data = file_postupdate_standard_filemanager($data, 'wploginbtnicon', $fileoptions, context_system::instance(), 'auth_edwiserbridge', 'wploginbtnicon', 0);
-            // save filename in database
+            $data = file_postupdate_standard_filemanager(
+                $data, 'wploginbtnicon',
+                $fileoptions,
+                context_system::instance(),
+                'auth_edwiserbridge',
+                'wploginbtnicon',
+                0
+            );
+            // Save filename in database.
             $filename = '';
             $fs = get_file_storage();
             $file = $fs->get_area_files(
@@ -145,7 +156,7 @@ foreach ($mform as $key => $mformdata) {
                     $filename = $f->get_filename();
                 }
             }
-            if($filename != ''){
+            if ($filename != '') {
                 $filename = '/'.$filename;
             }
             set_config('wploginbtnicon', $filename, 'auth_edwiserbridge');

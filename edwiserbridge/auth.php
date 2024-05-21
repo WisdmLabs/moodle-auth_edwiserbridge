@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,14 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Anobody can login with any password.
+ * Authentication plugin for Edwiser Bridge.
+ * This plugin allows users to login to Moodle using their WordPress credentials.
  *
- * @package auth_none
- * @author Martin Dougiamas
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -44,8 +45,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @deprecated since Moodle 3.1
      */
-    public function auth_plugin_wdmwpmoodle()
-    {
+    public function auth_plugin_wdmwpmoodle() {
         debugging('Use of class name as constructor is deprecated', DEBUG_DEVELOPER);
         self::__construct();
     }
@@ -59,19 +59,21 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @return bool Authentication success or failure.
      */
-    public function user_login($username, $password = null)
-    {
+    public function user_login($username, $password = null) {
         global $CFG, $DB;
 
         if ($password == null || $password == '') {
             return false;
         }
-        $user = $DB->get_record('user', array('username' => $username, 'password' => $password, 'mnethostid' => $CFG->mnet_localhost_id));
+        $user = $DB->get_record(
+            'user',
+            ['username' => $username, 'password' => $password, 'mnethostid' => $CFG->mnet_localhost_id]
+        );
 
         if (!empty($user->suspended)) {
             return false;
         }
-        
+
         if ($user) {
             return true;
         }
@@ -79,8 +81,12 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         return false;
     }
 
-    public function prevent_local_passwords()
-    {
+    /**
+     * Local authentication is not supported.
+     *
+     * @return bool
+     */
+    public function prevent_local_passwords() {
         return false;
     }
 
@@ -89,8 +95,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @return bool
      */
-    public function is_internal()
-    {
+    public function is_internal() {
         return false;
     }
 
@@ -100,8 +105,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @return bool
      */
-    public function can_change_password()
-    {
+    public function can_change_password() {
         return false;
     }
 
@@ -111,8 +115,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @return moodle_url
      */
-    public function change_password_url()
-    {
+    public function change_password_url() {
         return;
     }
 
@@ -121,28 +124,32 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      *
      * @return bool
      */
-    public function can_reset_password()
-    {
+    public function can_reset_password() {
         return false;
     }
 
-    public function eb_send_curl_request($request_data)
-    {
-        $request_url = $this->config->wpsiteurl;
-        $request_url .= '/wp-json/edwiser-bridge/sso/';
+    /**
+     * Send curl request to wp site.
+     *
+     * @param array $requestdata requestdata.
+     */
+    public function eb_send_curl_request($requestdata) {
+        $requesturl = $this->config->wpsiteurl;
+        $requesturl .= '/wp-json/edwiser-bridge/sso/';
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => $request_url,
-            CURLOPT_TIMEOUT => 100
-        ));
+            CURLOPT_URL => $requesturl,
+            CURLOPT_TIMEOUT => 100,
+        ]);
 
-        // If wordpress server have user-agent restriction then uncomment below line
-        // curl_setopt($curl,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+        global $CFG;
+        $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge SSO';
+        curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
 
         curl_setopt( $curl, CURLOPT_POST, 1 );
-        curl_setopt( $curl, CURLOPT_POSTFIELDS, $request_data );
+        curl_setopt( $curl, CURLOPT_POSTFIELDS, $requestdata );
         $response = curl_exec( $curl );
     }
 
@@ -150,8 +157,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      * Function to login user into wp site.
      * @since 1.2
      */
-    public function user_authenticated_hook(&$user, $username, $password)
-    {
+    public function user_authenticated_hook(&$user, $username, $password) {
         global $CFG, $SESSION;
 
         // Guest user.
@@ -159,7 +165,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
             return true;
         }
 
-        //Secret key is empty.
+        // Secret key is empty.
         if (empty($this->config->sharedsecret)) {
             return true;
         }
@@ -171,11 +177,10 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
 
         $wpsiteurl = strtok($this->config->wpsiteurl, '?');
 
-        $hash = hash('md5', rand( 10,1000 ) );
-
+        $hash = hash('md5', rand(10, 1000));
 
         // All conditions are passed.
-        $args = array(
+        $args = [
             'action'            => 'login',
             'mdl_uid'           => $user->id,
             'mdl_uname'         => $user->username,
@@ -183,15 +188,17 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
             'mdl_key'           => $this->config->sharedsecret,
             'mdl_wpurl'         => $wpsiteurl,
             'redirect_to'       => isset($SESSION->wantsurl) ? $SESSION->wantsurl : $CFG->wwwroot,
-            'mdl_one_time_code' => $hash
-        );
+            'mdl_one_time_code' => $hash,
+        ];
 
-        $encrypted_args = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
+        $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
 
         // Send curl to wp site with data.
-        $this->eb_send_curl_request( array( 'wdmargs' => $encrypted_args ) );
+        $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
 
-        $SESSION->wantsurl = $CFG->wwwroot.'/auth/edwiserbridge/wdmwplogin.php?'.'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash . '&wpsiteurl='.urlencode( $wpsiteurl );
+        $SESSION->wantsurl = $CFG->wwwroot.'/auth/edwiserbridge/wdmwplogin.php?'
+                            .'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash
+                            . '&wpsiteurl='.urlencode( $wpsiteurl );
 
         return true;
     }
@@ -200,11 +207,10 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      * Redirect users to specific page after logout. Also, logs out from wp site.
      * @since 1.2
      */
-    public function logoutpage_hook()
-    {
+    public function logoutpage_hook() {
         global $redirect, $USER;
 
-        //Secret key is empty.
+        // Secret key is empty.
         if (empty($this->config->sharedsecret)) {
             return true;
         }
@@ -218,20 +224,20 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         if (!filter_var($this->config->wpsiteurl, FILTER_VALIDATE_URL)) {
             return true;
         }
-        $hash = hash('md5', rand( 10,1000 ) );
+        $hash = hash('md5', rand(10, 1000) );
 
-        $args = array(
+        $args = [
             'action'        => 'logout',
             'mdl_key'       => $this->config->sharedsecret,
             'redirect_to'   => $redirect,
             'mdl_uid'       => $USER->id,
             'mdl_uname'     => $USER->username,
             'mdl_email'     => $USER->email,
-            'mdl_one_time_code' => $hash
-        );
+            'mdl_one_time_code' => $hash,
+        ];
 
-        $encrypted_args = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
-        $this->eb_send_curl_request( array( 'wdmargs' => $encrypted_args ) );
+        $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
+        $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
 
         $redirect = strtok($this->config->wpsiteurl, '?') .'?wdmaction=logout&mdl_uid=' . $USER->id . '&verify_code=' . $hash;
 
@@ -241,23 +247,22 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      * Function to encrypt query argument.
      * @since 1.2
      */
-    public static function wdm_get_encrypted_query_args($args, $key)
-    {
+    public static function wdm_get_encrypted_query_args($args, $key) {
         $query = http_build_query( $args, 'flags_' );
         $token = $query;
 
-        $enc_method = 'AES-128-CTR';
+        $encmethod = 'AES-128-CTR';
 
-        $enc_key = openssl_digest( $key, 'SHA256', true );
+        $enckey = openssl_digest( $key, 'SHA256', true );
 
-        $enc_iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($enc_method));
-        $crypttext = openssl_encrypt($token, $enc_method, $enc_key, 0, $enc_iv) . "::" . bin2hex($enc_iv);
+        $enciv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($encmethod));
+        $crypttext = openssl_encrypt($token, $encmethod, $enckey, 0, $enciv) . "::" . bin2hex($enciv);
 
         $data = base64_encode($crypttext);
-        $data = str_replace(array('+', '/', '='), array('-', '_', ''), $data);
+        $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
-        $encrypted_args = trim($data);
-        return $encrypted_args;
+        $encryptedargs = trim($data);
+        return $encryptedargs;
     }
 
 
@@ -270,34 +275,39 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
     public function loginpage_idp_list($wantsurl) {
         global $CFG, $SESSION;
 
-        //Secret key is empty.
+        // Secret key is empty.
         if (empty($this->config->wploginenablebtn)) {
-            return array();
+            return [];
         }
 
         if (empty($this->config->sharedsecret)) {
-            return array();
+            return [];
         }
 
         // WP URL is not a valid URL.
         if (!filter_var($this->config->wpsiteurl, FILTER_VALIDATE_URL)) {
-            return array();
+            return [];
         }
 
         $wpsiteurl = strtok($this->config->wpsiteurl, '?');
 
         // All conditions are passed.
-        $args = array(
+        $args = [
             'mdl_key' => $this->config->sharedsecret,
-        );
+        ];
 
-        $encrypted_args = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret );
+        $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret );
 
-        $url  = $wpsiteurl .'?wdmaction=login_with_moodle&data=' . $encrypted_args;
-        $url = new moodle_url( $url, array( 'installdepx' => 1, 'confirminstalldep' => 1 ) );
+        $url  = $wpsiteurl .'?wdmaction=login_with_moodle&data=' . $encryptedargs;
+        $url = new moodle_url( $url, ['installdepx' => 1, 'confirminstalldep' => 1]);
 
-        $text = ! empty($this->config->wploginbtntext) ? $this->config->wploginbtntext : get_string('WordPress', 'auth_edwiserbridge') ;
-        if(isset($this->config->wploginbtnicon) && !empty($this->config->wploginbtnicon)) {
+        if (!empty($this->config->wploginbtntext) ) {
+            $text = $this->config->wploginbtntext;
+        } else {
+            $text = get_string('WordPress', 'auth_edwiserbridge');
+        }
+
+        if (isset($this->config->wploginbtnicon) && !empty($this->config->wploginbtnicon)) {
             $iconurl = moodle_url::make_pluginfile_url(
                 context_system::instance()->id,
                 'auth_edwiserbridge',
@@ -307,7 +317,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
                 $this->config->wploginbtnicon
             );
         } else {
-            //load default icon from pix folder.
+            // Load default icon from pix folder.
             $iconurl = $CFG->wwwroot . '/auth/edwiserbridge/pix/wp-logo.png';
         }
 

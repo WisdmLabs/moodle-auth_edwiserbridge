@@ -66,7 +66,7 @@ define("auth_edwiserbridge/eb_settings", [
 
             function checkMissingServices(service_id, messge_ele = false) {
                 var promises = ajax.call([{
-                    methodname: "eb_get_service_info",
+                    methodname: "auth_edwiserbridge_get_service_info",
                     args: { service_id: service_id },
                 }, ]);
 
@@ -484,7 +484,7 @@ define("auth_edwiserbridge/eb_settings", [
                 $("#eb_common_err").css("display", "none");
 
                 var promises = ajax.call([{
-                    methodname: "eb_link_service",
+                    methodname: "auth_edwiserbridge_link_service",
                     args: { service_id: service_id, token: token },
                 }, ]);
 
@@ -529,7 +529,7 @@ define("auth_edwiserbridge/eb_settings", [
                 $('#id_eb_token option[value=""]').attr("selected", true);
 
                 var promises = ajax.call([{
-                    methodname: "eb_create_service",
+                    methodname: "auth_edwiserbridge_create_service",
                     args: { web_service_name: web_service_name, user_id: user_id },
                 }, ]);
 
@@ -806,7 +806,7 @@ define("auth_edwiserbridge/eb_settings", [
 
 
                 var promises = ajax.call([{
-                    methodname: "edwiserbridge_local_setup_wizard_save_and_continue",
+                    methodname: "auth_edwiserbridge_setup_wizard_save_and_continue",
                     args: { data : data },
                 }, ]);
 
@@ -868,7 +868,7 @@ define("auth_edwiserbridge/eb_settings", [
                 $("#eb-lading-parent").show();
 
                 var promises = ajax.call([{
-                    methodname: 'edwiserbridge_local_enable_plugin_settings',
+                    methodname: 'auth_edwiserbridge_enable_plugin_settings',
                     args: {},
                 }, ]);
 
@@ -983,7 +983,7 @@ define("auth_edwiserbridge/eb_settings", [
 
 
                 var promises = ajax.call([{
-                    methodname: 'edwiserbridge_local_setup_test_connection',
+                    methodname: 'auth_edwiserbridge_setup_test_connection',
                     args: { wp_url: url },
                 }, ]);
 
@@ -1149,7 +1149,7 @@ define("auth_edwiserbridge/eb_settings", [
 
 
             var promises = ajax.call([{
-                methodname: "edwiserbridge_local_setup_wizard_save_and_continue",
+                methodname: "auth_edwiserbridge_setup_wizard_save_and_continue",
                 args: { data : data },
             }, ]);
 

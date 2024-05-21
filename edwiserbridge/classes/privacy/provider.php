@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
+ * Privacy implementation for auth_edwiserbridge.
  * Privacy Subsystem implementation for auth_edwiserbridge.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge\privacy;
@@ -33,8 +33,6 @@ use core_privacy\local\request\helper;
 use core_privacy\local\request\transform;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * The edwiserbridge plugin stores a user preference data.
@@ -118,7 +116,12 @@ class provider implements
     public static function delete_data_for_users(approved_userlist $userlist) {
     }
 
-    public static function get_reason() : string {
+    /**
+     * Get the privacy provider component name.
+     *
+     * @return string The component name.
+     */
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }

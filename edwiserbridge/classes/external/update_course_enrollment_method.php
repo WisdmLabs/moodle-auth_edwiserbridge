@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,14 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Provides edwiserbridge_local\external\course_progress_data trait.
+ * Update course enrollment method.
+ * Functionality to update course enrollment method from WordPress.
  *
- * @package     edwiserbridge_local
- * @category    external
- * @copyright   2018 Wisdmlabs
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    auth_edwiserbridge
+ * @category   external
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge\external;
@@ -34,9 +36,9 @@ use core_completion\progress;
 require_once($CFG->dirroot.'/auth/edwiserbridge/classes/class-settings-handler.php');
 
 /**
- * Trait implementing the external function edwiserbridge_local_course_progress_data
+ * Trait implementing the external function auth_edwiserbridge_update_course_enrollment_method
  */
-trait edwiserbridge_local_update_course_enrollment_method {
+trait update_course_enrollment_method {
 
     /**
      * Get list of active course enrolment methods for current user.
@@ -45,22 +47,22 @@ trait edwiserbridge_local_update_course_enrollment_method {
      * @return array of course enrolment methods
      * @throws moodle_exception
      */
-    public static function edwiserbridge_local_update_course_enrollment_method( $courseid ) {
-        global $DB,$CFG;
+    public static function auth_edwiserbridge_update_course_enrollment_method($courseid) {
+        global $DB, $CFG;
 
         $params = self::validate_parameters(
-            self::edwiserbridge_local_update_course_enrollment_method_parameters(),
-            array(
+            self::auth_edwiserbridge_update_course_enrollment_method_parameters(),
+            [
                 'courseid'   => $courseid,
-            )
+            ]
         );
 
-        // include manual enrollment file .
+        // Include manual enrollment file.
         require_once($CFG->dirroot.'/enrol/manual/locallib.php');
 
-        $enroll_plugins = enrol_get_plugins(true);
-        $response = array();
-        if(isset($enroll_plugins['manual'])){
+        $enrollplugins = enrol_get_plugins(true);
+        $response = [];
+        if (isset($enrollplugins['manual'])) {
             foreach ($params['courseid'] as $singlecourseid) {
                 // Add enrolment instance.
                 $enrolinstance = new \enrol_manual_plugin();
@@ -69,66 +71,75 @@ trait edwiserbridge_local_update_course_enrollment_method {
                 $status = $enrolinstance->add_instance($course);
 
                 $instance = enrol_get_instances($course->id, false);
-                //get manual enrolment instance id.
-                //other plugin instances are also available
-                foreach ($instance as $instances) { //CHANGE YET TO COMMIT
-                    if($instances->enrol == 'manual'){
+                // Get manual enrolment instance id.
+                // Other plugin instances are also available.
+                foreach ($instance as $instances) {
+                    if ($instances->enrol == 'manual') {
                         $instanceid = $instances->id;
                     }
                 }
                 $enrolinstance->update_status($instance[$instanceid], ENROL_INSTANCE_ENABLED);
-                
-                $response[] = array(
+
+                $response[] = [
                     'courseid' => $singlecourseid,
-                    'status' => 1
-                ); 
+                    'status' => 1,
+                ];
             }
-        } else{
-            $response[] = array(
+        } else {
+            $response[] = [
                 'courseid' => 0,
                 'status' => 0,
-                'message' => 'plugin_not_installed'
-            );
+                'message' => 'plugin_not_installed',
+            ];
         }
-
         return $response;
     }
 
 
 
     /**
-     * Returns description of edwiserbridge_local_get_course_enrollment_method() parameters
+     * Returns description of auth_edwiserbridge_update_course_enrollment_method() parameters
      *
      * @return external_function_parameters
      */
-    public static function edwiserbridge_local_update_course_enrollment_method_parameters() {
+    public static function auth_edwiserbridge_update_course_enrollment_method_parameters() {
         return new external_function_parameters(
-            array(
-                'courseid'   => new external_multiple_structure( 
+            [
+                'courseid'   => new external_multiple_structure(
                     new external_value(
                         PARAM_TEXT,
-                        get_string('web_service_wp_url', 'auth_edwiserbridge')
+                        'Course id'
                     ),
                     'List of course id.'
-                )
-            )
+                ),
+            ]
         );
     }
 
 
     /**
-     * Returns description of edwiserbridge_local_get_course_enrollment_method() result value
+     * Returns description of auth_edwiserbridge_update_course_enrollment_method() result value
      *
      * @return external_description
      */
-    public static function edwiserbridge_local_update_course_enrollment_method_returns() {
+    public static function auth_edwiserbridge_update_course_enrollment_method_returns() {
         return new external_multiple_structure(
             new external_single_structure(
-                array(
-                    'courseid' => new external_value(PARAM_INT, 'id of course'),
-                    'status'   => new external_value(PARAM_INT, 'Returns 1 if manual enrolment is enabled and 0 if disabled.'),
-                    'message'  => new external_value(PARAM_TEXT, 'message', VALUE_OPTIONAL),
-                )
+                [
+                    'courseid' => new external_value(
+                        PARAM_INT,
+                        'id of course'
+                    ),
+                    'status' => new external_value(
+                        PARAM_INT,
+                        'Returns 1 if manual enrolment is enabled and 0 if disabled.'
+                    ),
+                    'message' => new external_value(
+                        PARAM_TEXT,
+                        'message',
+                        VALUE_OPTIONAL
+                    ),
+                ]
             )
         );
     }

@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,14 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Settings mod form
+ * Connection settings.
+ * Functionality to manage connection settings.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -36,7 +37,7 @@ class edwiserbridge_connection_form extends moodleform {
     public function definition() {
         $defaultvalues = auth_edwiserbridge_get_connection_settings();
         $mform = $this->_form;
-        $repeatarray = array();
+        $repeatarray = [];
 
         $repeatarray[] = $mform->createElement('header', 'wp_header', get_string('wp_site_settings_title', 'auth_edwiserbridge')
         . "<div class ='eb_each_site_container'> </div>");
@@ -51,7 +52,7 @@ class edwiserbridge_connection_form extends moodleform {
         $repeatarray[] = $mform->createElement('text', 'wp_token', get_string('wp_token', 'auth_edwiserbridge'), 'size="35"');
         $repeatarray[] = $mform->createElement('hidden', 'wp_remove', 'no');
 
-        $buttonarray = array();
+        $buttonarray = [];
         $buttonarray[] = $mform->createElement(
             'button',
             'eb_test_connection',
@@ -72,7 +73,7 @@ class edwiserbridge_connection_form extends moodleform {
         /*
         * Data type of each field.
         */
-        $repeateloptions = array();
+        $repeateloptions = [];
         $repeateloptions['wp_name']['type']   = PARAM_TEXT;
         $repeateloptions['wp_url']['type']    = PARAM_TEXT;
         $repeateloptions['wp_token']['type']  = PARAM_TEXT;
@@ -81,9 +82,9 @@ class edwiserbridge_connection_form extends moodleform {
         /*
         * Name of each field.
         */
-        $repeateloptions['wp_name']['helpbutton']  = array("wordpress_site_name", "auth_edwiserbridge");
-        $repeateloptions['wp_token']['helpbutton'] = array("token", "auth_edwiserbridge");
-        $repeateloptions['wp_url']['helpbutton']   = array("wordpress_url", "auth_edwiserbridge");
+        $repeateloptions['wp_name']['helpbutton']  = ["wordpress_site_name", "auth_edwiserbridge"];
+        $repeateloptions['wp_token']['helpbutton'] = ["token", "auth_edwiserbridge"];
+        $repeateloptions['wp_url']['helpbutton']   = ["wordpress_url", "auth_edwiserbridge"];
 
         /*
         * Adding rule for each field.

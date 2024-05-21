@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,20 +12,19 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Provides auth_edwiserbridge\external\course_progress_data trait.
+ * Get courses list.
+ * Functionality to get courses list(with limited data) from moodle.
  *
- * @package     auth_edwiserbridge
- * @category    external
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @category   external
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge\external;
-
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
@@ -33,12 +32,10 @@ use external_single_structure;
 use external_value;
 use core_completion\progress;
 
-// require_once($CFG->libdir.'/externallib.php');
-
 /**
- * Trait implementing the external function auth_edwiserbridge_course_progress_data
+ * Trait implementing the external function auth_edwiserbridge_get_courses
  */
-trait eb_get_courses {
+trait get_courses {
 
     /**
      * functionality to get courses in chunk.
@@ -48,12 +45,12 @@ trait eb_get_courses {
      * @param  int $totalcourses totalcourses
      * @return array array of courses.
      */
-    public static function eb_get_courses($offset, $limit, $searchstring, $totalcourses) {
+    public static function auth_edwiserbridge_get_courses($offset, $limit, $searchstring, $totalcourses) {
         global $DB;
 
         $params = self::validate_parameters(
-            self::eb_get_courses_parameters(),
-            array('offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_courses" => $totalcourses)
+            self::auth_edwiserbridge_get_courses_parameters(),
+            ['offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_courses" => $totalcourses]
         );
 
         $query = "SELECT id, fullname, category as categoryid FROM {course}";
@@ -64,21 +61,21 @@ trait eb_get_courses {
         }
 
         $courses = $DB->get_records_sql($query, null, $offset, $limit);
-       $coursecount = 0;
+        $coursecount = 0;
         if (!empty($params['total_courses'])) {
-           $coursecount = $DB->get_record_sql("SELECT count(*) total_count FROM {course}");
-           $coursecount =$coursecount->total_count;
+            $coursecount = $DB->get_record_sql("SELECT count(*) total_count FROM {course}");
+            $coursecount = $coursecount->total_count;
         }
 
-        return array("total_courses" =>$coursecount, "courses" => $courses);
+        return ["total_courses" => $coursecount, "courses" => $courses];
     }
 
     /**
      * paramters defined for get courses function.
      */
-    public static function eb_get_courses_parameters() {
+    public static function auth_edwiserbridge_get_courses_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'offset'        => new external_value(
                     PARAM_INT,
                     get_string('web_service_offset', 'auth_edwiserbridge')
@@ -95,20 +92,20 @@ trait eb_get_courses {
                     PARAM_INT,
                     get_string('web_service_total_courses', 'auth_edwiserbridge')
                 ),
-            )
+            ]
         );
     }
 
     /**
      * paramters which will be returned from get courses function.
      */
-    public static function eb_get_courses_returns() {
+    public static function auth_edwiserbridge_get_courses_returns() {
         return new external_function_parameters(
-            array(
+            [
                 'total_courses' => new external_value(PARAM_INT, ''),
                 'courses' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'id'        => new external_value(
                                 PARAM_INT,
                                 get_string('web_service_courseid', 'auth_edwiserbridge')
@@ -120,11 +117,11 @@ trait eb_get_courses {
                             'categoryid' => new external_value(
                                 PARAM_INT,
                                 get_string('web_service_categoryid', 'auth_edwiserbridge')
-                            )
-                        )
+                            ),
+                        ]
                     )
-                )
-            )
+                ),
+            ]
         );
     }
 }

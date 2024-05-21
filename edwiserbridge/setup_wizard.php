@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,22 +12,20 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser Bridge - WordPress and Moodle integration.
- * File displays the edwiser bridge settings.
+ * Setup wizard for Edwiser Bridge plugin.
+ * Functionality to manage amd display setup wizard.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 
 require('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-// require_once('mod_form.php');
+
 require_once('classes/class-setup-wizard.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
@@ -42,7 +40,7 @@ if ( ! empty( $progress ) ) {
 
     $nextstep = $setupwizard->get_next_step( $progress );
 
-    if ( ! isset( $_GET['current_step'] ) /*|| ( isset( $_GET['current_step'] ) && $_GET['current_step'] != $nextstep )*/ ) {
+    if (!isset( $_GET['current_step'])) {
         $redirecturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
         redirect ($redirecturl);
     }
@@ -82,19 +80,19 @@ $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
 $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
 
-// Actual page template output starts here. 
+// Actual page template output starts here.
 
 // Output page header.
 echo $OUTPUT->header();
 
-// Start page container
+// Start page container.
 echo $OUTPUT->container_start();
 
 // This outputs setup wizard template.
 // This will use classes/class-setup-wizard.php file.
 $setupwizard->eb_setup_wizard_template();
 
-// End page container
+// End page container.
 echo $OUTPUT->container_end();
 
 // Output footer.

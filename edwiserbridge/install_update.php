@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Install edwiser plugin
+ * Plugin update installation.
+ * Functionality to manage plugin update installation.
  *
- * @package   auth_edwiserbridge
- * @copyright 2020 WisdmLabs <edwiser@wisdmlabs.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author    Yogesh Shirsath
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 use core\update\remote_info;
@@ -35,7 +35,7 @@ $dismiss = optional_param('dismiss', 0, PARAM_INT);
 $download = optional_param('download', 0, PARAM_INT);
 $sesskey = optional_param('sesskey', 0, PARAM_RAW);
 
-if($dismiss) {
+if ($dismiss) {
     set_config('edwiserbridge_dismiss_update_notification', 1, 'auth_edwiserbridge');
     redirect(new moodle_url('/my'));
 }
@@ -44,11 +44,11 @@ require_login();
 $syscontext = context_system::instance();
 require_capability('moodle/site:config', $syscontext);
 
-$params = array(
+$params = [
     'installupdate' => $installupdate,
     'download' => $download,
-    'sesskey' => $sesskey
-);
+    'sesskey' => $sesskey,
+];
 $pageurl = new moodle_url('/auth/edwiserbridge/install_update.php', $params);
 
 $PAGE->set_url($pageurl);
@@ -82,11 +82,11 @@ $edwiserpluginupdate->upgrade_install_plugin(
     get_string('updateavailableinstallallhead', 'core_admin'),
     new moodle_url(
         $PAGE->url,
-        array(
+        [
             'installupdate' => $installupdate,
             'confirminstallupdate' => 1,
-            'sesskey' => $sesskey
-        )
+            'sesskey' => $sesskey,
+        ]
     ),
     $plugin->url,
     new moodle_url('/my')

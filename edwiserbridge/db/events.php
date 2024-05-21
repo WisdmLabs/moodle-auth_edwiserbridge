@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,55 +12,55 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser Bridge - WordPress and Moodle integration.
- * File responsible to register all the events which are used for 2 way synch.
+ * Event registration.
+ * Functionality to manage event registration.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$observers = array(
-    array(
+$observers = [
+    [
         'eventname' => 'core\event\user_enrolment_created',
         'callback'  => 'auth_edwiserbridge_observer::user_enrolment_created',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\user_enrolment_deleted',
         'callback'  => 'auth_edwiserbridge_observer::user_enrolment_deleted',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\user_created',
         'callback'  => 'auth_edwiserbridge_observer::user_created',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\user_deleted',
         'callback'  => 'auth_edwiserbridge_observer::user_deleted',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\user_updated',
         'callback'  => 'auth_edwiserbridge_observer::user_updated',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\user_password_updated',
         'callback'  => 'auth_edwiserbridge_observer::user_password_updated',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\course_created',
         'callback'  => 'auth_edwiserbridge_observer::course_created',
-    ),
-    array(
+    ],
+    [
         'eventname' => 'core\event\course_deleted',
         'callback'  => 'auth_edwiserbridge_observer::course_deleted',
-    ),
-    // page view event
-    array(
+    ],
+    // Page view event for update check.
+    [
         'eventname' => '\core\event\dashboard_viewed',
         'callback'  => 'auth_edwiserbridge_observer::dashboard_viewed',
-    ),
-);
+    ],
+];

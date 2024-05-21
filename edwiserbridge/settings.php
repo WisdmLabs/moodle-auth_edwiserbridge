@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
+ * Settings page for Edwiser Bridge plugin.
  * Plugin administration pages are defined here.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -29,10 +29,10 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 global $CFG, $PAGE;
 
-// plugin update notification.
+// Plugin update notification.
 auth_edwiserbridge_show_plugin_update_notification();
 
-if ( auth_edwiserbridge_check_pro_dependancy() ) {
+if (auth_edwiserbridge_check_pro_dependancy()) {
     $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
     $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/sso_settings.js'));
     $PAGE->requires->js_call_amd('auth_edwiserbridge/eb_settings', 'init');
@@ -42,7 +42,7 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
     $strings = $stringmanager->load_component_strings('auth_edwiserbridge', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'auth_edwiserbridge');
 
-    // add new cateogry in admin settings.
+    // Add new cateogry in admin settings.
 
     $ADMIN->add(
         'modules',
@@ -64,10 +64,10 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
                 'auth_edwiserbridge'
             ),
             "$CFG->wwwroot/auth/edwiserbridge/edwiserbridge.php?tab=settings",
-            array(
+            [
                 'moodle/user:update',
-                'moodle/user:delete'
-            )
+                'moodle/user:delete',
+            ]
         )
     );
 
@@ -80,17 +80,18 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
                 'auth_edwiserbridge'
             ),
             "$CFG->wwwroot/auth/edwiserbridge/setup_wizard.php",
-            array(
+            [
                 'moodle/user:update',
-                'moodle/user:delete'
-            )
+                'moodle/user:delete',
+            ]
         )
     );
 
     if ($ADMIN->fulltree) {
         global $CFG;
-        $settings_link = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', array('tab' => 'sso'));
-        $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settings_link . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
+        $settingslink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', ['tab' => 'sso']);
+        $heading = new lang_string('settings_migration', 'auth_edwiserbridge')
+            . ' <a href="' . $settingslink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }
 
@@ -99,12 +100,12 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
             'auth_edwiserbridge/eb_settings_msg',
             '',
             '<div class="eb_settings_btn_cont" style="padding:20px;">' . get_string('eb_settings_msg', 'auth_edwiserbridge')
-                . '<a target="_blank" class="eb_settings_btn" style="padding: 7px 18px; border-radius: 4px; color: white;
+            . '<a target="_blank" class="eb_settings_btn" style="padding: 7px 18px; border-radius: 4px; color: white;
             background-color: #2578dd; margin-left: 5px;" href="' . $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php'
-                . '" >' . get_string('click_here', 'auth_edwiserbridge') . '</a></div>'
+            . '" >' . get_string('click_here', 'auth_edwiserbridge') . '</a></div>'
         )
     );
-    
+
     // Adding this field so that the setting page will be shown after installation.
     $settings->add(
         new admin_setting_configcheckbox(

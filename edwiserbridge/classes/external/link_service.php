@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Provides auth_edwiserbridge\external\course_progress_data trait.
+ * Link service.
+ * Functionality to link existing services.
  *
- * @package     auth_edwiserbridge
- * @category    external
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @category   external
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge\external;
@@ -36,9 +37,9 @@ use core_completion\progress;
 require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-settings-handler.php');
 
 /**
- * Trait implementing the external function auth_edwiserbridge_course_progress_data
+ * Trait implementing the external function auth_edwiserbridge_link_service
  */
-trait eb_link_service {
+trait link_service {
 
 
     /**
@@ -48,8 +49,8 @@ trait eb_link_service {
      * @param  int $token
      * @return array
      */
-    public static function eb_link_service($serviceid, $token) {
-        $response           = array();
+    public static function auth_edwiserbridge_link_service($serviceid, $token) {
+        $response           = [];
         $response['status'] = 0;
         $response['msg']    = get_string('eb_link_err', 'auth_edwiserbridge');
 
@@ -66,24 +67,24 @@ trait eb_link_service {
     /**
      * paramters defined for link service function.
      */
-    public static function eb_link_service_parameters() {
+    public static function auth_edwiserbridge_link_service_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'service_id' => new external_value(PARAM_TEXT, get_string('web_service_id', 'auth_edwiserbridge')),
-                'token'      => new external_value(PARAM_TEXT, get_string('web_service_token', 'auth_edwiserbridge'))
-            )
+                'token'      => new external_value(PARAM_TEXT, get_string('web_service_token', 'auth_edwiserbridge')),
+            ]
         );
     }
 
     /**
      * paramters which will be returned from link service function.
      */
-    public static function eb_link_service_returns() {
+    public static function auth_edwiserbridge_link_service_returns() {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
-                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'))
-            )
+                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge')),
+            ]
         );
     }
 }

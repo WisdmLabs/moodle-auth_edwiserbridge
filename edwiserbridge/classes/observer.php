@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser Bridge - WordPress and Moodle integration.
+ * Event observer.
  * Observer file used as the callback for all the events.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -43,17 +43,17 @@ class auth_edwiserbridge_observer {
      */
     public static function user_enrolment_created(core\event\user_enrolment_created $event) {
         global $CFG;
-        $userdata = user_get_users_by_id(array($event->relateduserid));
+        $userdata = user_get_users_by_id([$event->relateduserid]);
 
-        $requestdata = array(
+        $requestdata = [
             'action'     => 'course_enrollment',
             'user_id'    => $event->relateduserid,
             'course_id'  => $event->courseid,
             'user_name'  => $userdata[$event->relateduserid]->username,
             'first_name' => $userdata[$event->relateduserid]->firstname,
             'last_name'  => $userdata[$event->relateduserid]->lastname,
-            'email'      => $userdata[$event->relateduserid]->email
-        );
+            'email'      => $userdata[$event->relateduserid]->email,
+        ];
 
         if (auth_edwiserbridge_check_if_request_is_from_wp()) {
             return;
@@ -81,16 +81,16 @@ class auth_edwiserbridge_observer {
      */
     public static function user_enrolment_deleted(core\event\user_enrolment_deleted $event) {
         global $CFG;
-        $userdata = user_get_users_by_id(array($event->relateduserid));
-        $requestdata = array(
+        $userdata = user_get_users_by_id([$event->relateduserid]);
+        $requestdata = [
             'action'     => 'course_un_enrollment',
             'user_id'    => $event->relateduserid,
             'course_id'  => $event->courseid,
             'user_name'  => $userdata[$event->relateduserid]->username,
             'first_name' => $userdata[$event->relateduserid]->firstname,
             'last_name'  => $userdata[$event->relateduserid]->lastname,
-            'email'      => $userdata[$event->relateduserid]->email
-        );
+            'email'      => $userdata[$event->relateduserid]->email,
+        ];
 
         // Checks if the request is from the wordpress site or from te Moodle site itself.
         if (auth_edwiserbridge_check_if_request_is_from_wp()) {
@@ -120,7 +120,7 @@ class auth_edwiserbridge_observer {
     public static function user_created(core\event\user_created $event) {
 
         global $CFG;
-        $userdata = user_get_users_by_id(array($event->relateduserid));
+        $userdata = user_get_users_by_id([$event->relateduserid]);
 
         // User password should be encrypted. Using Openssl for it.
         // We will use token as the key as it is present on both sites.
@@ -146,8 +146,8 @@ class auth_edwiserbridge_observer {
                     }
 
                     require_once("$CFG->dirroot/user/profile/lib.php");
-                    
-                    $requestdata = array(
+
+                    $requestdata = [
                         'action' => 'user_creation',
                         'user_id'     => $event->relateduserid,
                         'user_name'   => $userdata[$event->relateduserid]->username,
@@ -157,8 +157,8 @@ class auth_edwiserbridge_observer {
                         'password'    => $password,
                         'enc_iv'      => $enciv,
                         'secret_key' => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                        'custom_fields' => json_encode(profile_user_record($event->relateduserid, false)), // adding custom fields data.
-                    );
+                        'custom_fields' => json_encode(profile_user_record($event->relateduserid, false)), // Custom fields data.
+                    ];
 
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -173,7 +173,7 @@ class auth_edwiserbridge_observer {
      */
     public static function user_updated(core\event\user_updated $event) {
         global $CFG;
-        $userdata = user_get_users_by_id(array($event->relateduserid));
+        $userdata = user_get_users_by_id([$event->relateduserid]);
 
         // User password should be encrypted. Using Openssl for it.
         // We will use token as the key as it is present on both sites.
@@ -205,7 +205,7 @@ class auth_edwiserbridge_observer {
 
                     require_once("$CFG->dirroot/user/profile/lib.php");
 
-                    $requestdata = array(
+                    $requestdata = [
                         'action'        => 'user_updated',
                         'user_id'       => $event->relateduserid,
                         'first_name'    => $userdata[$event->relateduserid]->firstname,
@@ -217,8 +217,8 @@ class auth_edwiserbridge_observer {
                         'password'      => $password,
                         'enc_iv'        => $enciv,
                         'secret_key'    => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                        'custom_fields' => json_encode(profile_user_record($event->relateduserid, false)), // adding custom fields data.
-                    );
+                        'custom_fields' => json_encode(profile_user_record($event->relateduserid, false)), // Custom fields data.
+                    ];
 
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -234,12 +234,12 @@ class auth_edwiserbridge_observer {
     public static function user_password_updated(core\event\user_password_updated $event) {
         global $CFG;
 
-        $user_id = $event->userid;
-        if($event->relateduserid) {
-            $user_id = $event->relateduserid;
+        $userid = $event->userid;
+        if ($event->relateduserid) {
+            $userid = $event->relateduserid;
         }
 
-        $userdata = user_get_users_by_id(array($user_id));
+        $userdata = user_get_users_by_id([$userid]);
 
         // User password should be encrypted. Using Openssl for it.
         // We will use token as the key as it is present on both sites.
@@ -261,7 +261,7 @@ class auth_edwiserbridge_observer {
                     $password    = '';
                     $enciv       = '';
                     $newpassword = optional_param('newpassword1', '', PARAM_TEXT);
-                    if(empty($newpassword)) {
+                    if (empty($newpassword)) {
                         $newpassword = optional_param('password', '', PARAM_TEXT);
                     }
 
@@ -272,14 +272,14 @@ class auth_edwiserbridge_observer {
                         $password = openssl_encrypt($newpassword, $encmethod, $enckey, 0, $enciv);
                     }
 
-                    $requestdata = array(
+                    $requestdata = [
                         'action'     => 'user_updated',
-                        'user_id'    => $user_id,
-                        'email'      => $userdata[$user_id]->email,
+                        'user_id'    => $userid,
+                        'email'      => $userdata[$userid]->email,
                         'password'   => $password,
                         'enc_iv'     => $enciv,
                         'secret_key' => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                    );
+                    ];
 
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -294,10 +294,10 @@ class auth_edwiserbridge_observer {
      */
     public static function user_deleted(core\event\user_deleted $event) {
         global $CFG;
-        $requestdata = array(
+        $requestdata = [
             'action'  => 'user_deletion',
-            'user_id' => $event->relateduserid
-        );
+            'user_id' => $event->relateduserid,
+        ];
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
@@ -305,7 +305,9 @@ class auth_edwiserbridge_observer {
             $synchconditions = unserialize($CFG->eb_synch_settings);
 
             foreach ($sites as $value) {
-                if (isset( $synchconditions[$value["wp_name"]]["user_deletion"] ) && $synchconditions[$value["wp_name"]]["user_deletion"] && $value['wp_token']) {
+                if (isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
+                        $synchconditions[$value["wp_name"]]["user_deletion"] && $value['wp_token']
+                ) {
                     // Adding Token for verification in WP from Moodle.
                     $requestdata['secret_key'] = $value['wp_token'];
 
@@ -336,14 +338,14 @@ class auth_edwiserbridge_observer {
                     $synchconditions[$value["wp_name"]]["course_creation"] &&
                     $value['wp_token']
                 ) {
-                    $requestdata = array(
+                    $requestdata = [
                         'action'      => 'course_created',
                         'course_id'   => $event->courseid,
                         'fullname'    => $course->fullname,
                         'summary'     => $course->summary,
                         'cat'         => $course->category,
                         'secret_key'  => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                    );
+                    ];
 
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -359,10 +361,10 @@ class auth_edwiserbridge_observer {
     public static function course_deleted(core\event\course_deleted $event) {
         global $CFG;
 
-        $requestdata = array(
+        $requestdata = [
             'action'    => 'course_deleted',
             'course_id' => $event->objectid,
-        );
+        ];
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
@@ -386,13 +388,13 @@ class auth_edwiserbridge_observer {
 
     /**
      * Dashboard viewed event.
-     * 
+     *
      * @param \core\event\dashboard_viewed $event event.
      */
     public static function dashboard_viewed(\core\event\dashboard_viewed $event) {
         global $CFG;
-        
-        // check if user is admin or not.
+
+        // Check if user is admin or not.
         if (!is_siteadmin()) {
             return;
         }

@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,15 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Edwiser Bridge - WordPress and Moodle integration.
- * File responsible to perform all actions of the set-up wizard.
+ * Settings handler.
+ * Saves and handle all Moodle settings related functionalities.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -45,7 +45,7 @@ class eb_settings_handler {
     public function eb_create_externle_service($name, $userid) {
         global $DB, $CFG;
         // Response initializations.
-        $response               = array();
+        $response               = [];
         $response['status']     = 1;
         $response['msg']        = '';
         $response['token']      = 0;
@@ -53,7 +53,7 @@ class eb_settings_handler {
         $response['service_id'] = 0;
 
         // Service creation default data.
-        $service                       = array();
+        $service                       = [];
         $service['name']               = $name;
         $service['enabled']            = 1;
         $service['requiredcapability'] = null;
@@ -124,7 +124,7 @@ class eb_settings_handler {
                 return 0;
                 break;
             }
-        } while ($DB->record_exists('external_services', array('shortname' => $newshortname)));
+        } while ($DB->record_exists('external_services', ['shortname' => $newshortname]));
 
         return $newshortname;
     }
@@ -136,7 +136,7 @@ class eb_settings_handler {
      */
     public function eb_check_if_service_name_available($servicename) {
         global $DB;
-        if ($DB->record_exists('external_services', array('name' => $servicename))) {
+        if ($DB->record_exists('external_services', ['name' => $servicename])) {
             return 0;
         }
         return 1;
@@ -149,7 +149,7 @@ class eb_settings_handler {
      */
     public function eb_add_auth_user($serviceid, $userid) {
         global $DB;
-        $dbarr = array();
+        $dbarr = [];
         $dbarr['externalserviceid'] = $serviceid;
         $dbarr['userid'] = $userid;
         $dbarr['iprestriction'] = null;
@@ -164,28 +164,28 @@ class eb_settings_handler {
      */
     public function eb_add_default_web_service_functions($serviceid) {
         global $DB;
-        $functions = array(
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_user_create_users'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_user_get_users_by_field'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_user_update_users'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses_by_field'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_course_get_categories'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_enrol_users'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_unenrol_users'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_enrol_get_users_courses'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_test_connection'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_site_data'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_course_progress'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_edwiser_plugins_info'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'edwiserbridge_local_get_course_enrollment_method'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'edwiserbridge_local_update_course_enrollment_method'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'edwiserbridge_local_get_mandatory_settings'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'edwiserbridge_local_enable_plugin_settings'),
-        );
+        $functions = [
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_create_users'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_get_users_by_field'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_update_users'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses_by_field'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_categories'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_enrol_users'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_unenrol_users'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_enrol_get_users_courses'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_test_connection'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_site_data'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_course_progress'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_edwiser_plugins_info'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_course_enrollment_method'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_update_course_enrollment_method'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_mandatory_settings'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_enable_plugin_settings'],
+        ];
 
         foreach ($functions as $function) {
-            if ($DB->record_exists('external_functions', array('name' => $function['functionname']))) {
+            if ($DB->record_exists('external_functions', ['name' => $function['functionname']])) {
                 $DB->insert_record('external_services_functions', $function);
             }
         }
@@ -200,31 +200,31 @@ class eb_settings_handler {
      */
     public function eb_extensions_web_service_function($serviceid) {
         global $DB;
-        $ssofunctions = array(
-            array('externalserviceid' => $serviceid, 'functionname' => 'wdm_sso_verify_token'),
-        );
+        $ssofunctions = [
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_verify_sso_token'],
+        ];
 
-        $selsyncfunctions = array(
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_users'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_courses'),
-        );
+        $selsyncfunctions = [
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_users'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_courses'],
+        ];
 
-        $bulkpurchase = array(
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_add_cohort_members'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_create_cohorts'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_role_assign_roles'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_role_unassign_roles'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_delete_cohort_members'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'core_cohort_get_cohorts'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_manage_cohort_enrollment'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_delete_cohort'),
-            array('externalserviceid' => $serviceid, 'functionname' => 'eb_manage_user_cohort_enrollment')
-        );
+        $bulkpurchase = [
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_add_cohort_members'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_create_cohorts'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_role_assign_roles'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_role_unassign_roles'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_delete_cohort_members'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_get_cohorts'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_manage_cohort_enrollment'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_delete_cohort'],
+            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_manage_user_cohort_enrollment'],
+        ];
 
         $allfunctions = array_merge($ssofunctions, $selsyncfunctions, $bulkpurchase);
 
         foreach ($allfunctions as $function) {
-            if ($DB->record_exists('external_functions', array('name' => $function['functionname']))) {
+            if ($DB->record_exists('external_functions', ['name' => $function['functionname']])) {
                 $DB->insert_record('external_services_functions', $function);
             }
         }

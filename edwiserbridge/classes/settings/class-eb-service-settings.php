@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,14 +12,15 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Settings mod form
+ * Used to create web service.
+ * Functionality to create web service.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -58,7 +59,7 @@ class edwiserbridge_service_form extends moodleform {
             'text',
             'eb_service_inp',
             get_string('new_service_inp_lbl', 'auth_edwiserbridge'),
-            array('class' => 'eb_service_field')
+            ['class' => 'eb_service_field']
         );
         $mform->setType('eb_service_inp', PARAM_TEXT);
 
@@ -68,7 +69,7 @@ class edwiserbridge_service_form extends moodleform {
             'eb_auth_users_list',
             get_string('new_service_user_lbl', 'auth_edwiserbridge'),
             $authusers,
-            array('class' => '')
+            ['class' => '']
         );
         $select->setMultiple(false);
 

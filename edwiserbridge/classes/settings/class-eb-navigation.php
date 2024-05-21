@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,14 +12,16 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Settings mod form
+ * Navigation form.
+ * Functionality to manage navigation form.
  *
- * @package     auth_edwiserbridge
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @category   external
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -27,6 +29,9 @@ require_once("$CFG->libdir/formslib.php");
 
 /**
  * form shown while adding Edwiser Bridge settings.
+ *
+ * @copyright 2006 Jamie Pratt <me@jamiep.org>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class edwiserbridge_navigation_form extends moodleform {
 
@@ -43,38 +48,38 @@ class edwiserbridge_navigation_form extends moodleform {
 
         $summary = 'summary' === $currenttab ? 'active-tab ' . $summarystatus : $summarystatus;
 
-        $tabs = array(
-            array(
+        $tabs = [
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=settings",
                 'label' => get_string('tab_mdl_required_settings', 'auth_edwiserbridge'),
                 'css'   => 'settings' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
+            ],
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=service",
                 'label' => get_string('tab_service', 'auth_edwiserbridge'),
                 'css'   => 'service' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
+            ],
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=connection",
                 'label' => get_string('tab_conn', 'auth_edwiserbridge'),
                 'css'   => 'connection' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
+            ],
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=synchronization",
                 'label' => get_string('tab_synch', 'auth_edwiserbridge'),
                 'css'   => 'synchronization' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
+            ],
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=sso",
                 'label' => get_string('tab_sso', 'auth_edwiserbridge'),
                 'css'   => 'sso' === $currenttab ? 'active-tab eb-tabs ' : 'eb-tabs',
-            ),
-            array(
+            ],
+            [
                 'link'  => $CFG->wwwroot . "/auth/edwiserbridge/edwiserbridge.php?tab=summary",
                 'label' => get_string('summary', 'auth_edwiserbridge'),
                 'css'   => $summary,
-            )
-        );
+            ],
+        ];
 
         $mform->addElement('html', '<div class="eb-tabs-cont">' . $this->print_tabs($tabs) . '</div>');
     }

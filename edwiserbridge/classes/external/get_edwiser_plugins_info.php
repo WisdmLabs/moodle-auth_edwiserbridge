@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,20 +12,19 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * Provides auth_edwiserbridge\external\course_progress_data trait.
+ * Get Edwiser plugins info.
+ * Functionality to get Edwiser plugins info installed on Moodle.
  *
- * @package     auth_edwiserbridge
- * @category    external
- * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Wisdmlabs
+ * @package    auth_edwiserbridge
+ * @category   external
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace auth_edwiserbridge\external;
-
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
@@ -33,43 +32,41 @@ use external_single_structure;
 use external_value;
 use core_completion\progress;
 
-// require_once($CFG->libdir.'/externallib.php');
-
 /**
  * Trait implementing the external function auth_edwiserbridge_course_progress_data
  */
-trait eb_get_edwiser_plugins_info {
+trait get_edwiser_plugins_info {
 
     /**
      * functionality to link existing services.
      * @return array
      */
-    public static function eb_get_edwiser_plugins_info() {
-        $response    = array();
+    public static function auth_edwiserbridge_get_edwiser_plugins_info() {
+        $response    = [];
         $pluginman   = \core_plugin_manager::instance();
 
         $authplugin = $pluginman->get_plugins_of_type('auth');
         if (isset($authplugin['edwiserbridge'])) {
-            $plugins[] = array(
+            $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge',
                 'version'     => $authplugin['edwiserbridge']->release,
-            );
+            ];
         }
 
-        // check licensing
+        // Check licensing.
         global $CFG;
         require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
         $license = new \eb_pro_license_controller();
-        if($license->get_data_from_db() == 'available'){
-            $plugins[] = array(
+        if ($license->get_data_from_db() == 'available') {
+            $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge_pro',
                 'version'     => 'available',
-            );
+            ];
         } else {
-            $plugins[] = array(
+            $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge_pro',
                 'version'     => 'not_available',
-            );
+            ];
         }
 
         $response['plugins'] = $plugins;
@@ -80,25 +77,25 @@ trait eb_get_edwiser_plugins_info {
     /**
      * paramters defined for get plugin info function.
      */
-    public static function eb_get_edwiser_plugins_info_parameters() {
-        return new external_function_parameters(array());
+    public static function auth_edwiserbridge_get_edwiser_plugins_info_parameters() {
+        return new external_function_parameters([]);
     }
 
     /**
      * paramters which will be returned from get plugin info function.
      */
-    public static function eb_get_edwiser_plugins_info_returns() {
+    public static function auth_edwiserbridge_get_edwiser_plugins_info_returns() {
         return new external_single_structure(
-            array(
+            [
                 'plugins' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'plugin_name' => new external_value(PARAM_TEXT, get_string('eb_plugin_name', 'auth_edwiserbridge')),
                             'version'     => new external_value(PARAM_TEXT, get_string('eb_plugin_version', 'auth_edwiserbridge')),
-                        )
+                        ]
                     )
                 ),
-            )
+            ]
         );
     }
 }
