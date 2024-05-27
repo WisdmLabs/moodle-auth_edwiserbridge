@@ -92,6 +92,9 @@ class edwiserbridge_navigation_form extends moodleform {
      */
     private function print_tabs($tabs) {
         ob_start();
+        global $CFG;
+        $service = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
+        echo "<div id='web_service_id' data-serviceid='$service'></div>";
         foreach ($tabs as $tab) {
             ?>
             <a href="<?php echo $tab['link']; ?>" class="<?php echo $tab['css']; ?>">

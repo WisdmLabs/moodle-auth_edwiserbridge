@@ -127,11 +127,16 @@ define("auth_edwiserbridge/eb_settings", [
                     if ("" != service_id && "create" != service_id) {
                         checkMissingServices(service_id);
                     }
-                }
-                if (searchParams.has("tab") && "summary" === searchParams.get("tab")) {
+                } else if (searchParams.has("tab") && "summary" === searchParams.get("tab")) {
                     $("#web_service_status").empty();
                     var service_id = $("#web_service_status").data("serviceid");
                     checkMissingServices(service_id, "#web_service_status");
+                } else {
+                    var service_id = $("#web_service_id").data("serviceid");
+                    console.log(service_id);
+                    if ("" != service_id) {
+                        checkMissingServices(service_id);
+                    }
                 }
             }
 

@@ -117,7 +117,6 @@ class eb_pro_license_controller {
             }
         } else if ($licensedata->license == 'failed') {
             $status = 'failed';
-            $GLOBALS['wdm_license_activation_failed'] = true;
             $this->add_notice(get_string('license_failed', 'auth_edwiserbridge'));
         } else {
             $status = $licensedata->license;
@@ -151,8 +150,6 @@ class eb_pro_license_controller {
         global $DB;
 
         if ($licensedata == null || ! in_array($currentresponsecode, $validresponsecode)) {
-            $GLOBALS['wdm_server_null_response'] = true;
-
             // Delete previous record.
             $DB->delete_records_select(
                 'config_plugins',
