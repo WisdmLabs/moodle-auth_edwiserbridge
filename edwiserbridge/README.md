@@ -29,7 +29,7 @@ Edwiser Bridge provides the necessary platform for you to sell your Moodle cours
 So to enhance its functionality and achieve a fully automated WooCommerce Solution for the purpose of selling your Moodle courses, you may consider choosing Edwiser Bridge Pro to be installed on both your Moodle and WordPress sites.
 
 1. <a href="https://wordpress.org/plugins/edwiser-bridge/"> Edwiser Bridge - WordPress Add On </a>
-2. <a href="https://edwiser.org/wp-content/uploads/edd/2023/03/edwiserbridge-1.zip"> Edwiser Bridge - Moodle Add On </a>
+2. <a href="https://edwiser.org/plugins/edwiserbridge.zip"> Edwiser Bridge - Moodle Add On </a>
 
 1. <a href="https://edwiser.org/bridge/?utm_source=moodle&utm_medium=landingpage&utm_campaign=EBFreePlugin"> Edwiser Bridge Pro </a>
 
@@ -115,34 +115,40 @@ Together we could make this solution better for your Moodle.
 * WordPress 5.9 or higher
 * Moodle 3.11 or higher
 
- =  Automatic Installation  =
-* Go to the Plugins menu from the dashboard.
-* Click on the 'Add New' button on this page.
-* Search for 'Edwiser Bridge' in the search bar provided.
-* Click on 'Install Now' once you have located the plugin.
-* On successful installation, click the 'Activate Plugin' link to activate the plugin.
-
- =  Manual Installation  =
-* Download the Edwiser Bridge plugin from WordPress.org.
-* Now unzip and upload the folder using the FTP application of your choice.
-* The plugin can then be activated by navigating to the Plugins menu in the admin dashboard.
-
-= Moodle Plugin Automatic Installation =
-* Download the Moodle edwiserbridge plugin from <a href = "https://edwiser.org/wp-content/uploads/edd/2023/03/edwiserbridge-1.zip">here</a>.
+ = Moodle Plugin Automatic Installation =
+* Download the Moodle edwiserbridge plugin from <a href = "https://edwiser.org/plugins/edwiserbridge.zip">here</a>.
 * Go to the Plugins menu in Moodle.
 * Click on Install plugins.
 * Upload plugins zip file.
 * Then click on Install plugin from the Zip file.
 
  = Moodle Plugin Manual Installation  =
-* Download the Moodle edwiserbridge plugin from <a href = "https://edwiser.org/wp-content/uploads/edd/2023/03/edwiserbridge-1.zip">here</a>.
+* Download the Moodle edwiserbridge plugin from <a href = "https://edwiser.org/plugins/edwiserbridge.zip">here</a>.
 * Now unzip and upload the folder in local directory of Moodle using the FTP application of your choice.
 * The plugin can then be activated by navigating to the Plugins menu in the dashboard.
 
+ = Wordpress plugin Automatic Installation  =
+* Go to the Plugins menu from the dashboard.
+* Click on the 'Add New' button on this page.
+* Search for 'Edwiser Bridge' in the search bar provided.
+* Click on 'Install Now' once you have located the plugin.
+* On successful installation, click the 'Activate Plugin' link to activate the plugin.
+
+ = Wordpress Plugin Manual Installation  =
+* Download the Edwiser Bridge plugin from WordPress.org.
+* Now unzip and upload the folder using the FTP application of your choice.
+* The plugin can then be activated by navigating to the Plugins menu in the admin dashboard.
+
+ = Edwiser Bridge PRO License Key =
+* To activate the Edwiser Bridge PRO functionality, you need to enter the license key.
+* Go to the Site Administration > Plugins > Edwise Bridge > Settings > Summary.
+* Enter the license key in the License Key field and click on the 'Activate License' button.
+* License key can be obtained from <a href = "https://edwiser.org/my-account/"> Edwiser My Account </a> page.
+* You can now access the PRO features of the plugin.
 
  = Moodle Configuration =
 Take a look at the link below and follow the steps provided to configure your Moodle website.
-<a href = "https://edwiser.org/bridge/documentation/#tab-b540a7a7-e59f-3">Moodle Website Configurations</a>
+<a href = "https://edwiser.org/documentation/edwiser-bridge/">Moodle Website Configurations</a>
 
 [(Back to top)](#table-of-contents)
 

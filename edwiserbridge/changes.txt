@@ -52,3 +52,11 @@ Feature
 Version 3.0.0
 New
 * New consolidated edwiser bridge pro plugin.
+
+Version 3.0.5
+Tweak
+* Moodle Auto Plugin update functionality setting.
+
+Version 3.0.7
+Tweak
+* Moodle coding standard update.
