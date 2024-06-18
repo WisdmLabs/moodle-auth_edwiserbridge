@@ -23,9 +23,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use auth_edwiserbridge\settings\navigation_form;
+
 require('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-require_once('mod_form.php');
+require_once(dirname(__FILE__) . '/lib.php');
 
 global $CFG, $COURSE, $PAGE;
 
@@ -69,7 +71,7 @@ $mform = [
     ],
 ];
 
-$mformnavigation = new edwiserbridge_navigation_form();
+$mformnavigation = new \auth_edwiserbridge\settings\navigation_form();
 
 /*
  * Necessary page requirements.
@@ -98,9 +100,27 @@ $pageurl = $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=';
 
 
 foreach ($mform as $key => $mformdata) {
-    // Create object.
-    $objectname = 'edwiserbridge_' . $key . '_form';
-    $object     = new $objectname($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+    // initialize class based on key.
+    switch($key) {
+        case 'service':
+            $object = new auth_edwiserbridge\settings\service_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+        case 'connection':
+            $object = new auth_edwiserbridge\settings\connection_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+        case 'synchronization':
+            $object = new auth_edwiserbridge\settings\synchronization_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+        case 'settings':
+            $object = new auth_edwiserbridge\settings\settings_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+        case 'summary':
+            $object = new auth_edwiserbridge\settings\summary_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+        case 'sso':
+            $object = new auth_edwiserbridge\settings\sso_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            break;
+    }
 
     $fileoptions = [
         'maxbytes' => 0,

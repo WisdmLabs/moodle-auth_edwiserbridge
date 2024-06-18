@@ -58,6 +58,11 @@ trait verify_sso_token {
      * @since SSO 1.2.1
      */
     public static function auth_edwiserbridge_verify_sso_token($token) {
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $params = self::validate_parameters(
             self::auth_edwiserbridge_verify_sso_token_parameters(),
             ['token' => $token]

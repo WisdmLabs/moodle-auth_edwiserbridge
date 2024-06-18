@@ -42,6 +42,11 @@ trait get_edwiser_plugins_info {
      * @return array
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info() {
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $response    = [];
         $pluginman   = \core_plugin_manager::instance();
 
@@ -55,8 +60,7 @@ trait get_edwiser_plugins_info {
 
         // Check licensing.
         global $CFG;
-        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
-        $license = new \eb_pro_license_controller();
+        $license = new auth_edwiserbridge\eb_pro_license_controller();
         if ($license->get_data_from_db() == 'available') {
             $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge_pro',

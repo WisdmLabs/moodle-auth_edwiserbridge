@@ -25,8 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/classes/class-api-handler.php');
-require_once(dirname(__FILE__) . '/classes/class-settings-handler.php');
 require_once("{$CFG->libdir}/completionlib.php");
 
 /**
@@ -250,7 +248,7 @@ function auth_edwiserbridge_get_site_list() {
  * @return EDW
  */
 function auth_edwiserbridge_api_handler_instance() {
-    return api_handler::instance();
+    return auth_edwiserbridge\api_handler::instance();
 }
 
 /**
@@ -481,8 +479,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
     ];
 
     global $CFG;
-    require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
-    $license = new \eb_pro_license_controller();
+    $license = new auth_edwiserbridge\eb_pro_license_controller();
     if ($license->get_data_from_db() == 'available') {
         $bulkpurchase = [
             [
@@ -799,43 +796,30 @@ function auth_edwiserbridge_check_plugin_update() {
  * @param object $updatedata updatedata
  */
 function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
-    global $CFG;
+    global $CFG, $PAGE;
+
+    $renderer = $PAGE->get_renderer('core');
+
     if (isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check == true) {
-        ob_start();
-     ?>
-        <div class="eb-plugin-update-notice">
-            <p class="eb-plugin-update-notice-heading">
-                <?php echo get_string('plugin_update_notification_title', 'auth_edwiserbridge'); ?>
-            </p>
-            <p class="eb-plugin-update-notice-body">
-                <?php echo get_string('plugin_update_notification_body', 'auth_edwiserbridge'); ?> 
-                <a
-                    class="eb-plugin-update-changelog"
-                    target="_blank"
-                    href="https://wordpress.org/plugins/edwiser-bridge/#developers"
-                >
-                    <?php echo get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'); ?>
-                </a>
-            </p>
-            <p class="eb-plugin-update-action">
-                <a
-                    href="<?php echo $updatedata->url; ?>"
-                    title="<?php echo get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'); ?>"
-                >
-                    <?php echo get_string('plugin_download', 'auth_edwiserbridge'); ?>
-                </a>
-                <span> | </span>
-                <a
-                    href="UPDATE_URL"
-                    title="<?php echo get_string('plugin_update_help_text', 'auth_edwiserbridge'); ?>"
-                >
-                    <?php echo get_string('plugin_update', 'auth_edwiserbridge'); ?>
-                </a>
-            </p>
-            <a class="eb-plugin-update-dismiss" href="DISMISS_URL">x</a>
-        </div>
-        <?php
-        $msg = ob_get_clean();
+        // Mustache rendering data
+        $templatecontext = [
+            'plugin_update_notification_title' => get_string('plugin_update_notification_title', 'auth_edwiserbridge'),
+            'plugin_update_notification_body' => get_string('plugin_update_notification_body', 'auth_edwiserbridge'),
+            'plugin_update_notification_changelog' => get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'),
+            'changelog_url' => 'https://wordpress.org/plugins/edwiser-bridge/#developers', // Replace with actual changelog URL
+            'download_url' => $updatedata->url,
+            'plugin_download_help_text' => get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'),
+            'plugin_download' => get_string('plugin_download', 'auth_edwiserbridge'),
+            'update_url' => 'UPDATE_URL', // Replace with actual update URL
+            'plugin_update_help_text' => get_string('plugin_update_help_text', 'auth_edwiserbridge'),
+            'plugin_update' => get_string('plugin_update', 'auth_edwiserbridge'),
+            'dismiss_url' => 'DISMISS_URL', // Replace with actual dismiss URL
+        ];
+
+        // Rendering Mustache template with data
+        $msg = $renderer->render_from_template('auth_edwiserbridge/plugin_update_notification', $templatecontext);
+
+        // Set configurations
         set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
         set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
         set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');

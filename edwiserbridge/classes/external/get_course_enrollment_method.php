@@ -25,15 +25,12 @@
  */
 
 namespace auth_edwiserbridge\external;
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot.'/auth/edwiserbridge/classes/class-settings-handler.php');
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_course_enrollment_method
@@ -59,6 +56,10 @@ trait get_course_enrollment_method {
     public static function auth_edwiserbridge_get_course_enrollment_method() {
         global $DB, $CFG;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         // Check if Moodle manual enrollment plugin is disabled.
         $enrolplugins = explode(',', $CFG->enrol_plugins_enabled);
         if (! in_array('manual', $enrolplugins)) {

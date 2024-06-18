@@ -24,6 +24,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge\settings;
+use moodleform;
+
 defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
 
@@ -33,7 +36,7 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2006 Jamie Pratt <me@jamiep.org>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class edwiserbridge_navigation_form extends moodleform {
+class navigation_form extends moodleform {
 
     /**
      * Defining Navigation form.
@@ -96,11 +99,7 @@ class edwiserbridge_navigation_form extends moodleform {
         $service = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
         echo "<div id='web_service_id' data-serviceid='$service'></div>";
         foreach ($tabs as $tab) {
-            ?>
-            <a href="<?php echo $tab['link']; ?>" class="<?php echo $tab['css']; ?>">
-                <?php echo $tab['label']; ?>
-            </a>
-            <?php
+            echo "<a href='$tab[link]' class='$tab[css]'>$tab[label]</a>";
         }
         return ob_get_clean();
     }

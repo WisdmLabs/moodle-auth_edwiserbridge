@@ -28,39 +28,39 @@ defined('MOODLE_INTERNAL') || die();
 $observers = [
     [
         'eventname' => 'core\event\user_enrolment_created',
-        'callback'  => 'auth_edwiserbridge_observer::user_enrolment_created',
+        'callback'  => 'auth_edwiserbridge\observer::user_enrolment_created',
     ],
     [
         'eventname' => 'core\event\user_enrolment_deleted',
-        'callback'  => 'auth_edwiserbridge_observer::user_enrolment_deleted',
+        'callback'  => 'auth_edwiserbridge\observer::user_enrolment_deleted',
     ],
     [
         'eventname' => 'core\event\user_created',
-        'callback'  => 'auth_edwiserbridge_observer::user_created',
+        'callback'  => 'auth_edwiserbridge\observer::user_created',
     ],
     [
         'eventname' => 'core\event\user_deleted',
-        'callback'  => 'auth_edwiserbridge_observer::user_deleted',
+        'callback'  => 'auth_edwiserbridge\observer::user_deleted',
     ],
     [
         'eventname' => 'core\event\user_updated',
-        'callback'  => 'auth_edwiserbridge_observer::user_updated',
+        'callback'  => 'auth_edwiserbridge\observer::user_updated',
     ],
     [
         'eventname' => 'core\event\user_password_updated',
-        'callback'  => 'auth_edwiserbridge_observer::user_password_updated',
+        'callback'  => 'auth_edwiserbridge\observer::user_password_updated',
     ],
     [
         'eventname' => 'core\event\course_created',
-        'callback'  => 'auth_edwiserbridge_observer::course_created',
+        'callback'  => 'auth_edwiserbridge\observer::course_created',
     ],
     [
         'eventname' => 'core\event\course_deleted',
-        'callback'  => 'auth_edwiserbridge_observer::course_deleted',
+        'callback'  => 'auth_edwiserbridge\observer::course_deleted',
     ],
     // Page view event for update check.
     [
         'eventname' => '\core\event\dashboard_viewed',
-        'callback'  => 'auth_edwiserbridge_observer::dashboard_viewed',
+        'callback'  => 'auth_edwiserbridge\observer::dashboard_viewed',
     ],
 ];

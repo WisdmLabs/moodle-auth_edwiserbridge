@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");
@@ -34,7 +35,7 @@ require_once($CFG->libdir . "/externallib.php");
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class eb_settings_handler {
+class settings_handler {
 
     /**
      * Create external service with the provided name and the user id

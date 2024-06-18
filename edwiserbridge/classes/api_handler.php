@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge;
 /**
  * Handles API requests and response from WordPress.
  */

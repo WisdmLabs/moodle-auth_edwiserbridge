@@ -1,0 +1,52 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Edwiser Bridge
+    @package auth_edwiserbridge
+    @copyright (c) 2024 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template auth_edwiserbridge/setup_wizard_footer
+
+    Setup wizard footer template
+
+    Context variables required for this template:
+    * footerText: footer text
+    * contactUsText: contact us text
+    * closeSetup: close setup text
+
+    Example context (JSON):
+    {
+        "footerText": "value1",
+        "contactUsText": "value2",
+        "closeSetup": "value3"
+    }
+
+}}
+<footer class='eb-setup-wizard-footer'>
+    <div class='eb-setup-footer-copyright'>
+        {{footerText}}
+    </div>
+    <div class='eb-setup-footer-button'>
+        <a href='https://edwiser.org/contact-us/' target='_blank'>
+            {{contactUsText}}
+        </a>
+    </div>
+    <div>{{{closeSetup}}}</div>
+</footer>
+</body>
+</html>

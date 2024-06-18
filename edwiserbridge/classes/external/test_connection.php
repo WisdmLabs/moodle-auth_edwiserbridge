@@ -46,6 +46,11 @@ trait test_connection {
      * @return array
      */
     public static function auth_edwiserbridge_test_connection($wpurl, $wptoken, $testconnection = "moodle") {
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $params = self::validate_parameters(
             self::auth_edwiserbridge_test_connection_parameters(),
             [

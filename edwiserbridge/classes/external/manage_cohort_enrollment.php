@@ -26,13 +26,12 @@
 
 namespace auth_edwiserbridge\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
@@ -84,6 +83,10 @@ trait manage_cohort_enrollment {
     public static function auth_edwiserbridge_manage_cohort_enrollment($cohort) {
         global $USER, $DB;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         // Parameter validation.
         $params = self::validate_parameters(
             self::auth_edwiserbridge_manage_cohort_enrollment_parameters(),

@@ -15,7 +15,7 @@ Tweak
 
 Version 1.4.3
 Feature
-* Added functionality to show a set-up wizard on Moodle plugin installation to create web service automatically with authorized user.
+* Added functionality to show set-up wizard on Moodle plugin installation to create web service automatically with authorized user.
 * Added functionality to add missing functions on linking the existing web-service.
 * Added functionality to show all non added Moodle web service functions on test connection functionality.
  

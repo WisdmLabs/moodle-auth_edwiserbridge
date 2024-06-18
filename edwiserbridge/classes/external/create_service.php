@@ -26,15 +26,12 @@
 
 namespace auth_edwiserbridge\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-settings-handler.php');
+use auth_edwiserbridge;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_create_service
@@ -48,7 +45,12 @@ trait create_service {
      * @return boolean
      */
     public static function auth_edwiserbridge_create_service($webservicename, $userid) {
-        $settingshandler = new \eb_settings_handler();
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
+        $settingshandler = new auth_edwiserbridge\settings_handler();
         $response = $settingshandler->eb_create_externle_service($webservicename, $userid);
         return $response;
     }

@@ -74,6 +74,10 @@ trait delete_cohort {
     public static function auth_edwiserbridge_delete_cohort($cohort) {
         global $USER, $DB;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         // Parameter validation.
         $params = self::validate_parameters(
             self::auth_edwiserbridge_delete_cohort_parameters(),

@@ -1,0 +1,59 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Edwiser Bridge
+    @package auth_edwiserbridge
+    @copyright (c) 2024 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template auth_edwiserbridge/setup_wizard_header
+
+    Setup wizard header template
+
+    Context variables required for this template:
+    * pageTitle: Page title
+    * logoSrc: Logo source
+    * headerTitle: Header title
+
+    Example context (JSON):
+    {
+        "pageTitle": "value1",
+        "logoSrc": "value2",
+        "headerTitle": "value3"
+    }
+}}
+<div class="eb-plugin-update-notice">
+    <p class="eb-plugin-update-notice-heading">
+        {{ plugin_update_notification_title }}
+    </p>
+    <p class="eb-plugin-update-notice-body">
+        {{ plugin_update_notification_body }}
+        <a class="eb-plugin-update-changelog" target="_blank" href="{{ changelog_url }}">
+            {{ plugin_update_notification_changelog }}
+        </a>
+    </p>
+    <p class="eb-plugin-update-action">
+        <a href="{{ download_url }}" title="{{ plugin_download_help_text }}">
+            {{ plugin_download }}
+        </a>
+        <span> | </span>
+        <a href="{{ update_url }}" title="{{ plugin_update_help_text }}">
+            {{ plugin_update }}
+        </a>
+    </p>
+    <a class="eb-plugin-update-dismiss" href="{{ dismiss_url }}">x</a>
+</div>

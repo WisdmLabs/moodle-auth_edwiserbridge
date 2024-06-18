@@ -48,6 +48,10 @@ trait get_course_progress {
     public static function auth_edwiserbridge_get_course_progress($userid) {
         global $DB, $CFG;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $params = self::validate_parameters(
         self::auth_edwiserbridge_get_course_progress_parameters(),
         ['user_id' => $userid]

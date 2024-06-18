@@ -47,6 +47,10 @@ trait setup_test_connection {
      */
     public static function auth_edwiserbridge_setup_test_connection($wpurl) {
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $params = self::validate_parameters(
             self::auth_edwiserbridge_setup_test_connection_parameters(),
             [

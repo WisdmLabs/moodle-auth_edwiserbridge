@@ -22,17 +22,15 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+use auth_edwiserbridge;
 require('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-
-require_once('classes/class-setup-wizard.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
 global $CFG, $COURSE, $PAGE;
 
 
-$setupwizard = new eb_setup_wizard();
+$setupwizard = new auth_edwiserbridge\setup_wizard();
 
 // Check progress and redirect accordingly.
 $progress  = isset( $CFG->eb_setup_progress ) ? $CFG->eb_setup_progress : '';

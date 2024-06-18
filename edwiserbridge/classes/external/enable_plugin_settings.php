@@ -25,15 +25,12 @@
  */
 
 namespace auth_edwiserbridge\external;
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot.'/auth/edwiserbridge/classes/class-setup-wizard.php');
 
 /**
  * Trait implementing the external function auth_edwiserbridge_enable_plugin_settings
@@ -60,6 +57,10 @@ trait enable_plugin_settings {
     public static function auth_edwiserbridge_enable_plugin_settings() {
         global $DB, $CFG;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $activewebservices[] = 'rest';
 
         set_config('webserviceprotocols', implode(',', $activewebservices));

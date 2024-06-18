@@ -23,6 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 require_once($CFG->dirroot . '/user/lib.php');
@@ -34,7 +36,7 @@ require_once($CFG->dirroot . '/user/lib.php');
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class auth_edwiserbridge_observer {
+class observer {
 
     /**
      * Functionality to handle user enrollment event.

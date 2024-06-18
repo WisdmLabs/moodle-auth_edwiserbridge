@@ -26,14 +26,13 @@
 
 namespace auth_edwiserbridge\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
 
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 /**
@@ -47,6 +46,11 @@ trait get_service_info {
      * @return array
      */
     public static function auth_edwiserbridge_get_service_info($serviceid) {
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $response           = [];
         $response['status'] = 1;
         $response['msg']    = '';

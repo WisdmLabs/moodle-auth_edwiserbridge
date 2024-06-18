@@ -22,6 +22,8 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace auth_edwiserbridge\settings;
+use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
@@ -29,7 +31,7 @@ require_once("$CFG->libdir/formslib.php");
 /**
  * form shown while adding Edwiser Bridge settings.
  */
-class edwiserbridge_synchronization_form extends moodleform {
+class synchronization_form extends moodleform {
 
     /**
      * Defining synchronization form.

@@ -25,15 +25,12 @@
  */
 
 namespace auth_edwiserbridge\external;
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot.'/auth/edwiserbridge/classes/class-settings-handler.php');
 
 /**
  * Trait implementing the external function auth_edwiserbridge_update_course_enrollment_method
@@ -50,6 +47,10 @@ trait update_course_enrollment_method {
     public static function auth_edwiserbridge_update_course_enrollment_method($courseid) {
         global $DB, $CFG;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $params = self::validate_parameters(
             self::auth_edwiserbridge_update_course_enrollment_method_parameters(),
             [

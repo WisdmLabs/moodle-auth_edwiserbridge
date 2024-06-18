@@ -23,13 +23,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge\settings;
+use moodleform;
+
 defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
 
 /**
  * form shown while adding Edwiser Bridge settings.
  */
-class edwiserbridge_connection_form extends moodleform {
+class connection_form extends moodleform {
 
     /**
      * Defining connection settings form.

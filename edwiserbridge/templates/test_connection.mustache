@@ -1,0 +1,74 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+    Edwiser Bridge
+    @package auth_edwiserbridge
+    @copyright (c) 2024 WisdmLabs (https://wisdmlabs.com/)
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+{{!
+    @template auth_edwiserbridge/setup_wizard_header
+
+    Setup wizard header template
+
+    Context variables required for this template:
+    * pageTitle: Page title
+    * logoSrc: Logo source
+    * headerTitle: Header title
+
+    Example context (JSON):
+    {
+        "pageTitle": "value1",
+        "logoSrc": "value2",
+        "headerTitle": "value3"
+    }
+}}
+<div class="eb_setup_wordpress_site_details es-w-80">
+    <div>
+        <div class="eb_setup_conn_url_inp_wrap">
+            <span>{{{wp_site_details_note}}}</span>
+            <p>
+                <label class="eb_setup_h2">{{{name_label}}}</label>
+                <i class="fa-solid fa-info eb-tooltip es-info-icon">
+                    <span class='eb-tooltiptext'>{{{wp_site_name_tip}}}</span>
+                </i>
+            </p>
+            <input class="eb_setup_inp eb_setup_site_name" name="eb_setup_site_name" type="text" value="{{name}}" disabled>
+        </div>
+        <div class="eb_setup_conn_url_inp_wrap">
+            <p>
+                <label class="eb_setup_h2">{{{url_label}}}</label>
+                <i class="fa-solid fa-info eb-tooltip es-info-icon">
+                    <span class='eb-tooltiptext'>{{{wp_site_url_tip}}}</span>
+                </i>
+            </p>
+            <input class="eb_setup_inp eb_setup_site_url" name="eb_setup_site_url" type="url" value="{{url}}" disabled>
+            <div class="eb_setup_test_conn_resp_msg"></div>
+        </div>
+        <div class="eb_setup_btn_wrap">
+            <a class="eb_setup_sec_btn" href="{{prevurl}}">
+                {{{back}}}
+            </a>
+            <button class="eb_setup_btn eb_setup_test_connection_btn" data-step="{{step}}" data-next-step="{{nextstep}}" data-is-next-sub-step="{{isnextsubstep}}">
+                {{{wp_test_conn_btn}}}
+            </button>
+            <button class="eb_setup_btn eb_setup_save_and_continue eb_setup_test_connection_continue_btn" data-step="{{step}}" data-next-step="{{nextstep}}" data-is-next-sub-step="{{isnextsubstep}}">
+                {{{setup_continue_btn}}}
+            </button>
+        </div>
+    </div>
+</div>
+

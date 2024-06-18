@@ -22,6 +22,11 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace auth_edwiserbridge\settings;
+use moodleform;
+use webservice;
+use moodle_url;
+use auth_edwiserbridge\eb_pro_license_controller;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,7 +38,7 @@ require_once("$CFG->libdir/formslib.php");
  * @copyright 2006 Jamie Pratt <me@jamiep.org>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class edwiserbridge_summary_form extends moodleform {
+class summary_form extends moodleform {
     /**
      * Defining summary form.
      */
@@ -361,14 +366,18 @@ class edwiserbridge_summary_form extends moodleform {
      *
      */
     private function get_license_data() {
-        global $DB;
+        global $DB, $PAGE;
+
+        $renderer = $PAGE->get_renderer('core');
+
         $pluginslug = 'moodle_edwiser_bridge';
+
         // Get License Key.
         $licensekey = $DB->get_field_select(
             'config_plugins',
             'value',
             'name = :name',
-            ['name' => 'edd_' . $pluginslug .'_license_key'],
+            ['name' => 'edd_' . $pluginslug . '_license_key'],
             IGNORE_MISSING
         );
 
@@ -381,34 +390,19 @@ class edwiserbridge_summary_form extends moodleform {
             IGNORE_MISSING
         );
 
-        ob_start();
-        ?>
-        <form method="post">
-            <input
-                type="text"
-                class="eb_pro_license_input"
-                name="eb_license_key"
-                placeholder="License key"
-                value="<?php echo $licensekey; ?>"
-            />
-            <?php
-            if ($licensestatus == 'valid') {
-                ?>
-                <span class="eb_pro_license_active"><?php echo get_string('eb_active', 'auth_edwiserbridge') ?></span>
-                <input type="submit" name="eb_license_deactivate" class="eb_pro_license_btn" value="Deactivate License" />
-                <?php
-            } else {
-                ?>
-                <span class="eb_pro_license_not_active"><?php echo $licensestatus ?></span>
-                <input type="submit" name="eb_license_activate" class="eb_pro_license_btn" value="Activate License" />
-                <?php
-            }
-            ?>
-        </form>
-        <?php
-        $licenseform = ob_get_clean();
-        return $licenseform;
+        // Prepare data for Mustache template.
+        $templatecontext = [
+            'licensekey' => $licensekey,
+            'licensestatus' => $licensestatus,
+            'is_valid_license' => ($licensestatus == 'valid'),
+            'eb_active' => get_string('eb_active', 'auth_edwiserbridge'),
+            'deactivate' => get_string('deactivate', 'auth_edwiserbridge'),
+            'activate' => get_string('activate', 'auth_edwiserbridge'),
+        ];
+
+        return $renderer->render_from_template('auth_edwiserbridge/license_form', $templatecontext);
     }
+
 
     /**
      * Handle license action.
@@ -419,7 +413,6 @@ class edwiserbridge_summary_form extends moodleform {
         $activatelicense = optional_param('eb_license_activate', '', PARAM_RAW);
         $deactivatelicense = optional_param('eb_license_deactivate', '', PARAM_RAW);
 
-        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
         $licensecontroller = new eb_pro_license_controller();
         if ($activatelicense) {
             $licensecontroller->activate_license($licensekey);

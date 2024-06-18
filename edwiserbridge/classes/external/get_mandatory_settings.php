@@ -48,6 +48,10 @@ trait get_mandatory_settings {
     public static function auth_edwiserbridge_get_mandatory_settings() {
         global $CFG, $DB;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $settings = [];
         // Get all settings and form array.
         $protocols = $CFG->webserviceprotocols;

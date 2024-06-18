@@ -26,15 +26,12 @@
 
 namespace auth_edwiserbridge\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-settings-handler.php');
+use auth_edwiserbridge;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_link_service
@@ -50,11 +47,16 @@ trait link_service {
      * @return array
      */
     public static function auth_edwiserbridge_link_service($serviceid, $token) {
+
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
         $response           = [];
         $response['status'] = 0;
         $response['msg']    = get_string('eb_link_err', 'auth_edwiserbridge');
 
-        $settingshandler = new \eb_settings_handler();
+        $settingshandler = new auth_edwiserbridge\settings_handler();
         $result           = $settingshandler->eb_link_exitsing_service($serviceid, $token);
         if ($result) {
             $response['status'] = 1;

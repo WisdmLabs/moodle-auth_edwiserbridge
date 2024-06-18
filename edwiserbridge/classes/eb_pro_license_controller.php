@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace auth_edwiserbridge;
  /**
   * License controller class.
   */
@@ -129,7 +130,7 @@ class eb_pro_license_controller {
             ['name' => 'edd_' . $this->pluginslug. '_license_status']
         );
 
-        $dataobject = new stdClass();
+        $dataobject = new \stdClass();
         $dataobject->plugin         = 'auth_edwiserbridge';
         $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
         $dataobject->value = $status;
@@ -158,7 +159,7 @@ class eb_pro_license_controller {
             );
 
             // Insert new license trans.
-            $dataobject = new stdClass();
+            $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
             $dataobject->value = serialize(['server_did_not_respond', time() + (60 * 60 * 24)]);
@@ -183,7 +184,7 @@ class eb_pro_license_controller {
             );
 
             // Insert new license key.
-            $dataobject = new stdClass();
+            $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'edd_' . $this->pluginslug. '_license_key';
             $dataobject->value = $licensekey;
@@ -247,7 +248,7 @@ class eb_pro_license_controller {
                 );
 
                 // Add renew link.
-                $dataobject = new stdClass();
+                $dataobject = new \stdClass();
                 $dataobject->plugin         = 'auth_edwiserbridge';
                 $dataobject->name = 'wdm_' . $this->pluginslug. '_product_site';
                 $dataobject->value = $licensedata->renew_link;
@@ -314,7 +315,7 @@ class eb_pro_license_controller {
                 }
 
                 // Insert new license trans.
-                $dataobject = new stdClass();
+                $dataobject = new \stdClass();
                 $dataobject->plugin         = 'auth_edwiserbridge';
                 $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
                 $dataobject->value = serialize([$licensestatus, $time]);
@@ -384,7 +385,7 @@ class eb_pro_license_controller {
                     ['name' => 'edd_' . $this->pluginslug. '_license_status']
                 );
 
-                $dataobject = new stdClass();
+                $dataobject = new \stdClass();
                 $dataobject->plugin         = 'auth_edwiserbridge';
                 $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
                 $dataobject->value = 'deactivated';
@@ -398,7 +399,7 @@ class eb_pro_license_controller {
                 ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
             );
 
-            $dataobject = new stdClass();
+            $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
             $dataobject->value = serialize([$licensedata->license, 0]);
@@ -497,7 +498,7 @@ class eb_pro_license_controller {
 
                     if (empty($licensedata)) {
                         // Insert new license transient.
-                        $dataobject = new stdClass();
+                        $dataobject = new \stdClass();
                         $dataobject->plugin         = 'auth_edwiserbridge';
                         $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
                         $dataobject->value = serialize(['server_did_not_respond', time() + (60 * 60 * 24)]);
@@ -520,7 +521,7 @@ class eb_pro_license_controller {
                         ['name' => 'edd_' . $this->pluginslug. '_license_status']
                     );
 
-                    $dataobject = new stdClass();
+                    $dataobject = new \stdClass();
                     $dataobject->plugin         = 'auth_edwiserbridge';
                     $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
                     $dataobject->value = $licensestatus;
@@ -577,7 +578,7 @@ class eb_pro_license_controller {
             );
 
             // Insert new license transient.
-            $dataobject = new stdClass();
+            $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $pluginslug . '_license_trans';
             $dataobject->value = serialize([$licensestatus, time() + (60 * 60 * 24)]);

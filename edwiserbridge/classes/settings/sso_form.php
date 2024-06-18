@@ -22,6 +22,9 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace auth_edwiserbridge\settings;
+use moodleform;
+use auth_edwiserbridge\eb_pro_license_controller;
 
 defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
@@ -29,7 +32,7 @@ require_once("$CFG->libdir/formslib.php");
 /**
  * form shown while adding Edwiser Bridge settings.
  */
-class edwiserbridge_sso_form extends moodleform {
+class sso_form extends moodleform {
 
     /**
      * Defining sso form.
@@ -40,7 +43,6 @@ class edwiserbridge_sso_form extends moodleform {
         $sitekeys      = array_keys($sites);
 
         global $CFG;
-        require_once($CFG->dirroot . '/auth/edwiserbridge/classes/class-eb-pro-license_controller.php');
         $license = new eb_pro_license_controller();
         if ($license->get_data_from_db() == 'available') {
             $mform->addElement('html', '<div class="eb-auto-generate-key-container">');

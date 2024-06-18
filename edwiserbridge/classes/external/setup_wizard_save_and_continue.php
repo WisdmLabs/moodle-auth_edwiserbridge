@@ -23,17 +23,14 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace auth_edwiserbridge\external;
-defined('MOODLE_INTERNAL') || die();
 
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
 use external_value;
 use core_completion\progress;
-
-require_once($CFG->dirroot.'/auth/edwiserbridge/classes/class-setup-wizard.php');
+use auth_edwiserbridge;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_setup_wizard_save_and_continue
@@ -63,6 +60,13 @@ trait setup_wizard_save_and_continue {
     public static function auth_edwiserbridge_setup_wizard_save_and_continue($data) {
         global $DB, $CFG;
 
+        // Validation for context is needed.
+        $systemcontext = \context_system::instance();
+        self::validate_context($systemcontext);
+        
+        global $PAGE;
+        $PAGE->set_context(\context_system::instance());
+
         $response = [
             'html_data' => '',
             'title'     => '',
@@ -74,7 +78,7 @@ trait setup_wizard_save_and_continue {
         $nextstep = $data->next_step;
         $isnextsubstep = $data->is_next_sub_step;
 
-        $setupwizardhandler = new \eb_setup_wizard();
+        $setupwizardhandler = new auth_edwiserbridge\setup_wizard();
         $steps = $setupwizardhandler->eb_setup_wizard_get_steps();
 
         // Check if there are any sub steps available.
@@ -86,7 +90,7 @@ trait setup_wizard_save_and_continue {
         switch ( $currentstep ) {
             case 'web_service':
                 // Create web service and update data in EB settings.
-                $settingshandler = new \eb_settings_handler();
+                $settingshandler = new auth_edwiserbridge\settings_handler();
                 // Get main admin user.
                 $adminuser = get_admin();
 
