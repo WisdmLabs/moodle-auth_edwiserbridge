@@ -43,7 +43,7 @@ class observer {
      *
      * @param core\event\user_enrolment_created $event event.
      */
-    public static function user_enrolment_created(core\event\user_enrolment_created $event) {
+    public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
         global $CFG;
         $userdata = user_get_users_by_id([$event->relateduserid]);
 
@@ -81,7 +81,7 @@ class observer {
      *
      * @param core\event\user_enrolment_deleted $event event.
      */
-    public static function user_enrolment_deleted(core\event\user_enrolment_deleted $event) {
+    public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
         global $CFG;
         $userdata = user_get_users_by_id([$event->relateduserid]);
         $requestdata = [
@@ -119,7 +119,7 @@ class observer {
      *
      * @param core\event\user_created $event event.
      */
-    public static function user_created(core\event\user_created $event) {
+    public static function user_created(\core\event\user_created $event) {
 
         global $CFG;
         $userdata = user_get_users_by_id([$event->relateduserid]);
@@ -173,7 +173,7 @@ class observer {
      *
      * @param core\event\user_updated $event event.
      */
-    public static function user_updated(core\event\user_updated $event) {
+    public static function user_updated(\core\event\user_updated $event) {
         global $CFG;
         $userdata = user_get_users_by_id([$event->relateduserid]);
 
@@ -233,7 +233,7 @@ class observer {
      *
      * @param core\event\user_password_updated $event event.
      */
-    public static function user_password_updated(core\event\user_password_updated $event) {
+    public static function user_password_updated(\core\event\user_password_updated $event) {
         global $CFG;
 
         $userid = $event->userid;
@@ -294,7 +294,7 @@ class observer {
      *
      * @param core\event\user_deleted $event event.
      */
-    public static function user_deleted(core\event\user_deleted $event) {
+    public static function user_deleted(\core\event\user_deleted $event) {
         global $CFG;
         $requestdata = [
             'action'  => 'user_deletion',
@@ -324,7 +324,7 @@ class observer {
      *
      * @param core\event\course_created $event event.
      */
-    public static function course_created(core\event\course_created $event) {
+    public static function course_created(\core\event\course_created $event) {
         global $CFG;
         // Get course info.
         $course = get_course($event->courseid);
@@ -360,7 +360,7 @@ class observer {
      *
      * @param core\event\course_deleted $event event.
      */
-    public static function course_deleted(core\event\course_deleted $event) {
+    public static function course_deleted(\core\event\course_deleted $event) {
         global $CFG;
 
         $requestdata = [
