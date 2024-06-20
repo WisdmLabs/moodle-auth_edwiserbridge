@@ -845,7 +845,7 @@ function auth_edwiserbridge_show_plugin_update_notification() {
         }
         $ebnotice = true;
 
-        if (isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false) {
+        if (isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false && strpos($ME, 'setup_wizard.php') == false ){
             $updateavailable = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
             $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
             if ($updateavailable && ! $dismiss) {
