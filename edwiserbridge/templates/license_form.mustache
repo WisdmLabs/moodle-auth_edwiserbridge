@@ -20,21 +20,26 @@
     @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
 {{!
-    @template auth_edwiserbridge/setup_wizard_header
+    @template auth_edwiserbridge/license_form
 
-    Setup wizard header template
+    Edwiser Bridge license form template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * is_valid_license: Is valid license
+    * licensekey: License key
+    * deactivate: Deactivate
+    * licensestatus: License status
+    * eb_active: Active
+    * activate: Activate
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
-    }
+        "is_valid_license": "value1",
+        "licensekey": "value2",
+        "deactivate": "value3",
+        "licensestatus": "value4",
+        "eb_active": "value5",
+        "activate": "value6"
 }}
 <form method="post">
     <input type="text" class="eb_pro_license_input" name="eb_license_key" placeholder="License key" value="{{ licensekey }}" />

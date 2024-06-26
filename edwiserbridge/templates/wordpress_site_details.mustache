@@ -20,20 +20,67 @@
     @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
 {{!
-    @template auth_edwiserbridge/setup_wizard_header
+    @template auth_edwiserbridge/wordpress_site_details
 
-    Setup wizard header template
+    WordPress site details template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * setup_wp_site_note1: Note 1 for setting up WordPress site
+    * setup_wp_site_dropdown: Label for WordPress site dropdown
+    * wp_site_tip: Tooltip text for WordPress site dropdown
+    * select: Option text for select option
+    * create_wp_site: Option text for creating a new WordPress site
+    * sites: Array of existing WordPress sites
+        - key: Unique identifier for the site
+        - name: Name of the site
+        - url: URL of the site
+        - selected: Whether the site is selected or not (true/false)
+    * class: CSS class for WordPress site details input wrappers
+    * setup_wp_site_note2: Note 2 for setting up WordPress site
+    * name_label: Label for site name input
+    * wp_site_name_tip: Tooltip text for site name input
+    * selected_name: Pre-filled value for site name input
+    * url_label: Label for site URL input
+    * wp_site_url_tip: Tooltip text for site URL input
+    * selected_url: Pre-filled value for site URL input
+    * prev_url: URL for the previous step
+    * back: Text for the back button
+    * setup_continue_btn: Text for the continue button
+    * step: Current step number
+    * nextstep: Next step number
+    * isnextsubstep: Whether the next step is a sub-step or not (true/false)
+    * btnclass: CSS class for the continue button
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "setup_wp_site_note1": "value1",
+        "setup_wp_site_dropdown": "value2",
+        "wp_site_tip": "value3",
+        "select": "value4",
+        "create_wp_site": "value5",
+        "sites": [
+            {
+                "key": "value6",
+                "name": "value7",
+                "url": "value8",
+                "selected": "value9"
+            }
+        ],
+        "class": "value10",
+        "setup_wp_site_note2": "value11",
+        "name_label": "value12",
+        "wp_site_name_tip": "value13",
+        "selected_name": "value14",
+        "url_label": "value15",
+        "wp_site_url_tip": "value16",
+        "selected_url": "value17",
+        "prev_url": "value18",
+        "back": "value19",
+        "setup_continue_btn": "value20",
+        "step": "value21",
+        "nextstep": "value22",
+        "isnextsubstep": "value23",
+        "btnclass": "value24"
     }
 }}
 <div class="eb_setup_wordpress_site_details es-w-80">

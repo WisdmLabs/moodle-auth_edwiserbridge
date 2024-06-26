@@ -20,20 +20,56 @@
     @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
 {{!
-    @template auth_edwiserbridge/setup_wizard_header
+    @template auth_edwiserbridge/web_service
 
-    Setup wizard header template
+    Web service template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * setup_web_service_note1: Note for setting up web service
+    * setup_web_service_h1: Heading 1 for setting up web service
+    * setup_web_service_h2: Heading 2 for setting up web service
+    * or: Text for "or" separator
+    * sum_web_services: Label for existing web services dropdown
+    * web_service_tip: Tooltip text for web services dropdown
+    * existingservices: Array of existing web services
+        ** key: Key for the web service
+        ** value: Value for the web service
+        ** selected: Whether the option is selected or not
+    * new_service_inp_lbl: Label for new web service input
+    * name_web_service_tip: Tooltip text for new web service input
+    * setup_continue_btn: Text for continue button
+    * step: Current step number
+    * nextstep: Next step number
+    * isnextsubstep: Whether the next step is a sub-step or not
+    * disable: Class to disable the continue button
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "setup_web_service_note1": "value1",
+        "setup_web_service_h1": "value2",
+        "setup_web_service_h2": "value3",
+        "or": "value4",
+        "sum_web_services": "value5",
+        "web_service_tip": "value6",
+        "existingservices": [
+            {
+                "key": "value7",
+                "value": "value8",
+                "selected": true
+            },
+            {
+                "key": "value9",
+                "value": "value10",
+                "selected": false
+            }
+        ],
+        "new_service_inp_lbl": "value11",
+        "name_web_service_tip": "value12",
+        "setup_continue_btn": "value13",
+        "step": "value14",
+        "nextstep": "value15",
+        "isnextsubstep": true,
+        "disable": "value16"
     }
 }}
 <div class="eb_setup_web_service es-w-80">

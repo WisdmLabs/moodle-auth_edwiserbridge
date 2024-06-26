@@ -20,20 +20,60 @@
     @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
 {{!
-    @template auth_edwiserbridge/setup_wizard_header
+    @template auth_edwiserbridge/setup_complete_details
 
-    Setup wizard header template
+    Setup wizard complete details template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * what_next: The heading text for the "What's Next?" section.
+    * setup_completion_note1: The note text for the "What's Next?" section.
+    * setup_completion_note2: The heading text for the setup completion cards section.
+    * mdl_url: The heading text for the Moodle URL card.
+    * url: The Moodle URL value.
+    * wp_token: The heading text for the WordPress token card.
+    * token: The WordPress token value.
+    * eb_mform_lang_desc: The heading text for the language code card.
+    * lang: The language code value.
+    * or: The text to display between the setup completion cards and the download credentials button.
+    * setup_completion_note3: The heading text for the download credentials section.
+    * mdl_edwiser_bridge_txt_download: The text for the download credentials button.
+    * setup_completion_note4: The note text for the final section.
+    * back: The text for the "Back" button.
+    * prevurl: The URL for the "Back" button.
+    * continue_wp_wizard_btn: The text for the "Continue to WordPress Wizard" button.
+    * wpurl: The URL for the "Continue to WordPress Wizard" button.
+    * step: The current step in the setup wizard.
+    * nextstep: The next step in the setup wizard.
+    * isnextsubstep: A flag indicating whether the next step is a sub-step.
+    * setup_continue_btn: The text for the "Continue" button (hidden by default).
+    * eb_setup_redirection_popup: The HTML content for the redirection popup.
+    * eb_setup_completion_popup: The HTML content for the completion popup.
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "what_next": "value1",
+        "setup_completion_note1": "value1",
+        "setup_completion_note2": "value1",
+        "mdl_url": "value1",
+        "url": "value1",
+        "wp_token": "value1",
+        "token": "value1",
+        "eb_mform_lang_desc": "value1",
+        "lang": "value1",
+        "or": "value1",
+        "setup_completion_note3": "value1",
+        "mdl_edwiser_bridge_txt_download": "value1",
+        "setup_completion_note4": "value1",
+        "back": "value1",
+        "prevurl": "value2",
+        "continue_wp_wizard_btn": "value1",
+        "wpurl": "value2",
+        "step": "value1",
+        "nextstep": "value1",
+        "isnextsubstep": "value1",
+        "setup_continue_btn": "value1",
+        "eb_setup_redirection_popup": "value1",
+        "eb_setup_completion_popup": "value1"
     }
 }}
 <div class="eb_setup_complete_details es-w-80">

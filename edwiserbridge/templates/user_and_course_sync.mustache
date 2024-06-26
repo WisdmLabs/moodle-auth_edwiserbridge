@@ -20,20 +20,57 @@
     @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 }}
 {{!
-    @template auth_edwiserbridge/setup_wizard_header
+    @template auth_edwiserbridge/user_and_course_sync
 
-    Setup wizard header template
+    User and course sync template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * setup_sync_note1: Note for user and course sync
+    * select_all: Text for "Select All" option
+    * recommended: Text indicating "Recommended" option
+    * all_checked: Boolean indicating if "Select All" option is checked
+    * sync_settings: Array of sync settings
+      - name: Name of the sync setting
+      - label: Label for the sync setting
+      - tip: Tooltip text for the sync setting
+      - checked: Boolean indicating if the sync setting is checked
+    * prevurl: URL for the previous step
+    * nexturl: URL for the next step
+    * back: Text for the "Back" button
+    * skip: Text for the "Skip" button
+    * setup_continue_btn: Text for the "Continue" button
+    * step: Current step number
+    * nextstep: Next step number
+    * isnextsubstep: Boolean indicating if the next step is a sub-step
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "setup_sync_note1": "value1",
+        "select_all": "value2",
+        "recommended": "value3",
+        "all_checked": true,
+        "sync_settings": [
+        {
+            "name": "setting1",
+            "label": "value4",
+            "tip": "value5",
+            "checked": true
+        },
+        {
+            "name": "setting2",
+            "label": "value6",
+            "tip": "value7",
+            "checked": false
+        }
+        ],
+        "prevurl": "value8",
+        "nexturl": "value9",
+        "back": "value10",
+        "skip": "value11",
+        "setup_continue_btn": "value12",
+        "step": 1,
+        "nextstep": 2,
+        "isnextsubstep": false
     }
 }}
 <div class="eb_setup_user_and_course_sync es-p-t-b-30 es-w-80">

@@ -25,15 +25,34 @@
     Setup wizard header template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
-
+    steps: An array of step objects, each containing the following properties:
+    key: A unique identifier for the step.
+    name: The display name of the step.
+    html_icon: The HTML code for the step icon.
+    is_completed: A boolean indicating whether the step has been completed.
+    is_active: A boolean indicating whether the step is currently active.
+    top_level: A boolean indicating whether the step is a top-level step.
+    
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "steps": [
+          {
+            "key": "step1",
+            "name": "Step 1",
+            "html_icon": "<i class='icon fa fa-check'></i>",
+            "is_completed": true,
+            "is_active": false,
+            "top_level": true
+          },
+          {
+            "key": "step2",
+            "name": "Step 2",
+            "html_icon": "<i class='icon fa fa-times'></i>",
+            "is_completed": false,
+            "is_active": true,
+            "top_level": true
+          }
+        ]
     }
 }}
 <ul class="eb-setup-steps">
