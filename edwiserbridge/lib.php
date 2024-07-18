@@ -390,6 +390,10 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
 			),
 			array(
 				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_user_delete_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
 				'functionname'      => 'core_user_get_users_by_field',
 			),
 			array(

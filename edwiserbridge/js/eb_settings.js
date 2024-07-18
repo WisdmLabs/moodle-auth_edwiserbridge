@@ -117,6 +117,61 @@ define("auth_edwiserbridge/eb_settings", [
                         return 0;
                     });
             }
+
+            function checkConnectionstatus(messge_ele = false) {
+                var wp_url = $("#eb_wp_url").text();
+                var wp_token = $("#eb_wp_token").text();
+                var promises = ajax.call([
+                    { methodname: 'eb_test_connection', args: { wp_url: wp_url, wp_token: wp_token } }
+                ]);
+
+                promises[0]
+                    .done(function(response) {
+                        var message = "";
+                        $("body").css("cursor", "default");
+                        if (!response.data.status) {
+                            $(".eb_summary_tab").removeClass("summary_tab_sucess");
+                            $(".eb_summary_tab").addClass("summary_tab_error");
+                            if (!messge_ele) {
+                                $("#eb_common_err").text(response.msg);
+                                $("#eb_common_err").css("display", "block");
+                            } else if (messge_ele) {
+                                var link =
+                                    window.location.origin +
+                                    window.location.pathname +
+                                    "?tab=connection";
+                                var fix_link =
+                                    " Check more detials <a href='" +
+                                    link +
+                                    "'  target='_blank'>here</a>.";
+                                message =
+                                    "<span class='summ_error'>" +
+                                    response.msg +
+                                    fix_link +
+                                    "</span>";
+                                $(messge_ele).empty().append(message);
+                            }
+                        } else {
+                            if (jQuery("#test_connection_status span").hasClass("summ_error")) {
+                                $(".eb_summary_tab").removeClass("summary_tab_sucess");
+                                $(".eb_summary_tab").addClass("summary_tab_error");
+                            } else {
+                                $(".eb_summary_tab").addClass("summary_tab_sucess");
+                                $(".eb_summary_tab").removeClass("summary_tab_error");
+                            }
+                            if (messge_ele) {
+                                message =
+                                    '<span style="color: #7ad03a;"><span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003; ' + response.msg + ' </span></span>';
+                                $(messge_ele).empty().append(message);
+                            }
+                        }
+                        return response;
+                    })
+                    .fail(function(response) {
+                        $("body").css("cursor", "default");
+                        return 0;
+                    });
+            }
             /**
              * Check if the user is on edwiser bridge settings page.
              */
@@ -129,10 +184,12 @@ define("auth_edwiserbridge/eb_settings", [
                     }
                 }
                 if (searchParams.has("tab") && "summary" === searchParams.get("tab")) {
-                    $("#web_service_status").empty();
                     var service_id = $("#web_service_status").data("serviceid");
                     checkMissingServices(service_id, "#web_service_status");
                 }
+
+                checkConnectionstatus("#test_connection_status");
+
             }
 
             /*

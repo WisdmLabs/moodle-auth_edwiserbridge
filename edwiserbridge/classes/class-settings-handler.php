@@ -166,6 +166,7 @@ class eb_settings_handler {
         global $DB;
         $functions = array(
             array('externalserviceid' => $serviceid, 'functionname' => 'core_user_create_users'),
+            array('externalserviceid' => $serviceid, 'functionname' => 'core_user_delete_users'),
             array('externalserviceid' => $serviceid, 'functionname' => 'core_user_get_users_by_field'),
             array('externalserviceid' => $serviceid, 'functionname' => 'core_user_update_users'),
             array('externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses'),

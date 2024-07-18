@@ -236,6 +236,7 @@ $string['sum_extended_char'] = 'Allow Extended Characters In Username';
 $string['sum_service_link'] = 'Service Linked';
 $string['sum_token_link'] = 'Token Linked';
 $string['web_service_status'] = 'Web Service Function';
+$string['test_connection_status'] = 'Connection Status';
 $string['web_service_cap'] = 'Capability';
 
 $string['sum_error_rest_protocol'] = 'Error: Please enable Rest Protocol';

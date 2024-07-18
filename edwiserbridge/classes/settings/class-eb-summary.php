@@ -73,6 +73,15 @@ class edwiserbridge_summary_form extends moodleform {
                 // If the token available then show the token.
                 $tokenfield = auth_edwiserbridge_create_token_field($service, $token);
             }
+
+            if(isset($CFG->eb_connection_settings)){
+                $sites = unserialize($CFG->eb_connection_settings);
+                foreach ($sites as $value) {
+                    $wp_url = $value['wp_url'];
+                    $token  = $value['wp_token'];
+                    break;
+                }
+            }
         } else {
             $missingcapmsg = "<span class='summ_error'>User don't have web service access capabilities,
             click $functionspage to know more.</span>";
@@ -152,9 +161,21 @@ class edwiserbridge_summary_form extends moodleform {
                 'token' => array(
                     'label'          => get_string('token', 'auth_edwiserbridge'),
                     'expected_value' => 'static',
-                    'value'          => '<div class="eb_copy_text_wrap"> <span class="eb_copy_text" title="'
+                    'value'          => '<div class="eb_copy_text_wrap"> <span class="eb_copy_text" id="eb_wp_token" title="'
                         . get_string('click_to_copy', 'auth_edwiserbridge') . '">' . $token
                         . '</span> <span class="eb_copy_btn">' . get_string('copy', 'auth_edwiserbridge') . '</span></div>'
+                ),
+                'wp_url' => array(
+                    'label'          => get_string('wordpress_url', 'auth_edwiserbridge'),
+                    'expected_value' => 'static',
+                    'value'          => '<div class="eb_copy_text_wrap"> <span class="eb_copy_text" id="eb_wp_url" title="'
+                        . get_string('click_to_copy', 'auth_edwiserbridge') . '">' . $wp_url . '</span>'
+                        . ' <span class="eb_copy_btn">' . get_string('copy', 'auth_edwiserbridge') . '</span></div>'
+                ),
+                'testconnectionstatus' => array(
+                    'expected_value' => 'static',
+                    'label'          => get_string('test_connection_status', 'auth_edwiserbridge'),
+                    'value'          => "<div id='test_connection_status'>Checking...</div>"
                 ),
                 'lang_code' => array(
                     'label'          => get_string('lang_label', 'auth_edwiserbridge'),
