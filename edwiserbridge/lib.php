@@ -274,6 +274,11 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
 			$required = 1;
 		}
 
+		// check the wsfunction param to check if the request is from WordPress (for user deletion). as there are no other unique params to check.
+		if ( isset( $_GET['wsfunction'] ) && 'core_user_delete_users' === $_GET['wsfunction'] ) {
+			$required = 1;
+		}
+
 		return $required;
 	}
 

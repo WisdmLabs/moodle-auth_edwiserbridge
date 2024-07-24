@@ -299,6 +299,10 @@ class auth_edwiserbridge_observer {
             'user_id' => $event->relateduserid
         );
 
+        if (auth_edwiserbridge_check_if_request_is_from_wp()) {
+            return;
+        }
+        
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
             $sites = unserialize($CFG->eb_connection_settings);
