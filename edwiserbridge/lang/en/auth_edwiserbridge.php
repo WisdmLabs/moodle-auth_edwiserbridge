@@ -60,21 +60,21 @@ $string["eb-setting-page-title_help"] = "Edwiser Bridge Two Way Synchronization 
 $string["eb-setup-page-title"] = "Edwiser Bridge Setup Wizard";
 $string["eb-setup-page-title_help"] = "Edwiser Bridge Setup Wizard";
 
-$string["enrollment_checkbox"] = "Enable User Enrollment.";
+$string["enrollment_checkbox"] = "User Enrollment.";
 $string["enrollment_checkbox_desc"] = "Enroll user from Moodle to Wordpress for linked users.";
-$string["unenrollment_checkbox"] = "Enable User Un-enrollment.";
+$string["unenrollment_checkbox"] = "User Un-enrollment.";
 $string["unenrollment_checkbox_desc"] = "Unenroll user from Moodle to Wordpress for linked users.";
-$string["user_creation"] = "Enable User Creation";
+$string["user_creation"] = "User Creation";
 $string["user_creation_desc"] = "Create user In linked Wordpress site when created in Moodle Site.";
-$string["user_deletion"] = "Enable User Deletion";
+$string["user_deletion"] = "User Deletion";
 $string["user_deletion_desc"] = "Delete user In linked Wordpress site when deleted in Moodle Site.";
 
-$string["course_creation"] = "Enable Course Creation";
+$string["course_creation"] = "Course Creation";
 $string["course_creation_desc"] = "This will create course in Wordpress site.";
-$string["course_deletion"] = "Enable Course Deletion";
+$string["course_deletion"] = "Course Deletion";
 $string["course_deletion_desc"] = "This won't delete course but it will mark course as deleted in linked Wordpress site.";
-$string["user_updation"] = "Enable User Update";
-$string["user_updation_desc"] = "This will update user first name, last name and password and won't update Username and Email.";
+$string["user_updation"] = "User Update";
+$string["user_updation_desc"] = "This will update user first name, last name, email and password and won't update username.";
 
 $string["wp_settings_section"] = "Wordpress Connection Settings";
 $string["wordpress_url"] = "Wordpress URL";
