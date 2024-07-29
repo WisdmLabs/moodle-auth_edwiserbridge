@@ -129,7 +129,7 @@ define("auth_edwiserbridge/eb_settings", [
                     .done(function(response) {
                         var message = "";
                         $("body").css("cursor", "default");
-                        if (!response.data.status) {
+                        if (response.status == "0") {
                             $(".eb_summary_tab").removeClass("summary_tab_sucess");
                             $(".eb_summary_tab").addClass("summary_tab_error");
                             if (!messge_ele) {
@@ -186,10 +186,8 @@ define("auth_edwiserbridge/eb_settings", [
                 if (searchParams.has("tab") && "summary" === searchParams.get("tab")) {
                     var service_id = $("#web_service_status").data("serviceid");
                     checkMissingServices(service_id, "#web_service_status");
+                    checkConnectionstatus("#test_connection_status");
                 }
-
-                checkConnectionstatus("#test_connection_status");
-
             }
 
             /*
