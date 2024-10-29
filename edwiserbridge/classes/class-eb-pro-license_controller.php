@@ -48,6 +48,12 @@ class eb_pro_license_controller {
      *              this store
      */
     private $store_url = '';
+    
+    /**
+     *
+     * @var string  Stores the plugin shortname.
+     */
+    private $plugin_short_name = '';
 
     /**
      *
