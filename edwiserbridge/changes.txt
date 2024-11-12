@@ -52,3 +52,7 @@ Feature
 Version 3.0.0
 New
 * New consolidated edwiser bridge pro plugin.
+
+Version 3.0.8
+Tweak
+* Made plugin compatible with Moodle 4.5
