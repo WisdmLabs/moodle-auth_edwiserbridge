@@ -1,0 +1,42 @@
+name: Moodle Coding Standards
+
+on: [push, pull_request]
+
+jobs:
+  phpcs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring
+          tools: composer
+
+      - name: Allow Composer Plugin and Install PHP CodeSniffer Globally
+        run: |
+          # Allow the Composer plugin for phpcs installer
+          composer config --global allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          
+          # Install PHP CodeSniffer and Moodle coding standards globally via Composer
+          composer global require \
+            squizlabs/php_codesniffer \
+            dealerdirect/phpcodesniffer-composer-installer \
+            moodlehq/moodle-cs \
+            phpcompatibility/php-compatibility
+
+      - name: Verify Installed Standards
+        run: |
+          # Set the global Composer bin directory and check installed standards
+          COMPOSER_BIN_DIR=$(composer global config bin-dir --absolute)
+          $COMPOSER_BIN_DIR/phpcs -i
+
+      - name: Run PHP CodeSniffer with Moodle Coding Standards
+        run: |
+          # Set the global Composer bin directory and run PHP CodeSniffer
+          COMPOSER_BIN_DIR=$(composer global config bin-dir --absolute)
+          $COMPOSER_BIN_DIR/phpcs --standard=Moodle edwiserbridge/*.php
