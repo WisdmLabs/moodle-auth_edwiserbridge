@@ -176,6 +176,7 @@ class eb_settings_handler {
             array('externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_unenrol_users'),
             array('externalserviceid' => $serviceid, 'functionname' => 'core_enrol_get_users_courses'),
             array('externalserviceid' => $serviceid, 'functionname' => 'eb_test_connection'),
+            array('externalserviceid' => $serviceid, 'functionname' => 'eb_validate_token'),
             array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_site_data'),
             array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_course_progress'),
             array('externalserviceid' => $serviceid, 'functionname' => 'eb_get_edwiser_plugins_info'),

@@ -44,7 +44,14 @@ $functions = array(
     'eb_test_connection' => array(
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'eb_test_connection',
-        'description'   => 'Course completion status of the user with the given user id',
+        'description'   => 'Test connection with WordPress',
+        'type'          => 'read',
+        'ajax'          => true,
+    ),
+    'eb_validate_token' => array(
+        'classname'     => 'auth_edwiserbridge\external\api',
+        'methodname'    => 'eb_validate_token',
+        'description'   => 'Validate if token is matching and user has access to the service',
         'type'          => 'read',
         'ajax'          => true,
     ),

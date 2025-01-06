@@ -431,6 +431,10 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
 			),
 			array(
 				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_validate_token',
+			),
+			array(
+				'externalserviceid' => $serviceid,
 				'functionname'      => 'eb_get_site_data',
 			),
 			array(
@@ -649,7 +653,88 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
 		if ( empty( $serviceid ) ) {
 			continue;
 		}
-
+		$functions = array(
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_user_create_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_user_delete_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_user_get_users_by_field',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_user_update_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_course_get_courses',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_course_get_categories',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'enrol_manual_enrol_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'enrol_manual_unenrol_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'core_enrol_get_users_courses',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_test_connection',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_validate_token',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_get_site_data',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_get_course_progress',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_get_edwiser_plugins_info',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'edwiserbridge_local_get_course_enrollment_method',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'edwiserbridge_local_update_course_enrollment_method',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'edwiserbridge_local_get_mandatory_settings',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'edwiserbridge_local_enable_plugin_settings',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_get_users',
+			),
+			array(
+				'externalserviceid' => $serviceid,
+				'functionname'      => 'eb_get_courses',
+			),
+		);
 		$ssofunctions = array(
 			array(
 				'externalserviceid' => $serviceid,
@@ -700,9 +785,9 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
 			),
 		);
 
-		$webservicefunctions = array_merge( $ssofunctions, $bulkpurchasefunctions );
+		$webservicefunctions = array_merge( $ssofunctions, $bulkpurchasefunctions, $functions );
 
-		foreach ( $ssofunctions as $function ) {
+		foreach ( $webservicefunctions as $function ) {
 
 			// adding function without check because services.php runs after install.php
 			// and at this time there are no functions from this plugin.

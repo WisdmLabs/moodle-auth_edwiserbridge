@@ -550,3 +550,5 @@ $string['updateavailable'] = 'Update available: {$a}';
 $string['uptodate'] = 'Up to date';
 $string['updatedown'] = 'Update service is down temporarily. <br>Error - {$a}.';
 $string['dismiss'] = 'Dismiss';
+$string['web_service_validate_token_msg'] = 'Return true if tokens match';
+$string['web_service_validate_user_msg'] = 'Return true if user is manager/site admin';
