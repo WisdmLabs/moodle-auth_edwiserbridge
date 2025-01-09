@@ -125,6 +125,7 @@ trait eb_test_connection {
                                         <div>Status : Connection  Failed </div>
                                         <div>Url : '. $params['wp_url'] .'/wp-json/edwiser-bridge/wisdmlabs/</div>
                                         <div>Response : '. $server_msg .'</div>
+                                        <div>Next Steps: Please refresh the page and try again. If this still doesnt work. Go to <a href="'. $params['wp_url'] .'/wp-admin/admin.php?page=eb-settings&tab=connection" target="_blank"> Connection Settings </a> and click the <strong>Run Diagnostics</strong> button . </div>
                                     </div>
                     <div class="eb_admin_templ_dismiss_notice_message">
                                         <span class="eb_test_connection_log_close " style="color:red;"> X </span> 
