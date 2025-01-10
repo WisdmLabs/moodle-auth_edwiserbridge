@@ -224,6 +224,16 @@ define("auth_edwiserbridge/eb_settings", [
 
             /*****************    Change Form Action URL   *******************/
 
+            $("#service_submit_continue").click(function() {
+                $(this)
+                    .closest("form")
+                    .attr(
+                        "action",
+                        M.cfg.wwwroot +
+                        "/auth/edwiserbridge/edwiserbridge.php?tab=connection"
+                    );
+            });
+
             $("#conne_submit_continue").click(function() {
                 $(this)
                     .closest("form")
