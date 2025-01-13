@@ -75,20 +75,27 @@ function decrypt_string($base64, $key)
     if (!$base64) {
         return '';
     }
-    $data = str_replace(array('-', '_'), array('+', '/'), $base64); // manual de-hack url formatting
-    $mod4 = strlen($data) % 4; // base64 length must be evenly divisible by 4
+    $data = str_replace(array('-', '_'), array('+', '/'), $base64); // Convert URL-safe Base64 back to standard Base64
+    
+    // Base64 length must be evenly divisible by 4, so we pad if necessary
+    $mod4 = strlen($data) % 4;
     if ($mod4) {
         $data .= substr('====', $mod4);
     }
+    // Decode the Base64 data
     $crypttext = base64_decode($data);
 
-    if (preg_match("/^(.*)::(.*)$/", $crypttext, $regs)) {
+    // AES-256-ECB does not use an IV, so we don't need to split the data
+    // if (preg_match("/^(.*)::(.*)$/", $crypttext, $regs)) {
 
-        list(, $crypttext, $enc_iv) = $regs;
-        $enc_method = 'AES-128-CTR';
-             $enc_key = openssl_digest( $key, 'SHA256', true);
-        $decrypted_token = openssl_decrypt($crypttext, $enc_method, $enc_key, 0, hex2bin($enc_iv));
-    }
+        // list(, $crypttext, $enc_iv) = $regs;
+    // Directly decrypt the data
+    $enc_method = 'AES-256-ECB'; // Use AES-256-ECB encryption method
+    $enc_key = openssl_digest( $key, 'SHA256', true); // Hash the key to 256 bits using SHA-256
+    // Decrypt the token with AES-256-ECB (no IV required)
+    $decrypted_token = openssl_decrypt($crypttext, $enc_method, $enc_key, 0);
+    // }
+    // Return the decrypted value, trimmed of any extra spaces or characters
     return trim($decrypted_token);
 }
 /**
