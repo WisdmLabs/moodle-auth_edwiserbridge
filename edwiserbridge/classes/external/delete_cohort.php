@@ -46,8 +46,9 @@ require_once($CFG->dirroot. '/cohort/lib.php');
  */
 trait delete_cohort {
     /**
-     * Returns description of method parameters
-     * @return external_function_parameters
+     * Returns the description of the method parameters for the auth_edwiserbridge_delete_cohort function.
+     *
+     * @return external_function_parameters The description of the method parameters.
      */
     public static function auth_edwiserbridge_delete_cohort_parameters() {
         return new external_function_parameters(
@@ -68,8 +69,12 @@ trait delete_cohort {
     }
 
     /**
-     * Function responsible for enrolling cohort in course
-     * @return string welcome message
+     * Deletes cohorts and returns the status of the operation.
+     *
+     * @param array $cohort An array of cohort IDs to be deleted.
+     * @return array An associative array containing the status of the operation. The "status" key will be:
+     *               - 1 if all cohorts were successfully deleted.
+     *               - 0 if there was any error during the deletion process.
      */
     public static function auth_edwiserbridge_delete_cohort($cohort) {
         global $USER, $DB;
@@ -112,8 +117,10 @@ trait delete_cohort {
     }
 
     /**
-     * Returns description of method result value
-     * @return external_description
+     * Returns the external structure for the connection status.
+     *
+     * @return external_single_structure External structure containing:
+     *                                   - status (string): This will return "1" for a successful connection and "0" on failure.
      */
     public static function auth_edwiserbridge_delete_cohort_returns() {
         return new external_single_structure(

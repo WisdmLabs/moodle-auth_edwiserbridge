@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +16,7 @@
 /**
  * JS file to handle edwiser bridge.
  *
- * @package     auth_edwiserbridge
+ * @package
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
@@ -30,8 +31,9 @@ define(['jquery', 'core/ajax', 'core/url', 'core/str'], function($, ajax, url) {
                  */
                 $('input[name^="wp_name"]').on({
                     keydown: function(e) {
-                        if (e.which === 32)
+                        if (e.which === 32) {
                             return false;
+                        }
                     },
                     change: function() {
                         this.value = this.value.replace(/\s/g, "");
@@ -48,7 +50,7 @@ define(['jquery', 'core/ajax', 'core/url', 'core/str'], function($, ajax, url) {
                     var id = $(this).prop("id");
                     id = id.replace("eb_test_connection", '');
                     id = id.replace("id_eb_buttons", '');
-                    index = id.replace(/\_/g, '');
+                    var index = id.replace(/\_/g, '');
                     var url = $("#id_wp_url_" + index).val();
                     var token = $("#id_wp_token_" + index).val();
                     var parent = $(this).parent().parent();
@@ -87,7 +89,7 @@ define(['jquery', 'core/ajax', 'core/url', 'core/str'], function($, ajax, url) {
                     var id = $(this).prop("id");
                     id = id.replace("eb_remove_site", '');
                     id = id.replace("id_eb_buttons", '');
-                    index = id.replace(/\_/g, '');
+                    var index = id.replace(/\_/g, '');
 
                     $("#id_wp_url_" + index).val("");
                     $("#id_wp_token_" + index).val("");
@@ -98,7 +100,10 @@ define(['jquery', 'core/ajax', 'core/url', 'core/str'], function($, ajax, url) {
                     $("input[name='wp_remove[" + index + "]']").val("yes");
                 });
 
-                // Hide the elements removed from the remove button.
+                /**
+                 * Hide the elements removed from the remove button.
+                 * @param {number} index - Index of the element.
+                 */
                 function onRemoveHideElemnts(index) {
                     $("#id_wp_name_" + index).closest('fieldset').css("display", "none");
                 }

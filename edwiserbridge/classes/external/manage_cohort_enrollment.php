@@ -45,8 +45,9 @@ require_once($CFG->dirroot. '/cohort/lib.php');
  */
 trait manage_cohort_enrollment {
     /**
-     * Returns description of method parameters
-     * @return external_function_parameters
+     * Returns the description of the method parameters for the auth_edwiserbridge_manage_cohort_enrollment function.
+     *
+     * @return external_function_parameters The description of the method parameters.
      */
     public static function auth_edwiserbridge_manage_cohort_enrollment_parameters() {
         return new external_function_parameters(
@@ -77,8 +78,10 @@ trait manage_cohort_enrollment {
     }
 
     /**
-     * Function responsible for enrolling cohort in course
-     * @return string welcome message
+     * Manages cohort enrollment for courses.
+     * 
+     * @param array $cohort Details of the cohort and course for enrollment/un-enrollment.
+     * @return int|string The instance ID if successful enrollment is added, or "disabled" if cohort enrollment is disabled.
      */
     public static function auth_edwiserbridge_manage_cohort_enrollment($cohort) {
         global $USER, $DB;
@@ -153,8 +156,9 @@ trait manage_cohort_enrollment {
     }
 
     /**
-     * Returns description of method result value
-     * @return external_description
+     * Returns the description of the method result value.
+     *
+     * @return external_value The ID of the instance as an integer.
      */
     public static function auth_edwiserbridge_manage_cohort_enrollment_returns() {
         return new external_value(PARAM_INT, 'Id of the instance');

@@ -41,9 +41,10 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 trait get_service_info {
 
     /**
-     * functionality to link existing services.
-     * @param  int $serviceid service id.
-     * @return array
+     * Functionality to link existing services.
+     *
+     * @param int $serviceid Service ID.
+     * @return array Response array with status and message.
      */
     public static function auth_edwiserbridge_get_service_info($serviceid) {
 
@@ -65,7 +66,9 @@ trait get_service_info {
     }
 
     /**
-     * paramters defined for get service info function.
+     * Defines the parameters for the auth_edwiserbridge_get_service_info external function.
+     *
+     * @return external_function_parameters The parameters for the external function.
      */
     public static function auth_edwiserbridge_get_service_info_parameters() {
         return new external_function_parameters(
@@ -76,7 +79,9 @@ trait get_service_info {
     }
 
     /**
-     * paramters which will be returned from get service info function.
+     * Returns the parameters that will be returned from the get_service_info function.
+     *
+     * @return external_single_structure The structure of the returned parameters.
      */
     public static function auth_edwiserbridge_get_service_info_returns() {
         return new external_single_structure(

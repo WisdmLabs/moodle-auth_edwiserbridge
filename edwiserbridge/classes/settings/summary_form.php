@@ -26,25 +26,27 @@ namespace auth_edwiserbridge\settings;
 use moodleform;
 use webservice;
 use moodle_url;
-use auth_edwiserbridge\eb_pro_license_controller;
+use auth_edwiserbridge\local\eb_pro_license_controller;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * form shown while adding Edwiser Bridge settings.
- *
- * @copyright 2006 Jamie Pratt <me@jamiep.org>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Defines the summary form for the Edwiser Bridge plugin.
+ * This form is used to display the plugin summary and license information.
  */
 class summary_form extends moodleform {
+    
     /**
-     * Defining summary form.
+     * This method is responsible for defining the summary form for the Edwiser Bridge plugin. 
+     * It sets up the form fields and handles the display of plugin summary and license information. 
+     * The method retrieves various data points such as the plugin version, web service details, and license information, and populates the form accordingly. 
+     * It also checks the web service user's capabilities and displays appropriate messages based on the findings.
      */
     public function definition() {
         global $CFG;
-
         $servicename   = '';
         $pluginsvdata  = $this->get_plugin_version_data();
         $mform         = $this->_form;
@@ -249,9 +251,13 @@ class summary_form extends moodleform {
     }
 
     /**
-     * get plugin fetch link.
+     * Get the URL for fetching plugin information.
      *
-     * @return string
+     * This function generates the URL for fetching the latest information about the Edwiser Bridge plugin,
+     * including the current version and any available updates. The URL is constructed using the global
+     * $CFG object, which contains the root URL of the Moodle installation.
+     *
+     * @return string The URL for fetching plugin information.
      */
     private function get_plugin_fetch_link() {
         global $CFG;
@@ -262,9 +268,13 @@ class summary_form extends moodleform {
     }
 
     /**
-     * Default methods of moodleform class to get method version.
+     * Retrieves the version information for the Edwiser Bridge plugin.
      *
-     * @return string
+     * This function fetches the current version of the Edwiser Bridge plugin installed on the Moodle site,
+     * as well as the latest available version from the remote server. It then constructs an array of version
+     * information, including any available updates, and returns it.
+     *
+     * @return array An associative array containing the version information for the Edwiser Bridge plugin.
      */
     private function get_plugin_version_data() {
         $pluginsdata = [];
@@ -312,13 +322,16 @@ class summary_form extends moodleform {
     }
 
     /**
-     * Returns plugin details.
+     * Returns the remote plugin data.
      *
-     * @param string $fetchdata
-     * @return object
+     * @param bool $fetchdata Whether to fetch the data from the remote server.
+     * @return object The remote plugin data.
      */
     private function get_remote_plugins_data($fetchdata) {
-        $data         = get_config('auth_edwiserbridge', 'edwiserbridge_plugins_versions');
+        global $CFG;
+        include_once($CFG->libdir . '/filelib.php'); // Ensure Moodle's curl class is available.
+
+        $data = get_config('auth_edwiserbridge', 'edwiserbridge_plugins_versions');
         $requestdata = true;
 
         if ($data || $fetchdata) {
@@ -328,42 +341,51 @@ class summary_form extends moodleform {
                 $requestdata = false;
             }
         }
-        if ($requestdata) {
-            if (!function_exists('curl_version')) {
-                return false;
-            }
 
-            $curl = curl_init();
-            curl_setopt_array($curl, [
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json",
-                CURLOPT_TIMEOUT => 100,
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => 0,
-            ]);
+        if ($requestdata) {
+            // Use Moodle's curl class.
+            $curl = new \curl();
+
             // Construct a user agent string.
-            global $CFG;
             $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Update Checker';
 
-            curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-            $output = curl_exec($curl);
-            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            curl_close($curl);
-            if (200 === $httpcode) {
+            // Set headers and options.
+            $curl->setHeader('User-Agent: ' . $useragent);
+            $options = [
+                'CURLOPT_RETURNTRANSFER' => true,
+                'CURLOPT_TIMEOUT' => 100,
+                'CURLOPT_SSL_VERIFYHOST' => false,
+                'CURLOPT_SSL_VERIFYPEER' => false,
+            ];
+
+            // Execute GET request.
+            $url = "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json";
+            $response = $curl->get($url, [], $options);
+
+            // Check the response.
+            $httpcode = $curl->info['http_code'];
+            if ($httpcode === 200) {
                 $data = [
                     'time' => time() + (60 * 60 * 24),
-                    'data' => $output,
+                    'data' => $response,
                 ];
                 set_config('edwiserbridge_plugins_versions', json_encode($data), 'auth_edwiserbridge');
             }
-            $output = json_decode($output);
+
+            $output = json_decode($response);
         }
+
         return $output;
+
     }
 
     /**
-     * Plugin licensing.
+     * Retrieves the license data for the Edwiser Bridge plugin.
      *
+     * This function fetches the license key and status from the Moodle database and
+     * prepares the data for rendering a license form template.
+     *
+     * @return string The rendered license form template.
      */
     private function get_license_data() {
         global $DB, $PAGE;
@@ -403,12 +425,14 @@ class summary_form extends moodleform {
         return $renderer->render_from_template('auth_edwiserbridge/license_form', $templatecontext);
     }
 
-
     /**
-     * Handle license action.
+     * Handles the license activation and deactivation actions.
+     *
+     * This function retrieves the license key and activation/deactivation parameters
+     * from the request, and then uses the eb_pro_license_controller to perform the
+     * corresponding license action.
      */
     private function handle_license_action() {
-        global $CFG;
         $licensekey = optional_param('eb_license_key', '', PARAM_RAW);
         $activatelicense = optional_param('eb_license_activate', '', PARAM_RAW);
         $deactivatelicense = optional_param('eb_license_deactivate', '', PARAM_RAW);

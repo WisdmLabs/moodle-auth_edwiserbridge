@@ -24,13 +24,14 @@
  */
 use auth_edwiserbridge;
 require('../../config.php');
+global $CFG, $PAGE;
+
 require_once($CFG->libdir . '/adminlib.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
-global $CFG, $COURSE, $PAGE;
 
 
-$setupwizard = new auth_edwiserbridge\setup_wizard();
+$setupwizard = new auth_edwiserbridge\local\setup_wizard();
 
 // Check progress and redirect accordingly.
 $progress  = isset( $CFG->eb_setup_progress ) ? $CFG->eb_setup_progress : '';
@@ -77,7 +78,10 @@ $PAGE->set_title(get_string('eb-setup-page-title', 'auth_edwiserbridge'));
 
 $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
-$PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
+// 
+$PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
+// $PAGE->requires->js('/auth/edwiserbridge/amd/src/setup_wizard.js');
+// $PAGE->requires->js('/auth/edwiserbridge/amd/src/sso_settings.js');
 
 // Actual page template output starts here.
 

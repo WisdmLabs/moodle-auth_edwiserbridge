@@ -38,9 +38,9 @@ use auth_edwiserbridge;
 trait setup_wizard_save_and_continue {
 
     /**
-     * Returns description of auth_edwiserbridge_setup_wizard_save_and_continue_returns() parameters
+     * Returns the parameter description for the auth_edwiserbridge_setup_wizard_save_and_continue external function.
      *
-     * @return external_function_parameters
+     * @return external_function_parameters The parameter description.
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_parameters() {
         return new external_function_parameters(
@@ -51,14 +51,13 @@ trait setup_wizard_save_and_continue {
     }
 
     /**
-     * Get list of active course enrolment methods for current user.
+     * Saves and continues the setup wizard steps data.
      *
-     * @param int $courseid
-     * @return array of course enrolment methods
-     * @throws moodle_exception
+     * @param string $data The data to be saved and continued.
+     * @return void
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue($data) {
-        global $DB, $CFG;
+        global $CFG;
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
@@ -78,19 +77,18 @@ trait setup_wizard_save_and_continue {
         $nextstep = $data->next_step;
         $isnextsubstep = $data->is_next_sub_step;
 
-        $setupwizardhandler = new auth_edwiserbridge\setup_wizard();
+        $setupwizardhandler = new auth_edwiserbridge\local\setup_wizard();
         $steps = $setupwizardhandler->eb_setup_wizard_get_steps();
 
         // Check if there are any sub steps available.
         $function = $steps[$nextstep]['function'];
-
         // Save progress data.
         set_config('eb_setup_progress', $currentstep);
 
         switch ( $currentstep ) {
             case 'web_service':
                 // Create web service and update data in EB settings.
-                $settingshandler = new auth_edwiserbridge\settings_handler();
+                $settingshandler = new auth_edwiserbridge\local\settings_handler();
                 // Get main admin user.
                 $adminuser = get_admin();
 
@@ -178,9 +176,9 @@ trait setup_wizard_save_and_continue {
     }
 
     /**
-     * Returns description of auth_edwiserbridge_setup_wizard_save_and_continue_returns() result value
+     * Returns the description of the result value for the auth_edwiserbridge_setup_wizard_save_and_continue() function.
      *
-     * @return external_description
+     * @return external_single_structure The structure describing the result value, which contains the HTML content for the next setup wizard step and the title of that step.
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_returns() {
         new external_single_structure(

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace auth_edwiserbridge;
+namespace auth_edwiserbridge\local;
 /**
  * Handles API requests and response from WordPress.
  *
@@ -113,10 +113,11 @@ class setup_wizard {
         return $steps;
     }
 
-
-
     /**
-     * Setup Wizard Steps HTML content
+     * Generates the HTML content for the setup wizard steps.
+     *
+     * @param string $currentstep The current step in the setup wizard.
+     * @return string The HTML content for the setup wizard steps.
      */
     public function eb_setup_steps_html($currentstep = '') {
         global $CFG, $PAGE;
@@ -172,19 +173,23 @@ class setup_wizard {
     }
 
     /**
-     * Setup Wizard get step title.
+     * Get the title of the specified setup wizard step.
      *
-     * @param string $step Step name.
+     * @param string $step The name of the setup wizard step.
+     * @return string The title of the specified step, or an empty string if the step is not found.
      */
     public function eb_get_step_title($step) {
         $steps = $this->eb_setup_wizard_get_steps();
         return isset($steps[$step]['title']) ? $steps[$step]['title'] : '';
     }
 
-
-
     /**
-     * Setup Wizard Page submission or refresh handler
+     * Handles the submission or refresh of the setup wizard page.
+     *
+     * This function determines the current step of the setup wizard based on the
+     * request parameters or the saved progress in the configuration.
+     *
+     * @return string The name of the current setup wizard step.
      */
     public function eb_setup_handle_page_submission_or_refresh() {
         global $CFG;
@@ -204,12 +209,16 @@ class setup_wizard {
         return $step;
     }
 
-
-
     /**
-     * Get setup wizard step content.
+     * Renders the setup wizard template.
      *
-     * @param string $step Step name.
+     * This function is responsible for rendering the setup wizard template, which
+     * includes the sidebar and content sections. It determines the current step of
+     * the setup wizard and calls the appropriate function to generate the content
+     * for that step.
+     *
+     * @param string $step The name of the current setup wizard step, defaulting to
+     *                     'installation_guide'.
      */
     public function eb_setup_wizard_template($step = 'installation_guide') {
         global $PAGE;
@@ -247,11 +256,16 @@ class setup_wizard {
     }
 
     /**
-     * Setup Wizard Header.
+     * Renders the setup wizard header.
+     *
+     * This function is responsible for rendering the header section of the setup wizard
+     * template. It takes an optional $title parameter to set the page title.
+     *
+     * @param string $title The title to display in the header.
      */
     public function setup_wizard_header($title = '') {
 
-        global $CFG, $PAGE;
+        global $PAGE;
 
         $renderer = $PAGE->get_renderer('core');
 
@@ -267,7 +281,11 @@ class setup_wizard {
     }
 
     /**
-     * Setup Wizard Footer.
+     * Renders the setup wizard footer.
+     *
+     * This function is responsible for rendering the footer section of the setup wizard
+     * template. It sets up the template context with the necessary data and then
+     * renders the 'auth_edwiserbridge/setup_wizard_footer' template.
      */
     public function setup_wizard_footer() {
         global $PAGE;
@@ -286,9 +304,12 @@ class setup_wizard {
     }
 
     /**
-     * Get next step.
-     * @param string $currentstep Current step.
-     * @return string $step Next step.
+     * Get the next step in the setup wizard.
+     *
+     * This function retrieves the next step in the setup wizard based on the current step.
+     *
+     * @param string $currentstep The current step in the setup wizard.
+     * @return string The next step in the setup wizard.
      */
     public function get_next_step($currentstep) {
         $steps = $this->eb_setup_wizard_get_steps();
@@ -310,9 +331,12 @@ class setup_wizard {
     }
 
     /**
-     * Get previous step.
-     * @param string $currentstep Current step.
-     * @return string $step Previous step.
+     * Get the previous step in the setup wizard.
+     *
+     * This function retrieves the previous step in the setup wizard based on the current step.
+     *
+     * @param string $currentstep The current step in the setup wizard.
+     * @return string The previous step in the setup wizard.
      */
     public function get_prev_step($currentstep) {
 
@@ -336,10 +360,14 @@ class setup_wizard {
     }
 
     /**
-     * Installaion guide.
+     * Displays the installation guide for the Edwiser Bridge plugin.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * This function renders the installation guide template with the necessary data and
+     * outputs the HTML content. If the $ajax parameter is set to 1, the function will
+     * return the HTML content instead of directly echoing it.
+     *
+     * @param int $ajax Whether the call is an AJAX request (1) or not (0).
+     * @return string The HTML content of the installation guide.
      */
     public function eb_setup_installation_guide($ajax = 1) {
         global $PAGE;
@@ -380,10 +408,11 @@ class setup_wizard {
     }
 
     /**
-     * Plugin configuration.
+     * Outputs the HTML content for the plugin configuration page. If the $ajax parameter is set to 1, the function will
+     * return the HTML content instead of directly echoing it.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Whether the call is an AJAX request (1) or not (0).
+     * @return string The HTML content of the plugin configuration page.
      */
     public function eb_setup_plugin_configuration($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -457,13 +486,11 @@ class setup_wizard {
         }
     }
 
-
-
     /**
-     * Web service setup.
+     * Handles the web service setup for the Edwiser Bridge plugin.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Indicates whether the request is an AJAX call.
+     * @return string $html HTML content for the web service setup.
      */
     public function eb_setup_web_service($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -517,12 +544,11 @@ class setup_wizard {
         }
     }
 
-
     /**
-     * WordPress site details.
+     * Displays the WordPress site details step in the setup wizard.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Whether the function is called via AJAX (1) or not (0).
+     * @return string $html HTML content for the WordPress site details step.
      */
     public function eb_setup_wordpress_site_details($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -596,12 +622,11 @@ class setup_wizard {
         }
     }
 
-
     /**
-     * Check permalink structure.
+     * Checks the permalink structure of the WordPress site.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Indicates whether the call is an AJAX request (1) or not (0).
+     * @return string $html HTML content to be displayed.
      */
     public function eb_setup_check_permalink($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -710,12 +735,11 @@ class setup_wizard {
         }
     }
 
-
     /**
-     * User and course sync.
+     * Handles the user and course synchronization settings in the setup wizard.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Whether the function is called via AJAX (1) or not (0).
+     * @return string $html HTML content to be displayed in the setup wizard.
      */
     public function eb_setup_user_and_course_sync($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -825,12 +849,11 @@ class setup_wizard {
         }
     }
 
-
     /**
-     * Complete details.
+     * Handles the completion of the setup wizard for the Edwiser Bridge plugin.
      *
-     * @param int $ajax Ajax call.
-     * @return string $html HTML content.
+     * @param int $ajax Indicates whether the request is an AJAX call (1) or not (0).
+     * @return string $html The HTML content to be displayed.
      */
     public function eb_setup_complete_details($ajax = 1) {
         global $CFG, $OUTPUT, $PAGE;
@@ -898,11 +921,10 @@ class setup_wizard {
         }
     }
 
-
     /**
-     * Setup Wizard close setup.
+     * Renders the HTML content for the setup close popup.
      *
-     * @return string $html HTML content.
+     * @return string $html HTML content for the setup close popup.
      */
     public function eb_setup_close_setup() {
         global $CFG, $OUTPUT, $PAGE;
@@ -922,9 +944,9 @@ class setup_wizard {
     }
 
     /**
-     * Setup Wizard close setup.
+     * Renders the HTML content for the setup redirection popup.
      *
-     * @return string $html HTML content.
+     * @return string $html HTML content for the setup redirection popup.
      */
     public function eb_setup_redirection_popup() {
         global $PAGE;
@@ -936,11 +958,10 @@ class setup_wizard {
         return $renderer->render_from_template('auth_edwiserbridge/setup_redirection_popup', $templatecontext);
     }
 
-
     /**
-     * Setup Wizard close setup.
+     * Renders the HTML content for the setup completion popup.
      *
-     * @return string $html HTML content.
+     * @return string $html HTML content for the setup completion popup.
      */
     public function eb_setup_completion_popup() {
         global $PAGE;

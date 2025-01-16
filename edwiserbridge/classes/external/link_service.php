@@ -38,13 +38,12 @@ use auth_edwiserbridge;
  */
 trait link_service {
 
-
     /**
      * Functionality to link existing services.
      *
-     * @param  string $serviceid
-     * @param  int $token
-     * @return array
+     * @param string $serviceid The ID of the service to link.
+     * @param int $token The token associated with the service.
+     * @return array An array containing the status and message of the linking operation.
      */
     public static function auth_edwiserbridge_link_service($serviceid, $token) {
 
@@ -56,7 +55,7 @@ trait link_service {
         $response['status'] = 0;
         $response['msg']    = get_string('eb_link_err', 'auth_edwiserbridge');
 
-        $settingshandler = new auth_edwiserbridge\settings_handler();
+        $settingshandler = new auth_edwiserbridge\local\settings_handler();
         $result           = $settingshandler->eb_link_exitsing_service($serviceid, $token);
         if ($result) {
             $response['status'] = 1;
@@ -67,7 +66,9 @@ trait link_service {
     }
 
     /**
-     * paramters defined for link service function.
+     * Defines the parameters for the auth_edwiserbridge_link_service external function.
+     *
+     * @return external_function_parameters The parameters for the link service function.
      */
     public static function auth_edwiserbridge_link_service_parameters() {
         return new external_function_parameters(
@@ -79,7 +80,9 @@ trait link_service {
     }
 
     /**
-     * paramters which will be returned from link service function.
+     * Defines the return structure for the auth_edwiserbridge_link_service external function.
+     *
+     * @return external_single_structure The return structure for the link service function.
      */
     public static function auth_edwiserbridge_link_service_returns() {
         return new external_single_structure(

@@ -26,15 +26,20 @@ namespace auth_edwiserbridge\settings;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * form shown while adding Edwiser Bridge settings.
+ * Defines the synchronization settings form for the Edwiser Bridge plugin.
+ * This form allows the user to configure various synchronization options
+ * between Moodle and the connected WordPress site.
  */
 class synchronization_form extends moodleform {
 
     /**
-     * Defining synchronization form.
+     * Defines the synchronization settings form for the Edwiser Bridge plugin.
+     * This method sets up the form fields and default values for configuring
+     * various synchronization options between Moodle and the connected WordPress site.
      */
     public function definition() {
         $mform         = $this->_form;

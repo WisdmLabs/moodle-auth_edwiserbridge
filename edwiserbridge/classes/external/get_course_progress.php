@@ -38,15 +38,14 @@ use core_completion\progress;
  */
 trait get_course_progress {
 
-
     /**
-     * Functionality to get course progress.
+     * Functionality to get course progress data for the given user.
      *
-     * @param  string $userid the user id.
-     * @return array of the course progress.
+     * @param string $userid the user id.
+     * @return array an array of course progress data.
      */
     public static function auth_edwiserbridge_get_course_progress($userid) {
-        global $DB, $CFG;
+        global $DB;
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
@@ -107,7 +106,9 @@ trait get_course_progress {
     }
 
     /**
-     * paramters defined for course progress function.
+     * Defines the parameters for the auth_edwiserbridge_get_course_progress function.
+     *
+     * @return external_function_parameters The parameters for the function.
      */
     public static function auth_edwiserbridge_get_course_progress_parameters() {
         return new external_function_parameters(
@@ -118,7 +119,14 @@ trait get_course_progress {
     }
 
     /**
-     * paramters which will be returned from course progress function.
+     * Returns the structure of the course progress data.
+     *
+     * This function defines the structure of the data that will be returned by the
+     * auth_edwiserbridge_get_course_progress function. It specifies that the
+     * returned data will be an array of objects, where each object has two
+     * properties: 'course_id' (a text value) and 'completion' (an integer value).
+     *
+     * @return external_multiple_structure The structure of the course progress data.
      */
     public static function auth_edwiserbridge_get_course_progress_returns() {
         return new external_multiple_structure(

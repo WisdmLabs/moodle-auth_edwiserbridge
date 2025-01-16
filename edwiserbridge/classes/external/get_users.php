@@ -38,12 +38,13 @@ use core_completion\progress;
 trait get_users {
 
     /**
-     * functionality to get users in chunk.
-     * @param  int $offset offset
-     * @param  int $limit  limit
-     * @param  string $searchstring searchstring
-     * @param  int $totalusers totalusers
-     * @return array array of users.
+     * Functionality to get users list in chunks.
+     *
+     * @param int $offset Offset for the user list.
+     * @param int $limit Limit for the number of users to retrieve.
+     * @param string $searchstring Search string to filter the users.
+     * @param int $totalusers Flag to retrieve the total number of users.
+     * @return array Array of users.
      */
     public static function auth_edwiserbridge_get_users($offset, $limit, $searchstring, $totalusers) {
         global $DB;
@@ -77,7 +78,19 @@ trait get_users {
     }
 
     /**
-     * paramters defined for get users function.
+     * Defines the parameters for the auth_edwiserbridge_get_users external function.
+     *
+     * This function returns an external_function_parameters object that defines the
+     * parameters for the auth_edwiserbridge_get_users function. The parameters
+     * include:
+     *
+     * - offset: The offset for the user list.
+     * - limit: The limit for the number of users to retrieve.
+     * - search_string: The search string to filter the users.
+     * - total_users: A flag to retrieve the total number of users.
+     *
+     * @return external_function_parameters The parameters for the
+     *         auth_edwiserbridge_get_users function.
      */
     public static function auth_edwiserbridge_get_users_parameters() {
         return new external_function_parameters(
@@ -103,7 +116,18 @@ trait get_users {
     }
 
     /**
-     * paramters which will be returned from get users function.
+     * Defines the return parameters for the auth_edwiserbridge_get_users function.
+     *
+     * This function returns an array with two keys:
+     * - 'total_users': an integer representing the total number of users
+     * - 'users': an array of user objects, each with the following properties:
+     *   - 'id': the user's ID
+     *   - 'username': the user's username
+     *   - 'firstname': the user's first name
+     *   - 'lastname': the user's last name
+     *   - 'email': the user's email address
+     * 
+     * @return external_function_parameters The return structure for the auth_edwiserbridge_get_users function.
      */
     public static function auth_edwiserbridge_get_users_returns() {
         return new external_function_parameters(

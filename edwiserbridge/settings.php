@@ -27,17 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . '/lib.php');
 
-global $CFG, $PAGE;
+global $CFG, $PAGE, $ADMIN;
 
 // Plugin update notification.
 auth_edwiserbridge_show_plugin_update_notification();
 
 if (auth_edwiserbridge_check_pro_dependancy()) {
-    $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
-    $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/sso_settings.js'));
-    $PAGE->requires->js_call_amd('auth_edwiserbridge/eb_settings', 'init');
-    $PAGE->requires->js_call_amd('auth_edwiserbridge/eb_sso_settings', 'init');
-
+    $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
+    $PAGE->requires->js_call_amd('auth_edwiserbridge/sso_settings', 'init');
     $stringmanager = get_string_manager();
     $strings = $stringmanager->load_component_strings('auth_edwiserbridge', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'auth_edwiserbridge');
@@ -88,7 +85,6 @@ if (auth_edwiserbridge_check_pro_dependancy()) {
     );
 
     if ($ADMIN->fulltree) {
-        global $CFG;
         $settingslink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', ['tab' => 'sso']);
         $heading = new lang_string('settings_migration', 'auth_edwiserbridge')
             . ' <a href="' . $settingslink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';

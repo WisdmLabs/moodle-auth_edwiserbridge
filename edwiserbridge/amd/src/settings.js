@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +16,7 @@
 /**
  * Js file to handle settings.
  *
- * @package     auth_edwiserbridge
+ * @package
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
@@ -27,6 +28,9 @@ define("auth_edwiserbridge/eb_settings", [
     "core/url",
     "core/str",
 ], function($, ajax, url, str) {
+    /**
+     * Load settings.
+     */
     function load_settings() {
         var translation = str.get_strings([
             { key: "dialog_title", component: "auth_edwiserbridge" },
@@ -64,6 +68,11 @@ define("auth_edwiserbridge/eb_settings", [
                 $(".eb_test_connection_log").slideUp();
             });
 
+            /**
+             * Check if all the services are enabled.
+             * @param {string} service_id
+             * @param {boolean} messge_ele
+            */
             function checkMissingServices(service_id, messge_ele = false) {
                 var promises = ajax.call([{
                     methodname: "auth_edwiserbridge_get_service_info",
@@ -97,7 +106,7 @@ define("auth_edwiserbridge/eb_settings", [
                                 $(messge_ele).empty().append(message);
                             }
                         } else {
-                            if (jQuery("#web_service_status span").hasClass("summ_error")) {
+                            if ($("#web_service_status span").hasClass("summ_error")) {
                                 $(".eb_summary_tab").removeClass("summary_tab_sucess");
                                 $(".eb_summary_tab").addClass("summary_tab_error");
                             } else {
@@ -106,7 +115,11 @@ define("auth_edwiserbridge/eb_settings", [
                             }
                             if (messge_ele) {
                                 message =
-                                    '<span style="color: #7ad03a;"><span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003;</span></span>';
+                                    '<span style="color: #7ad03a;">' +
+                                        '<span class="summ_success" style="font-weight:bolder;color:#7ad03a;font-size:22px;">' +
+                                            '&#10003;' +
+                                        '</span>' +
+                                    '</span>';
                                 $(messge_ele).empty().append(message);
                             }
                         }
@@ -133,7 +146,7 @@ define("auth_edwiserbridge/eb_settings", [
                     checkMissingServices(service_id, "#web_service_status");
                 } else {
                     var service_id = $("#web_service_id").data("serviceid");
-                    console.log(service_id);
+                    // console.log(service_id);
                     if ("" != service_id) {
                         checkMissingServices(service_id);
                     }
@@ -216,7 +229,8 @@ define("auth_edwiserbridge/eb_settings", [
                 $("#admin-eb_setup_wizard_field").before(
                     '<div class="eb_settings_btn_cont" style="padding: 30px;"> ' +
                     M.util.get_string("eb_settings_msg", "auth_edwiserbridge") +
-                    ' <a target="_blank" style="border-radius: 4px;margin-left: 5px;padding: 7px 18px;" class="eb_settings_btn btn btn-primary" href="' +
+                    ' <a target="_blank" style="border-radius:4px;margin-left:5px;padding:7px 18px;" ' +
+                        'class="eb_settings_btn btn btn-primary" href="' +
                     M.cfg.wwwroot +
                     '/auth/edwiserbridge/setup_wizard.php"> ' +
                     M.util.get_string("click_here", "auth_edwiserbridge") +
@@ -409,6 +423,8 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * Toatser adde to show the successful copy message.
+             * @param {string} title
+             * @param {int} time
              */
             function toaster(title, time = 2000) {
                 const id = "auth_edwiserbridge_copy";
@@ -434,6 +450,9 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * This function adds newly created web service in the drop down
+             * @param {string} element
+             * @param {string} name
+             * @param {string} id
              */
             function add_new_service_in_select(element, name, id) {
                 $(element + "option:selected").removeAttr("selected");
@@ -444,6 +463,9 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * This function adds newly created web service in the drop down
+             * @param {string} element
+             * @param {string} token
+             * @param {string} id
              */
             function add_new_token_in_select(element, token, id) {
                 $(element + "option:selected").removeAttr("selected");
@@ -460,6 +482,10 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * This function handles the display of the service creation form depending on the drop down value.
+             * @param {string} condition
+             * @param {string} condition_var
+             * @param {string} element
+             * @param {string} btn
              */
             function handlefieldsdisplay(
                 condition,
@@ -478,6 +504,10 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * This functions link the existing wervices
+             * @param {string} service_id
+             * @param {string} token
+             * @param {string} common_errr_fld
+             * @param {string} common_success_fld
              */
             function link_web_service(
                 service_id,
@@ -518,6 +548,11 @@ define("auth_edwiserbridge/eb_settings", [
 
             /**
              * This functions regiters new web service.
+             * @param {string} web_service_name
+             * @param {string} user_id
+             * @param {string} service_select_fld
+             * @param {string} common_errr_fld
+             * @param {boolean} is_mform
              */
             function create_web_service(
                 web_service_name,
@@ -629,20 +664,32 @@ define("auth_edwiserbridge/eb_settings", [
 
             /******************    SETUP wizard   *****************/
 
-            var loader = '<div id="eb-lading-parent" class="eb-lading-parent-wrap"><div class="eb-loader-progsessing-anim"></div></div>';
+            var loader = '<div id="eb-lading-parent" class="eb-lading-parent-wrap">' +
+                '<div class="eb-loader-progsessing-anim"></div>' +
+            '</div>';
             $("body").append(loader);
 
 
-
+            /**
+             * Change URL.
+             * @param {string} step
+             */
             function change_url( step ) {
                 var url = new URL(document.location);
                 url.searchParams.set('current_step', step);
                 window.history.replaceState( null, null, url );
             }
 
+            /**
+             * Handle step progress.
+             * @param {string} current_step
+             * @param {string} next_step
+             * @param {string} is_next_sub_step
+             * @param {string} parent_step
+             */
             function handle_step_progress( current_step, next_step, is_next_sub_step, parent_step ) {
                 /**
-                 * 1. Mark current step as active and 
+                 * 1. Mark current step as active and
                  * 2. Mark previous step as completed.
                  */
                 // Add completed class to the sidebar steps
@@ -668,7 +715,6 @@ define("auth_edwiserbridge/eb_settings", [
 
 
                 var temp2 = $('.eb-setup-step-' + next_step).addClass('eb-setup-step-active-wrap');
-                
                 var step_title1 = $('.eb-setup-step-' + next_step).children('.eb-setup-steps-title');
                 step_title1.addClass('eb-setup-step-active');
 
@@ -682,9 +728,9 @@ define("auth_edwiserbridge/eb_settings", [
             }
 
             // ajax xall to save data and get new tab at the same time.
-        
+
             // Clicking save continue
-            // 
+            //
             $(document).on('click', '.eb_setup_save_and_continue', function (event) {
                 // Create loader.
                 var current = $(this);
@@ -713,9 +759,9 @@ define("auth_edwiserbridge/eb_settings", [
                         $("#eb-lading-parent").show();
 
                         data = { current_step : current_step, next_step : next_step, is_next_sub_step : is_next_sub_step };
-                        
+
                         break;
-                
+
                     case 'web_service':
                         var service_name = $('.eb_setup_web_service_list').val();
 
@@ -736,7 +782,14 @@ define("auth_edwiserbridge/eb_settings", [
                                 existing_service = 0;
                             }
 
-                            data = { current_step : current_step, next_step : next_step, is_next_sub_step : is_next_sub_step, service_name : service_name, existing_service : existing_service /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/ };
+                            data = {
+                                current_step : current_step,
+                                next_step : next_step,
+                                is_next_sub_step : is_next_sub_step,
+                                service_name : service_name,
+                                existing_service : existing_service
+                                /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/
+                            };
                         }
                         break;
 
@@ -773,7 +826,13 @@ define("auth_edwiserbridge/eb_settings", [
                                 url       = $('.eb_setup_site_url').val();
                             }
 
-                            data = { current_step : current_step, next_step : next_step, is_next_sub_step : is_next_sub_step, site_name : site_name, url : url /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/ };
+                            data = {
+                                current_step : current_step,
+                                next_step : next_step,
+                                is_next_sub_step : is_next_sub_step,
+                                site_name : site_name,
+                                url : url /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/
+                            };
                         }
 
                         break;
@@ -793,7 +852,18 @@ define("auth_edwiserbridge/eb_settings", [
 
 
                         // If user checkbox is clicked start user sync otherwise just procedd to next screen.
-                        data = { current_step : current_step, next_step : next_step, is_next_sub_step : is_next_sub_step, user_enrollment: user_enrollment, user_unenrollment: user_unenrollment, user_creation: user_creation, user_deletion: user_deletion, user_update: user_update, course_creation: course_creation, course_deletion: course_deletion };
+                        data = {
+                            current_step : current_step,
+                            next_step : next_step,
+                            is_next_sub_step : is_next_sub_step,
+                            user_enrollment: user_enrollment,
+                            user_unenrollment: user_unenrollment,
+                            user_creation: user_creation,
+                            user_deletion: user_deletion,
+                            user_update: user_update,
+                            course_creation: course_creation,
+                            course_deletion: course_deletion
+                        };
 
                         break;
 
@@ -803,10 +873,6 @@ define("auth_edwiserbridge/eb_settings", [
 
                         break;
                 }
-
-
-
-            
                 data = JSON.stringify(data);
 
 
@@ -831,7 +897,11 @@ define("auth_edwiserbridge/eb_settings", [
 
 
                     if ( 'complete_details' == next_step ) {
-                        $('.eb-setup-content').append('<div class="eb_setup_popup"> ' + $('.eb_setup_wp_completion_success_popup').html() + ' </div>');
+                        $('.eb-setup-content').append(
+                            '<div class="eb_setup_popup"> ' +
+                            $('.eb_setup_wp_completion_success_popup').html() +
+                            ' </div>'
+                        );
 
 
                         setTimeout(function(){
@@ -854,7 +924,10 @@ define("auth_edwiserbridge/eb_settings", [
 
             // Adding for refresh page condition
             if ( $(".eb_setup_wp_completion_success_popup").length) {
-                $('.eb-setup-content').append('<div class="eb_setup_popup"> ' + $('.eb_setup_wp_completion_success_popup').html() + ' </div>');
+                $('.eb-setup-content').append(
+                    '<div class="eb_setup_popup"> ' +
+                    $('.eb_setup_wp_completion_success_popup').html() +
+                    ' </div>');
 
                 setTimeout(function(){
                     $('.eb_setup_popup').remove();
@@ -866,7 +939,7 @@ define("auth_edwiserbridge/eb_settings", [
 
 
             /*
-            * Ajax call to enable settings. 
+            * Ajax call to enable settings.
             */
             $(document).on('click', '.eb_enable_plugin_settings', function (event) {
                 // start loader
@@ -972,7 +1045,7 @@ define("auth_edwiserbridge/eb_settings", [
                     var option = $(this).find(":selected");
 
                     $('.eb_setup_site_name').val(option.data('name'));
-                    $('.eb_setup_site_url').val(option.data('url'));    
+                    $('.eb_setup_site_url').val(option.data('url'));
                 }
             });
 
@@ -1025,8 +1098,7 @@ define("auth_edwiserbridge/eb_settings", [
             });
 
 
-            
-            $(document).on('click', '#eb_setup_sync_all', function (event) {
+           $(document).on('click', '#eb_setup_sync_all', function (event) {
                 if(this.checked){
                     $('.eb_setup_sync_cb').prop('checked', true);
                 } else{
@@ -1053,10 +1125,6 @@ define("auth_edwiserbridge/eb_settings", [
                     $('#eb_setup_sync_all').prop('checked', false);
                 }
             });
-
-            
-
-
 
             /**
              * Copy to clipboard functionality.
@@ -1106,7 +1174,7 @@ define("auth_edwiserbridge/eb_settings", [
                     "href" : "data:application/json," + encodeURIComponent(JSON.stringify( obj ) )
                 }).appendTo("body").click(function() {
                     $(this).remove();
-                })[0].click()
+                })[0].click();
             });
 
         /**

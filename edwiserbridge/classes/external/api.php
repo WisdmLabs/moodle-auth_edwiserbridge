@@ -32,10 +32,12 @@ require_once($CFG->libdir . '/externallib.php');
 use external_api;
 
 /**
- * Provides an external API of the block.
+ * Provides an external API for the Edwiser Bridge plugin.
+ * This class aggregates all the external functions of the plugin.
  *
- * Each external function is implemented in its own trait. This class
- * aggregates them all.
+ * @package    auth_edwiserbridge
+ * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api extends external_api {
     use create_service;

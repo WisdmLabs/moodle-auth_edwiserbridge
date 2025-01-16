@@ -24,11 +24,15 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+global $CFG;
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 /**
- * custom code to be run on installing the plugin.
+ * Performs installation tasks for the Edwiser Bridge plugin.
+ *
+ * This function is called during the installation of the Edwiser Bridge plugin.
+ * It checks for the Edwiser Bridge Pro dependency, enables the plugin in the
+ * default authentication method, and checks and updates the webservice functions.
  */
 function xmldb_auth_edwiserbridge_install() {
 

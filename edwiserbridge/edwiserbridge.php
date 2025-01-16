@@ -26,10 +26,10 @@
 use auth_edwiserbridge\settings\navigation_form;
 
 require('../../config.php');
+global $CFG, $PAGE;
 require_once($CFG->libdir . '/adminlib.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
-global $CFG, $COURSE, $PAGE;
 
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('ui');

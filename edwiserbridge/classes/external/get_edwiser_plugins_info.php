@@ -36,10 +36,14 @@ use core_completion\progress;
  * Trait implementing the external function auth_edwiserbridge_course_progress_data
  */
 trait get_edwiser_plugins_info {
-
     /**
-     * functionality to link existing services.
-     * @return array
+     * Retrieves information about Edwiser plugins installed on the Moodle site.
+     *
+     * This function checks the installed authentication plugins and the Edwiser Bridge Pro
+     * license status to gather information about the Edwiser plugins. It returns an array
+     * containing the plugin names and versions.
+     *
+     * @return array An array with information about the installed Edwiser plugins.
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info() {
 
@@ -59,8 +63,7 @@ trait get_edwiser_plugins_info {
         }
 
         // Check licensing.
-        global $CFG;
-        $license = new auth_edwiserbridge\eb_pro_license_controller();
+        $license = new auth_edwiserbridge\local\eb_pro_license_controller();
         if ($license->get_data_from_db() == 'available') {
             $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge_pro',
@@ -79,14 +82,29 @@ trait get_edwiser_plugins_info {
     }
 
     /**
-     * paramters defined for get plugin info function.
+     * Returns the parameters for the auth_edwiserbridge_get_edwiser_plugins_info function.
+     *
+     * This function does not take any parameters, as the function it documents
+     * retrieves information about the installed Edwiser plugins without requiring
+     * any input from the caller.
+     *
+     * @return external_function_parameters The parameters for the
+     *         auth_edwiserbridge_get_edwiser_plugins_info function.
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info_parameters() {
         return new external_function_parameters([]);
     }
 
     /**
-     * paramters which will be returned from get plugin info function.
+     * Returns the structure of the response for the auth_edwiserbridge_get_edwiser_plugins_info function.
+     *
+     * This function defines the structure of the response that will be returned by the
+     * auth_edwiserbridge_get_edwiser_plugins_info function. It specifies that the response
+     * will be a single structure containing a 'plugins' field, which is a multiple structure
+     * containing individual plugin information with 'plugin_name' and 'version' fields.
+     *
+     * @return external_single_structure The structure of the response for the
+     *         auth_edwiserbridge_get_edwiser_plugins_info function.
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info_returns() {
         return new external_single_structure(

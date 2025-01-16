@@ -30,12 +30,16 @@ defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * form shown while adding Edwiser Bridge settings.
+ * Defines the connection settings form for the Edwiser Bridge plugin.
+ * This class extends the moodleform class and provides functionality to manage the connection settings.
  */
 class connection_form extends moodleform {
 
     /**
-     * Defining connection settings form.
+     * Defines the connection settings form for the Edwiser Bridge plugin.
+     * This method sets up the form elements, including text fields for site name, URL, and token,
+     * as well as buttons for testing the connection and removing a site. It also handles
+     * setting default values and validating the form data.
      */
     public function definition() {
         $defaultvalues = auth_edwiserbridge_get_connection_settings();
@@ -132,12 +136,11 @@ class connection_form extends moodleform {
     }
 
     /**
-     * Defining connection settings form.
+     * Validates the form data and files submitted.
      *
-     * @param object $data formdata.
-     * @param object $files if any files uploaded.
-     *
-     * @return array array of errors.
+     * @param array $data The form data.
+     * @param array $files The uploaded files.
+     * @return array An array of validation errors.
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);

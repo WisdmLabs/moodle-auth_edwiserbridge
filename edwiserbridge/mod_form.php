@@ -24,6 +24,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-connection-settings.php');
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-navigation.php');
@@ -33,15 +34,25 @@ require_once(dirname(__FILE__) . '/classes/settings/class-eb-synchronization-set
 require_once(dirname(__FILE__) . '/classes/settings/class-eb-sso-settings.php');
 
 /**
- * Used to create web service.
+ * Defines the settings form for the Edwiser Bridge plugin.
+ *
+ * This class extends the Moodle form library to create a settings form for the Edwiser Bridge plugin.
+ * The form includes various checkboxes for configuring the plugin's settings, such as the REST protocol,
+ * web service, password policy, extended username, and auto-update check.
+ *
+ * The form also includes submit buttons for saving the settings and continuing to the next step.
  */
 class edwiserbridge_settings_form extends moodleform {
 
     /**
-     * Form definition.
+     * Defines the form definition for the Edwiser Bridge plugin settings form.
+     *
+     * This method sets up the various form elements, including checkboxes for configuring
+     * the plugin's settings, such as the REST protocol, web service, password policy,
+     * extended username, and auto-update check. It also adds submit buttons for saving
+     * the settings and continuing to the next step.
      */
     public function definition() {
-        global $CFG;
         $mform         = $this->_form;
         $defaultvalues = auth_edwiserbridge_get_required_settings();
 
@@ -116,12 +127,11 @@ class edwiserbridge_settings_form extends moodleform {
     }
 
     /**
-     * Validate form data.
+     * Validates the form data submitted by the user.
      *
-     * @param array $data  Submitted data
-     * @param array $files Submitted files
-     *
-     * @return void
+     * @param array $data  The submitted form data.
+     * @param array $files The submitted files.
+     * @return array An array of validation errors, if any.
      */
     public function validation($data, $files) {
         return [];

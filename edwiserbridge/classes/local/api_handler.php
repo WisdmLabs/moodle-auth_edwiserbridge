@@ -23,17 +23,20 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace auth_edwiserbridge;
+namespace auth_edwiserbridge\local;
 /**
  * Handles API requests and response from WordPress.
  */
 class api_handler {
-
-    /** @var int  Returns instance of the class if already created */
+    /**
+     * Returns the singleton instance of the api_handler class.
+     *
+     * @return object self object.
+     */
     protected static $instance = null;
 
     /**
-     * Creates insce of the class.
+     * Returns the singleton instance of the api_handler class.
      *
      * @return object self object.
      */
@@ -45,41 +48,45 @@ class api_handler {
     }
 
     /**
-     * Create external service with the provided name and the user id
+     * Connects to WordPress with the provided request URL and data.
      *
-     * @param  string $requesturl   requesturl.
-     * @param  int $requestdata requestdata.
-     * @return array
+     * @param string $requesturl The URL for the WordPress API request.
+     * @param array $requestdata The data to be sent in the WordPress API request.
+     * @return array An array containing the response data or an error message.
      */
     public function connect_to_wp_with_args($requesturl, $requestdata) {
+        global $CFG;
+        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.
+
         $requesturl .= '/wp-json/edwiser-bridge/wisdmlabs/';
 
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            [
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL            => $requesturl,
-                CURLOPT_TIMEOUT        => 100,
-            ]
-        );
+        // Create an instance of Moodle's curl class.
+        $curl = new \curl();
 
-        curl_setopt($curl, CURLOPT_POST, 1);
-        global $CFG;
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Moodle Server');
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1); // Skip SSL Verification.
+        // Construct the User-Agent string.
+        $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Moodle Server';
 
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $requestdata);
-        $response = curl_exec($curl);
-        $statuscode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        // Set headers.
+        $curl->setHeader('User-Agent: ' . $useragent);
 
-        if (curl_error($curl)) {
-            $errormsg = curl_error($curl);
-            curl_close($curl);
+        // Set additional options.
+        $options = [
+            'CURLOPT_RETURNTRANSFER' => true,
+            'CURLOPT_TIMEOUT' => 100,
+            'CURLOPT_SSL_VERIFYPEER' => true, // Enforce SSL verification.
+        ];
+
+        // Execute the POST request.
+        $response = $curl->post($requesturl, $requestdata, $options);
+
+        // Get the HTTP status code.
+        $statuscode = $curl->info['http_code'];
+
+        // Check for errors.
+        if ($response === false) {
+            $errormsg = $curl->error;
             return ["error" => 1, "msg" => $errormsg];
         } else {
-            curl_close($curl);
-
             if ("200" == $statuscode) {
                 return ["error" => 0, "data" => json_decode($response)];
             } else {

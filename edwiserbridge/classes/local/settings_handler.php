@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace auth_edwiserbridge;
+namespace auth_edwiserbridge\local;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");
@@ -38,10 +38,11 @@ require_once($CFG->libdir . "/externallib.php");
 class settings_handler {
 
     /**
-     * Create external service with the provided name and the user id
-     * @param  string $name   Name.
-     * @param  int $userid User id.
-     * @return array
+     * Creates an external service with the provided name and user ID.
+     *
+     * @param string $name   The name of the external service.
+     * @param int $userid The user ID associated with the external service.
+     * @return array An array containing the response status, message, token, site URL, and service ID.
      */
     public function eb_create_externle_service($name, $userid) {
         global $DB, $CFG;
@@ -111,8 +112,16 @@ class settings_handler {
     }
 
     /**
-     * auto generates service shortname.
-     * @return string new shortname.
+     * Generates a unique shortname for an external service.
+     *
+     * This function generates a new shortname for an external service by appending a
+     * sequential number to the base 'edwiser' shortname. It checks if the generated
+     * shortname is already in use in the 'external_services' table, and continues
+     * generating new shortnames until a unique one is found, or a maximum of 100
+     * attempts is reached.
+     *
+     * @return string The new unique shortname, or 0 if a unique shortname could not
+     *         be generated after 100 attempts.
      */
     public function eb_generate_service_shortname() {
         global $DB;
@@ -131,9 +140,14 @@ class settings_handler {
     }
 
     /**
-     * checked if the provided service name is already regisered.
-     * @param  string $servicename Service name.
-     * @return boolean
+     * Checks if the provided service name is already registered.
+     *
+     * This function checks if the given service name is already registered in the
+     * 'external_services' table. It returns 0 if the service name is already
+     * registered, and 1 if the service name is available.
+     *
+     * @param string $servicename The service name to check.
+     * @return int 0 if the service name is already registered, 1 if it is available.
      */
     public function eb_check_if_service_name_available($servicename) {
         global $DB;
@@ -144,9 +158,14 @@ class settings_handler {
     }
 
     /**
-     * Adds authorized user for the external service.
-     * @param  int $serviceid Sevice Id.
-     * @param  int $userid User id.
+     * Adds an authorized user for the external service.
+     *
+     * This function adds a user as an authorized user for the specified external service.
+     * It inserts a new record in the 'external_services_users' table with the provided
+     * service ID and user ID.
+     *
+     * @param int $serviceid The ID of the external service.
+     * @param int $userid The ID of the user to be added as an authorized user.
      */
     public function eb_add_auth_user($serviceid, $userid) {
         global $DB;
@@ -160,8 +179,13 @@ class settings_handler {
     }
 
     /**
-     * This function adds default web services which registered with the edwiser-bridge only
-     * @param  int $serviceid
+     * Adds the default web service functions registered with the Edwiser Bridge plugin.
+     *
+     * This function adds a set of default web service functions to the external service
+     * identified by the provided $serviceid. The functions added are related to user
+     * management, course management, and other Edwiser Bridge specific operations.
+     *
+     * @param int $serviceid The ID of the external service to add the functions to.
      */
     public function eb_add_default_web_service_functions($serviceid) {
         global $DB;
@@ -196,8 +220,9 @@ class settings_handler {
     }
 
     /**
-     * This function adds extensions web services which are registered with the edwiser-bridge only
-     * @param  int $serviceid
+     * This function adds extensions web services which are registered with the edwiser-bridge only.
+     *
+     * @param int $serviceid The ID of the external service to add the extension functions to.
      */
     public function eb_extensions_web_service_function($serviceid) {
         global $DB;
@@ -232,11 +257,13 @@ class settings_handler {
     }
 
     /**
-     * This links the existing web service i.e it adds all the missing functions top the web-service
-     * This does not add ayuth user.
-     * @param  int $serviceid Service Id.
-     * @param  int $token Token.
-     * @return boolean returns success message.
+     * Links an existing web service to the Edwiser Bridge plugin.
+     *
+     * This function adds all the missing functions to the web service, but does not add an auth user.
+     *
+     * @param int $serviceid The ID of the external service to link.
+     * @param int $token     The token to use for the web service.
+     * @return bool          Returns a success message.
      */
     public function eb_link_exitsing_service($serviceid, $token) {
         $this->eb_add_default_web_service_functions($serviceid);
@@ -248,10 +275,11 @@ class settings_handler {
     }
 
     /**
-     * This function creates the token by calling Moodles inbuilt function
-     * @param  int $serviceid service id.
-     * @param  int $userid    user id.
-     * @return string Token
+     * This function creates the token by calling Moodle's inbuilt function.
+     *
+     * @param int $serviceid The ID of the external service.
+     * @param int $userid    The ID of the user.
+     * @return string        The generated token.
      */
     public function eb_create_token($serviceid, $userid) {
         $tokentype   = EXTERNAL_TOKEN_PERMANENT; // Check this add for testing purpose.

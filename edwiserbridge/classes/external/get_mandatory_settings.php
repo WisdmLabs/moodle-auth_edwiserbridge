@@ -36,17 +36,18 @@ use core_completion\progress;
  * Trait implementing the external function auth_edwiserbridge_get_mandatory_settings
  */
 trait get_mandatory_settings {
-
     /**
-     * Request to test connection
+     * Retrieves the mandatory settings for the Edwiser Bridge authentication plugin.
      *
-     * @param  string $wpurl   wpurl.
-     * @param  string $wptoken wptoken.
+     * This function fetches the necessary settings from the Moodle configuration and
+     * returns them as an associative array. The settings include the REST protocol
+     * status, web service status, password policy, extended character support, student
+     * role ID, and the language code.
      *
-     * @return array
+     * @return array An associative array containing the mandatory settings.
      */
     public static function auth_edwiserbridge_get_mandatory_settings() {
-        global $CFG, $DB;
+        global $CFG;
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
@@ -72,9 +73,18 @@ trait get_mandatory_settings {
         // Get allow_extended_char settings.
         $settings['allow_extended_char'] = $CFG->extendedusernamechars;
 
-        $studentroleid = $DB->get_record('role', ['shortname' => 'student'])->id;
-
+        $studentroles = role_get_archetype_roles('student');
+        if ($studentroles) {
+            // Assuming the first role in the list is the one we want
+            $studentroleid = $studentroles[0]->id;
+        } else {
+            // Handle the case where no 'student' archetype role is found
+            $studentroleid = null;
+            debugging('Student role archetype not found in the system.', DEBUG_DEVELOPER);
+        }
+        // $studentroleid = $DB->get_record('role', ['shortname' => 'student'])->id;
         $settings['student_role_id'] = $studentroleid;
+
 
         // Get lang_code settings.
         $settings['lang_code'] = $CFG->lang;
@@ -84,14 +94,25 @@ trait get_mandatory_settings {
     }
 
     /**
-     * Request to test connection parameter.
+     * Returns the parameters for the auth_edwiserbridge_get_mandatory_settings external function.
+     *
+     * This function does not take any parameters, as it is used to retrieve the mandatory settings
+     * for the Edwiser Bridge authentication plugin.
+     *
+     * @return external_function_parameters The parameters for the external function.
      */
     public static function auth_edwiserbridge_get_mandatory_settings_parameters() {
         return new external_function_parameters([]);
     }
 
     /**
-     * paramters which will be returned from test connection function.
+     * Returns the structure of the mandatory settings for the Edwiser Bridge authentication plugin.
+     *
+     * This function is used to define the structure of the settings that will be returned by the
+     * auth_edwiserbridge_get_mandatory_settings external function. It includes settings such as
+     * the REST protocol, web service, password policy, language code, and student role ID.
+     *
+     * @return external_single_structure The structure of the mandatory settings.
      */
     public static function auth_edwiserbridge_get_mandatory_settings_returns() {
         return new external_single_structure(

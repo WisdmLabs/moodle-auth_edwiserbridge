@@ -36,11 +36,10 @@ use core_completion\progress;
  * Trait implementing the external function auth_edwiserbridge_get_course_enrollment_method
  */
 trait get_course_enrollment_method {
-
     /**
-     * Returns description of auth_edwiserbridge_get_course_enrollment_method() parameters
+     * Returns the description of the parameters for the auth_edwiserbridge_get_course_enrollment_method() external function.
      *
-     * @return external_function_parameters
+     * @return external_function_parameters The description of the function parameters.
      */
     public static function auth_edwiserbridge_get_course_enrollment_method_parameters() {
         return new external_function_parameters([]);
@@ -49,9 +48,12 @@ trait get_course_enrollment_method {
     /**
      * Get list of active course enrolment methods for current user.
      *
-     * @param int $courseid
-     * @return array of course enrolment methods
-     * @throws moodle_exception
+     * This function retrieves the list of active course enrolment methods for the current user. It first validates the system context and checks if the Moodle manual enrolment plugin is enabled. If the plugin is disabled, it throws a moodle_exception. Otherwise, it retrieves the list of active manual enrolment instances from the database and returns an array containing the course IDs and a flag indicating if manual enrolment is enabled for each course.
+     *
+     * @return array An array of course enrolment methods, where each element is an associative array with the following keys:
+     *               - courseid (int): The ID of the course.
+     *               - enabled (int): 1 if manual enrolment is enabled for the course, 0 otherwise.
+     * @throws moodle_exception If the Moodle manual enrolment plugin is disabled.
      */
     public static function auth_edwiserbridge_get_course_enrollment_method() {
         global $DB, $CFG;
@@ -80,9 +82,11 @@ trait get_course_enrollment_method {
     }
 
     /**
-     * Returns description of auth_edwiserbridge_get_course_enrollment_method() result value
+     * Returns the external structure for course enrollment methods.
      *
-     * @return external_description
+     * @return external_multiple_structure Array of external_single_structure, each containing:
+     *                                      - courseid (int): ID of the course.
+     *                                      - enabled (int): Returns 1 if manual enrolment is enabled, 0 if disabled.
      */
     public static function auth_edwiserbridge_get_course_enrollment_method_returns() {
         return new external_multiple_structure(

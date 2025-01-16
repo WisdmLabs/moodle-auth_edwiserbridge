@@ -26,11 +26,14 @@
 namespace auth_edwiserbridge;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 require_once($CFG->dirroot . '/user/lib.php');
 
 /**
  * Handles callbacks for all in built Moodle events.
+ *
+ * This class provides methods to handle various Moodle events, such as user enrollment, user creation, user update, and course creation/deletion. It communicates with a WordPress site using the Edwiser Bridge plugin to synchronize user and course data between the two platforms.
  *
  * @package     auth_edwiserbridge
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
@@ -41,7 +44,9 @@ class observer {
     /**
      * Functionality to handle user enrollment event.
      *
-     * @param core\event\user_enrolment_created $event event.
+     * This method is called when a user is enrolled in a course. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the enrollment.
+     *
+     * @param core\event\user_enrolment_created $event The event object containing information about the user enrollment.
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
         global $CFG;
@@ -79,7 +84,9 @@ class observer {
     /**
      * Functionality to handle user un enrollment event.
      *
-     * @param core\event\user_enrolment_deleted $event event.
+     * This method is called when a user is unenrolled from a course. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the unenrollment.
+     *
+     * @param core\event\user_enrolment_deleted $event The event object containing information about the user unenrollment.
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
         global $CFG;
@@ -117,7 +124,9 @@ class observer {
     /**
      * Functionality to handle user creation event.
      *
-     * @param core\event\user_created $event event.
+     * This method is called when a new user is created in the Moodle system. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the user creation.
+     *
+     * @param core\event\user_created $event The event object containing information about the newly created user.
      */
     public static function user_created(\core\event\user_created $event) {
 
@@ -229,9 +238,12 @@ class observer {
     }
 
     /**
-     * Functionality to handle user update event.
+     * Functionality to handle user password update event.
      *
-     * @param core\event\user_password_updated $event event.
+     * This method is called when a user's password is updated in the system.
+     * It is responsible for updating the user's password in the connected WordPress sites.
+     *
+     * @param core\event\user_password_updated $event The event object containing information about the password update.
      */
     public static function user_password_updated(\core\event\user_password_updated $event) {
         global $CFG;
@@ -320,9 +332,9 @@ class observer {
     }
 
     /**
-     * Functionality to handle Course deletion event.
+     * Functionality to handle Course creation event.
      *
-     * @param core\event\course_created $event event.
+     * @param core\event\course_created $event The course creation event.
      */
     public static function course_created(\core\event\course_created $event) {
         global $CFG;
@@ -358,7 +370,7 @@ class observer {
     /**
      * Functionality to handle Course deletion event.
      *
-     * @param core\event\course_deleted $event event.
+     * @param core\event\course_deleted $event The course deletion event.
      */
     public static function course_deleted(\core\event\course_deleted $event) {
         global $CFG;
@@ -389,9 +401,9 @@ class observer {
     }
 
     /**
-     * Dashboard viewed event.
+     * Handles the dashboard viewed event.
      *
-     * @param \core\event\dashboard_viewed $event event.
+     * @param \core\event\dashboard_viewed $event The dashboard viewed event.
      */
     public static function dashboard_viewed(\core\event\dashboard_viewed $event) {
         global $CFG;

@@ -26,6 +26,7 @@
 use core\update\remote_info;
 
 require_once(__DIR__ . '/../../config.php');
+global $CFG, $PAGE;
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/filelib.php');
 
@@ -54,7 +55,7 @@ $pageurl = new moodle_url('/auth/edwiserbridge/install_update.php', $params);
 $PAGE->set_url($pageurl);
 $PAGE->set_context($syscontext);
 
-$edwiserpluginupdate = new auth_edwiserbridge\update(!$download && !$confirminstallupdate);
+$edwiserpluginupdate = new auth_edwiserbridge\local\update(!$download && !$confirminstallupdate);
 $plugin = $edwiserpluginupdate->get_plugin_update($params);
 if ($plugin === false) {
     $output = $PAGE->get_renderer('core', 'admin');

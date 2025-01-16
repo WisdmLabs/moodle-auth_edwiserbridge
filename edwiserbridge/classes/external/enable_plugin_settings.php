@@ -36,11 +36,10 @@ use core_completion\progress;
  * Trait implementing the external function auth_edwiserbridge_enable_plugin_settings
  */
 trait enable_plugin_settings {
-
     /**
-     * Parameter description of auth_edwiserbridge_enable_plugin_settings() parameters
+     * Returns the parameter description of the auth_edwiserbridge_enable_plugin_settings() function.
      *
-     * @return external_function_parameters
+     * @return external_function_parameters The parameter description.
      */
     public static function auth_edwiserbridge_enable_plugin_settings_parameters() {
         return new external_function_parameters([]);
@@ -48,20 +47,31 @@ trait enable_plugin_settings {
     }
 
     /**
-     * Get list of active course enrolment methods for current user.
+     * Enables the mandatory plugin settings for the Edwiser Bridge authentication plugin.
      *
-     * @param int $courseid
-     * @return array of course enrolment methods
-     * @throws moodle_exception
+     * This function performs the following actions:
+     * - Validates the system context
+     * - Ensures the REST web service protocol is enabled
+     * - Enables the web services feature
+     * - Disables the password policy
+     * - Allows extended user name characters
+     * - Returns an array of the enabled settings
+     *
+     * @return array An array containing the enabled plugin settings
      */
     public static function auth_edwiserbridge_enable_plugin_settings() {
-        global $DB, $CFG;
+        global $CFG;
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
         
-        $activewebservices[] = 'rest';
+        // Call the function to get the list of protocols
+        $activewebservices = core_webservice_get_protocols();
+
+        if (empty($activewebservices) || ! in_array('rest', $activewebservices)) {
+            $activewebservices[] = 'rest';
+        }
 
         set_config('webserviceprotocols', implode(',', $activewebservices));
         set_config('enablewebservices', 1);
@@ -79,11 +89,11 @@ trait enable_plugin_settings {
         return $response;
 
     }
-
+    
     /**
-     * Returns description of auth_edwiserbridge_enable_plugin_settings() result value
+     * Returns the description of the result value for the auth_edwiserbridge_enable_plugin_settings() function.
      *
-     * @return external_description
+     * @return external_single_structure The description of the result value.
      */
     public static function auth_edwiserbridge_enable_plugin_settings_returns() {
 

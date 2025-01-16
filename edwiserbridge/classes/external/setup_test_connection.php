@@ -40,17 +40,17 @@ trait setup_test_connection {
     /**
      * Request to test connection
      *
-     * @param  string $wpurl   wpurl.
-     * @param  string $wptoken wptoken.
-     *
-     * @return array
+     * @param string $wpurl WordPress URL to test the connection against.
+     * @return array An array containing the status and message of the connection test.
      */
     public static function auth_edwiserbridge_setup_test_connection($wpurl) {
+
+        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_setup_test_connection_parameters(),
             [
@@ -63,35 +63,46 @@ trait setup_test_connection {
 
         $requesturl = $params["wp_url"] . '/wp-json';
 
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            [
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL            => $requesturl,
-                CURLOPT_TIMEOUT        => 100,
-            ]
-        );
+        // Use Moodle's curl class.
+        $curl = new \curl();
 
+        // Construct the User-Agent string.
         global $CFG;
         $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Moodle Server';
-        curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // Skip SSL Verification.
 
-        $response = curl_exec($curl);
+        // Set custom headers.
+        $curl->setHeader('User-Agent: ' . $useragent);
 
-        json_decode($response);
+        // Set additional options.
+        $options = [
+            'CURLOPT_RETURNTRANSFER' => true,
+            'CURLOPT_TIMEOUT' => 100,
+            'CURLOPT_SSL_VERIFYPEER' => false, // Skip SSL verification.
+        ];
 
+        // Execute a GET request.
+        $response = $curl->get($requesturl, [], $options);
+
+        // Decode the response.
+        $response_data = json_decode($response);
+
+        // Check if the response is valid JSON.
         if (json_last_error() == JSON_ERROR_NONE) {
             $status = 1;
             $msg    = get_string('setup_test_conn_succ', 'auth_edwiserbridge');
         }
 
         return ["status" => $status, "msg" => $msg];
+
     }
 
     /**
-     * Request to test connection parameter.
+     * Defines the parameters for the auth_edwiserbridge_setup_test_connection function.
+     *
+     * This function returns the parameters required for the auth_edwiserbridge_setup_test_connection
+     * function, which is used to test the connection to the WordPress site.
+     *
+     * @return external_function_parameters The parameters for the auth_edwiserbridge_setup_test_connection function.
      */
     public static function auth_edwiserbridge_setup_test_connection_parameters() {
         return new external_function_parameters(
@@ -106,7 +117,14 @@ trait setup_test_connection {
     }
 
     /**
-     * paramters which will be returned from test connection function.
+     * Returns the parameters that will be returned from the test connection function.
+     *
+     * This function defines the structure of the return value for the
+     * auth_edwiserbridge_setup_test_connection function, which is used to test the
+     * connection to the WordPress site. The return value includes a status and a
+     * message.
+     *
+     * @return external_single_structure The parameters that will be returned from the test connection function.
      */
     public static function auth_edwiserbridge_setup_test_connection_returns() {
         return new external_single_structure(

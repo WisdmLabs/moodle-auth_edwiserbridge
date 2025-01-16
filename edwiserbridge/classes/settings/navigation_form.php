@@ -31,15 +31,14 @@ defined('MOODLE_INTERNAL') || die();
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * form shown while adding Edwiser Bridge settings.
- *
- * @copyright 2006 Jamie Pratt <me@jamiep.org>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Defines the navigation form for the Edwiser Bridge plugin.
+ * The navigation form includes tabs for different sections of the plugin settings.
  */
 class navigation_form extends moodleform {
-
+    
     /**
-     * Defining Navigation form.
+     * Defines the navigation form for the Edwiser Bridge plugin.
+     * This method sets up the navigation tabs for the different sections of the plugin settings.
      */
     public function definition() {
         global $CFG;
@@ -88,10 +87,10 @@ class navigation_form extends moodleform {
     }
 
     /**
+     * Prepares and prints the list of tab links.
      *
-     * Preapares and print the list of the tab links.
-     *
-     * @param array $tabs an array of settings array.
+     * @param array $tabs An array of settings arrays, each containing a link, label, and CSS class for a tab.
+     * @return void
      */
     private function print_tabs($tabs) {
         ob_start();

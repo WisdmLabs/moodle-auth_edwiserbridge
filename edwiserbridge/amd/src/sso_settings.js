@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +16,7 @@
 /**
  * Js file to handle settings.
  *
- * @package     auth_edwiserbridge
+ * @package
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
@@ -27,6 +28,9 @@ define("auth_edwiserbridge/eb_sso_settings", [
     "core/url",
     "core/str",
 ], function($, ajax, url, str) {
+    /**
+     * Load SSO settings.
+     */
     function load_settings() {
         $(document).ready(function () {
             $('#id_secret_key_generate').on('click', function (event) {
@@ -34,8 +38,9 @@ define("auth_edwiserbridge/eb_sso_settings", [
                 var text = "";
                 var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
 
-                for (var i = 0; i < 15; i++)
+                for (var i = 0; i < 15; i++) {
                     text += possible.charAt(Math.floor(Math.random() * possible.length));
+                }
 
                 $('#id_sharedsecret').val(text);
             });

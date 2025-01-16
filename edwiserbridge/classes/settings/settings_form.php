@@ -26,18 +26,28 @@ namespace auth_edwiserbridge\settings;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Used to create web service.
+ * Defines the settings form for the Edwiser Bridge authentication plugin.
+ *
+ * This class extends the moodleform class and provides the definition of the
+ * settings form for the Edwiser Bridge authentication plugin. The form includes
+ * various checkboxes for configuring the plugin's settings, such as the REST
+ * protocol, web service, password policy, extended username, and auto-update
+ * check. The form also includes buttons for saving the settings.
  */
 class settings_form extends moodleform {
 
     /**
-     * Form definition.
+     * Defines the form definition for the settings form of the Edwiser Bridge authentication plugin.
+     *
+     * This method sets up the various form elements, including checkboxes for configuring the
+     * REST protocol, web service, password policy, extended username, and auto-update check.
+     * It also adds the submit buttons for saving the settings.
      */
     public function definition() {
-        global $CFG;
         $mform         = $this->_form;
         $defaultvalues = auth_edwiserbridge_get_required_settings();
 
@@ -112,10 +122,10 @@ class settings_form extends moodleform {
     }
 
     /**
-     * Validate form data.
+     * Validates the form data submitted by the user.
      *
-     * @param array $data  Submitted data
-     * @param array $files Submitted files
+     * @param array $data  The submitted form data.
+     * @param array $files The submitted files, if any.
      *
      * @return void
      */

@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace auth_edwiserbridge;
+namespace auth_edwiserbridge\local;
  /**
   * License controller class.
   */
@@ -80,7 +80,9 @@ class eb_pro_license_controller {
     ];
 
     /**
-     * Initialize data on instance creation.
+     * Initializes the plugin data on instance creation.
+     * This method sets the values of various properties of the class
+     * based on the data stored in the $edwiserbridgedata array.
      */
     public function __construct() {
         $this->authorname      = $this->edwiserbridgedata['author_name'];
@@ -92,10 +94,10 @@ class eb_pro_license_controller {
     }
 
     /**
-     * Update status of the license
+     * Updates the status of the license.
      *
-     * @param  object $licensedata License data
-     * @return string             License status
+     * @param object $licensedata License data
+     * @return string License status
      */
     public function update_status($licensedata) {
 
@@ -141,11 +143,12 @@ class eb_pro_license_controller {
     }
 
     /**
-     * Check if there no data
-     * @param  string $licensedata          License data
-     * @param  int    $currentresponsecode Current response code
-     * @param  array  $validresponsecode   Valid response code
-     * @return bool                          Boolean
+     * Checks if there is no license data or if the current response code is not in the valid response codes.
+     *
+     * @param string $licensedata          The license data.
+     * @param int    $currentresponsecode  The current response code.
+     * @param array  $validresponsecode    The array of valid response codes.
+     * @return bool   True if there is no data or the response code is not valid, false otherwise.
      */
     public function check_if_no_data($licensedata, $currentresponsecode, $validresponsecode) {
         global $DB;
@@ -171,99 +174,102 @@ class eb_pro_license_controller {
     }
 
     /**
-     * Activate license key
+     * Activates the license key for the plugin.
+     *
+     * @param string $licensekey The license key to activate.
+     * @return void
      */
     public function activate_license($licensekey) {
         global $DB, $CFG;
+    
         if ($licensekey) {
             // Delete previous license key.
             $DB->delete_records_select(
                 'config_plugins',
                 'name = :name',
-                ['name' => 'edd_' . $this->pluginslug. '_license_key']
+                ['name' => 'edd_' . $this->pluginslug . '_license_key']
             );
-
+    
             // Insert new license key.
             $dataobject = new \stdClass();
-            $dataobject->plugin         = 'auth_edwiserbridge';
-            $dataobject->name = 'edd_' . $this->pluginslug. '_license_key';
+            $dataobject->plugin = 'auth_edwiserbridge';
+            $dataobject->name = 'edd_' . $this->pluginslug . '_license_key';
             $dataobject->value = $licensekey;
             $DB->insert_record('config_plugins', $dataobject);
-
-            // Get cURL resource.
-            $curl = curl_init();
-
-            curl_setopt_array($curl, [
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => $this->storeurl,
-                CURLOPT_POST => 1,
-                CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'].' - '.$CFG->wwwroot,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_POSTFIELDS => [
-                    'edd_action' => 'activate_license',
-                    'license' => $licensekey,
-                    'item_name' => urlencode($this->pluginname),
-                    'current_version' => $this->pluginversion,
-                    'url' => urlencode($CFG->wwwroot),
-                ],
-            ]);
-
-            // Send the request & save response to $resp.
-            $resp = curl_exec($curl);
-
-            $currentresponsecode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-            // Close request to clear up some resources.
-            curl_close($curl);
-
+    
+            // Use Moodle's curl class.
+            include_once($CFG->libdir . '/filelib.php');
+            $curl = new \curl();
+    
+            // Set the request data.
+            $postdata = [
+                'edd_action' => 'activate_license',
+                'license' => $licensekey,
+                'item_name' => urlencode($this->pluginname),
+                'current_version' => $this->pluginversion,
+                'url' => urlencode($CFG->wwwroot),
+            ];
+    
+            // Set user agent.
+            $useragent = $_SERVER['HTTP_USER_AGENT'] . ' - ' . $CFG->wwwroot;
+            $curl->setHeader('User-Agent: ' . $useragent);
+    
+            // Execute POST request.
+            $options = [
+                'CURLOPT_RETURNTRANSFER' => true,
+                'CURLOPT_TIMEOUT' => 30,
+                'CURLOPT_SSL_VERIFYPEER' => false,
+            ];
+            $resp = $curl->post($this->storeurl, $postdata, $options);
+    
+            $currentresponsecode = $curl->info['http_code'];
             $licensedata = json_decode($resp);
-
+    
             $validresponsecode = ['200', '301'];
-
+    
             $isdataavailable = $this->check_if_no_data($licensedata, $currentresponsecode, $validresponsecode);
-
+    
             if ($isdataavailable == false) {
                 return;
             }
-
+    
             $expirytime = 0;
             if (isset($licensedata->expires)) {
                 $expirytime = strtotime($licensedata->expires);
             }
             $currenttime = time();
-
+    
             if (isset($licensedata->expires) && ($licensedata->expires !== false) &&
                     ($licensedata->expires != 'lifetime') && $expirytime <= $currenttime && $expirytime != 0) {
                 $licensedata->error = "expired";
             }
-
-            if (isset($licensedata->renew_link) && ( ! empty($licensedata->renew_link) || $licensedata->renew_link != "")) {
-
+    
+            if (isset($licensedata->renew_link) && (!empty($licensedata->renew_link) || $licensedata->renew_link != "")) {
                 // Delete previous record.
                 $DB->delete_records_select(
                     'config_plugins',
                     'name = :name',
-                    ['name' => 'wdm_' . $this->pluginslug. '_product_site']
+                    ['name' => 'wdm_' . $this->pluginslug . '_product_site']
                 );
-
+    
                 // Add renew link.
                 $dataobject = new \stdClass();
-                $dataobject->plugin         = 'auth_edwiserbridge';
-                $dataobject->name = 'wdm_' . $this->pluginslug. '_product_site';
+                $dataobject->plugin = 'auth_edwiserbridge';
+                $dataobject->name = 'wdm_' . $this->pluginslug . '_product_site';
                 $dataobject->value = $licensedata->renew_link;
-
+    
                 $DB->insert_record('config_plugins', $dataobject);
             }
-
+    
             $licensestatus = $this->update_status($licensedata);
             $this->set_transient_on_activation($licensestatus);
         }
-    }
+    }    
 
     /**
-     * Set transient on activation for frequent license check
-     * @param string $licensestatus License status
+     * Sets a transient on plugin activation for frequent license checks.
+     *
+     * @param string $licensestatus The current license status.
      */
     public function set_transient_on_activation($licensestatus) {
 
@@ -325,91 +331,94 @@ class eb_pro_license_controller {
     }
 
     /**
-     * Deactivate license key
+     * Deactivates the license key for the plugin.
+     * This function retrieves the license key from the database, sends a deactivation request to the plugin store,
+     * and updates the license status and transaction records in the database accordingly.
      */
     public function deactivate_license() {
         global $DB, $CFG;
-
+    
         $licensekey = $DB->get_field_select(
             'config_plugins',
             'value', 'name = :name',
-            ['name' => 'edd_' . $this->pluginslug. '_license_key'],
+            ['name' => 'edd_' . $this->pluginslug . '_license_key'],
             IGNORE_MISSING
         );
-
+    
         if (!empty($licensekey)) {
-
-            // Get cURL resource.
-            $curl = curl_init();
-
-            curl_setopt_array($curl, [
-                CURLOPT_RETURNTRANSFER => 1,
-                CURLOPT_URL => $this->storeurl,
-                CURLOPT_POST => 1,
-                CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'].' - '.$CFG->wwwroot,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_POSTFIELDS => [
-                    'edd_action' => 'deactivate_license',
-                    'license' => $licensekey,
-                    'item_name' => urlencode($this->pluginname),
-                    'current_version' => $this->pluginversion,
-                    'url' => urlencode($CFG->wwwroot),
-                ],
-            ]);
-
-            // Send the request & save response to $resp.
-            $resp = curl_exec($curl);
-
-            $currentresponsecode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-            // Close request to clear up some resources.
-            curl_close($curl);
-
+            include_once($CFG->libdir . '/filelib.php');
+            $curl = new \curl();
+    
+            // Set user agent.
+            $useragent = $_SERVER['HTTP_USER_AGENT'] . ' - ' . $CFG->wwwroot;
+            $curl->setHeader('User-Agent: ' . $useragent);
+    
+            // Prepare POST data.
+            $postdata = [
+                'edd_action' => 'deactivate_license',
+                'license' => $licensekey,
+                'item_name' => urlencode($this->pluginname),
+                'current_version' => $this->pluginversion,
+                'url' => urlencode($CFG->wwwroot),
+            ];
+    
+            // Set options and execute the POST request.
+            $options = [
+                'CURLOPT_RETURNTRANSFER' => true,
+                'CURLOPT_TIMEOUT' => 30,
+                'CURLOPT_SSL_VERIFYPEER' => false,
+            ];
+            $resp = $curl->post($this->storeurl, $postdata, $options);
+    
+            $currentresponsecode = $curl->info['http_code'];
             $licensedata = json_decode($resp);
-
+    
             $validresponsecode = ['200', '301'];
-
+    
             $isdataavailable = $this->check_if_no_data($licensedata, $currentresponsecode, $validresponsecode);
-
+    
             if ($isdataavailable == false) {
                 return;
             }
-
+    
             if ($licensedata->license == 'deactivated' || $licensedata->license == 'failed') {
-
-                // Delete previous record.
+                // Delete previous license status record.
                 $DB->delete_records_select(
                     'config_plugins',
                     'name = :name',
-                    ['name' => 'edd_' . $this->pluginslug. '_license_status']
+                    ['name' => 'edd_' . $this->pluginslug . '_license_status']
                 );
-
+    
+                // Insert deactivated license status.
                 $dataobject = new \stdClass();
-                $dataobject->plugin         = 'auth_edwiserbridge';
-                $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
+                $dataobject->plugin = 'auth_edwiserbridge';
+                $dataobject->name = 'edd_' . $this->pluginslug . '_license_status';
                 $dataobject->value = 'deactivated';
                 $DB->insert_record('config_plugins', $dataobject);
             }
-
-            // Delete previous license trans.
+    
+            // Delete previous license transaction record.
             $DB->delete_records_select(
                 'config_plugins',
                 'name = :name',
-                ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
+                ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
             );
-
+    
+            // Insert new license transaction record.
             $dataobject = new \stdClass();
-            $dataobject->plugin         = 'auth_edwiserbridge';
-            $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
+            $dataobject->plugin = 'auth_edwiserbridge';
+            $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
             $dataobject->value = serialize([$licensedata->license, 0]);
             $DB->insert_record('config_plugins', $dataobject);
         }
     }
 
     /**
-     * Get data from database
-     * @return string Response status
+     * Retrieves the license data from the database and updates the license status.
+     *
+     * This method checks for the existence of a license transient in the database. If the transient has expired, it fetches the license key from the database, sends a request to the store to check the license status, and updates the license status in the database accordingly.
+     *
+     * @return string The response status, either 'available', 'unavailable', or 'server_did_not_respond'.
      */
     public function get_data_from_db() {
         global $DB, $CFG;
@@ -424,7 +433,7 @@ class eb_pro_license_controller {
             'config_plugins',
             'value',
             'name = :name',
-            ['name' => 'wdm_' . $this->pluginslug. '_license_trans'],
+            ['name' => 'wdm_' . $this->pluginslug . '_license_trans'],
             IGNORE_MISSING
         );
 
@@ -432,13 +441,13 @@ class eb_pro_license_controller {
             $transient = unserialize($transient);
 
             if (is_array($transient) && time() > $transient[1] && $transient[1] > 0) {
-
                 $transexpired = true;
-                // Delete previous license trans.
+
+                // Delete previous license transient.
                 $DB->delete_records_select(
                     'config_plugins',
                     'name = :name',
-                    ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
+                    ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
                 );
             }
         } else {
@@ -446,61 +455,59 @@ class eb_pro_license_controller {
         }
 
         if ($transexpired == true) {
-
             $licensekey = $DB->get_field_select(
                 'config_plugins',
                 'value',
                 'name = :name',
-                ['name' => 'edd_' . $this->pluginslug. '_license_key'],
+                ['name' => 'edd_' . $this->pluginslug . '_license_key'],
                 IGNORE_MISSING
             );
 
             if ($licensekey) {
+                include_once($CFG->libdir . '/filelib.php');
+                $curl = new \curl();
 
-                // Get cURL resource.
-                $curl = curl_init();
+                // Set headers.
+                $useragent = $_SERVER['HTTP_USER_AGENT'] . ' - ' . $CFG->wwwroot;
+                $curl->setHeader('User-Agent: ' . $useragent);
 
-                curl_setopt_array($curl, [
-                    CURLOPT_RETURNTRANSFER => 1,
-                    CURLOPT_URL => $this->storeurl,
-                    CURLOPT_POST => 1,
-                    CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'].' - '.$CFG->wwwroot,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_POSTFIELDS => [
-                        'edd_action' => 'check_license',
-                        'license' => $licensekey,
-                        'item_name' => urlencode($this->pluginname),
-                        'current_version' => $this->pluginversion,
-                        'url' => urlencode($CFG->wwwroot),
-                    ],
-                ]);
-                // Send the request & save response to $resp.
-                $resp = curl_exec($curl);
+                // Prepare POST data.
+                $postdata = [
+                    'edd_action' => 'check_license',
+                    'license' => $licensekey,
+                    'item_name' => urlencode($this->pluginname),
+                    'current_version' => $this->pluginversion,
+                    'url' => urlencode($CFG->wwwroot),
+                ];
 
-                $currentresponsecode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                // Execute POST request.
+                $options = [
+                    'CURLOPT_RETURNTRANSFER' => true,
+                    'CURLOPT_TIMEOUT' => 30,
+                    'CURLOPT_SSL_VERIFYPEER' => false,
+                ];
+                $resp = $curl->post($this->storeurl, $postdata, $options);
 
-                // Close request to clear up some resources.
-                curl_close($curl);
-
+                $currentresponsecode = $curl->info['http_code'];
                 $licensedata = json_decode($resp);
 
                 $validresponsecode = ['200', '301'];
 
-                if ($licensedata == null || ! in_array($currentresponsecode, $validresponsecode)) {
+                if ($licensedata == null || !in_array($currentresponsecode, $validresponsecode)) {
                     // If server does not respond, read current license information.
                     $licensestatus = $DB->get_field_select(
                         'config_plugins',
-                        'value', 'name = :name',
-                        ['name' => 'edd_' . $this->pluginslug. '_license_status'],
+                        'value',
+                        'name = :name',
+                        ['name' => 'edd_' . $this->pluginslug . '_license_status'],
                         IGNORE_MISSING
                     );
 
                     if (empty($licensedata)) {
                         // Insert new license transient.
                         $dataobject = new \stdClass();
-                        $dataobject->plugin         = 'auth_edwiserbridge';
-                        $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
+                        $dataobject->plugin = 'auth_edwiserbridge';
+                        $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
                         $dataobject->value = serialize(['server_did_not_respond', time() + (60 * 60 * 24)]);
                         $DB->insert_record('config_plugins', $dataobject);
                     }
@@ -512,18 +519,18 @@ class eb_pro_license_controller {
                     return;
                 }
 
-                if (isset($licensedata->license) && ! empty($licensedata->license)) {
-
+                if (isset($licensedata->license) && !empty($licensedata->license)) {
                     // Delete previous record.
                     $DB->delete_records_select(
                         'config_plugins',
                         'name = :name',
-                        ['name' => 'edd_' . $this->pluginslug. '_license_status']
+                        ['name' => 'edd_' . $this->pluginslug . '_license_status']
                     );
 
+                    // Insert new license status.
                     $dataobject = new \stdClass();
-                    $dataobject->plugin         = 'auth_edwiserbridge';
-                    $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
+                    $dataobject->plugin = 'auth_edwiserbridge';
+                    $dataobject->name = 'edd_' . $this->pluginslug . '_license_status';
                     $dataobject->value = $licensestatus;
                     $DB->insert_record('config_plugins', $dataobject);
                 }
@@ -532,12 +539,11 @@ class eb_pro_license_controller {
                 return self::$responsedata;
             }
         } else {
-
             $licensestatus = $DB->get_field_select(
                 'config_plugins',
                 'value',
                 'name = :name',
-                ['name' => 'edd_' . $this->pluginslug. '_license_status'],
+                ['name' => 'edd_' . $this->pluginslug . '_license_status'],
                 IGNORE_MISSING
             );
 
@@ -547,10 +553,11 @@ class eb_pro_license_controller {
     }
 
     /**
-     * Set response data in static properties
+     * Sets the response data in static properties.
+     *
      * @param string  $licensestatus License status
      * @param string  $pluginslug    Plugin slug
-     * @param boolean $settransient  Transient
+     * @param boolean $settransient  Whether to set a transient
      */
     public function set_response_data($licensestatus, $pluginslug, $settransient = false) {
         global $DB;
@@ -587,12 +594,9 @@ class eb_pro_license_controller {
     }
 
     /**
-     * This function is used to get list of sites where license key is already acvtivated.
+     * This function is used to get a list of sites where the license key is already activated.
      *
-     * @param type $pluginslug current plugin's slug
-     * @return string  list of site
-     *
-     *
+     * @return string A list of sites where the license key is activated, or an empty string if the number of activated sites is less than the maximum allowed.
      */
     public function get_site_data() {
 
@@ -641,7 +645,9 @@ class eb_pro_license_controller {
     }
 
     /**
-     * add notice in case of license key activation failure
+     * Adds a notification message to the system.
+     *
+     * @param string $msg The message to be displayed.
      */
     public function add_notice($msg) {
         \core\notification::add($msg, \core\output\notification::NOTIFY_ERROR);

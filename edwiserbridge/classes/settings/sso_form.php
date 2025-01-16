@@ -24,25 +24,27 @@
  */
 namespace auth_edwiserbridge\settings;
 use moodleform;
-use auth_edwiserbridge\eb_pro_license_controller;
+use auth_edwiserbridge\local\eb_pro_license_controller;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * form shown while adding Edwiser Bridge settings.
+ * Defines the SSO settings form for the Edwiser Bridge plugin.
+ * This form allows the user to configure the SSO settings, including the shared secret key, WordPress site URL, logout redirect URL, and login button options.
  */
 class sso_form extends moodleform {
 
     /**
-     * Defining sso form.
+     * Defines the form for configuring the SSO settings in the Edwiser Bridge plugin.
+     * This method sets up the form fields and default values for the SSO settings, including the shared secret key, WordPress site URL, logout redirect URL, and login button options.
      */
     public function definition() {
         $mform         = $this->_form;
         $sites         = auth_edwiserbridge_get_site_list();
         $sitekeys      = array_keys($sites);
 
-        global $CFG;
         $license = new eb_pro_license_controller();
         if ($license->get_data_from_db() == 'available') {
             $mform->addElement('html', '<div class="eb-auto-generate-key-container">');

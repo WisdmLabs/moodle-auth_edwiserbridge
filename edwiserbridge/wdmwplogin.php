@@ -24,8 +24,8 @@
  */
 
 require_once('../../config.php');
+global $CFG;
 require_once($CFG->dirroot.'/auth/edwiserbridge/lib.php');
-global $CFG, $USER, $SESSION, $DB;
 
 // Requested to wp login.
 $wdmaction = optional_param('wdmaction', '', PARAM_ALPHA);

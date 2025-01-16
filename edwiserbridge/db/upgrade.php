@@ -24,13 +24,17 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 /**
- * Upgrade function for Edwiser Bridge plugin.
- * Functionality to manage upgrade of the plugin.
+ * Upgrades the Edwiser Bridge plugin.
  *
- * @return bool
+ * This function is responsible for managing the upgrade process of the Edwiser Bridge plugin.
+ * It checks for the Edwiser Bridge Pro dependency, enables the plugin in the default authentication method,
+ * and updates the webservice functions as needed.
+ *
+ * @return bool True to continue the upgrade process.
  */
 function xmldb_auth_edwiserbridge_upgrade() {
 

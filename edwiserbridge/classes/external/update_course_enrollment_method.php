@@ -36,13 +36,14 @@ use core_completion\progress;
  * Trait implementing the external function auth_edwiserbridge_update_course_enrollment_method
  */
 trait update_course_enrollment_method {
-
     /**
-     * Get list of active course enrolment methods for current user.
+     * Update the course enrollment method for the specified course ID.
      *
-     * @param int $courseid
-     * @return array of course enrolment methods
-     * @throws moodle_exception
+     * This function is used to update the enrollment method for a course, typically from an external system like WordPress.
+     *
+     * @param int $courseid The ID of the course to update the enrollment method for.
+     * @return array An array containing the course ID and the status of the update operation.
+     * @throws moodle_exception If there is an error validating the context or parameters.
      */
     public static function auth_edwiserbridge_update_course_enrollment_method($courseid) {
         global $DB, $CFG;
@@ -95,13 +96,15 @@ trait update_course_enrollment_method {
         }
         return $response;
     }
-
-
-
+    
     /**
-     * Returns description of auth_edwiserbridge_update_course_enrollment_method() parameters
+     * Returns the parameters for the auth_edwiserbridge_update_course_enrollment_method() function.
      *
-     * @return external_function_parameters
+     * This function defines the parameters that can be passed to the
+     * auth_edwiserbridge_update_course_enrollment_method() function, which is used to update the
+     * course enrollment method.
+     *
+     * @return external_function_parameters The parameters for the function.
      */
     public static function auth_edwiserbridge_update_course_enrollment_method_parameters() {
         return new external_function_parameters(
@@ -117,11 +120,16 @@ trait update_course_enrollment_method {
         );
     }
 
-
     /**
-     * Returns description of auth_edwiserbridge_update_course_enrollment_method() result value
+     * Returns the description of the result value for the auth_edwiserbridge_update_course_enrollment_method() function.
      *
-     * @return external_description
+     * The result is a multiple structure containing a single structure with the following fields:
+     *
+     * - courseid: The ID of the course.
+     * - status: Returns 1 if manual enrolment is enabled, and 0 if disabled.
+     * - message: An optional message, if applicable.
+     *
+     * @return external_multiple_structure The description of the result value.
      */
     public static function auth_edwiserbridge_update_course_enrollment_method_returns() {
         return new external_multiple_structure(

@@ -24,9 +24,8 @@
  */
 
 require_once('../../config.php'); // @codingStandardsIgnoreLine
+global $CFG, $SESSION, $DB;
 require_once($CFG->dirroot.'/auth/edwiserbridge/lib.php');
-
-global $CFG, $USER, $SESSION, $DB;
 
 // Login may somehow modify this.
 $SESSION->wantsurl = $CFG->wwwroot;

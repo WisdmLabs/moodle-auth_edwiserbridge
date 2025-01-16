@@ -39,10 +39,11 @@ use auth_edwiserbridge;
 trait create_service {
 
     /**
-     * functionality to create new external service
-     * @param  string $webservicename
-     * @param  int $userid
-     * @return boolean
+     * Functionality to create a new external service.
+     *
+     * @param string $webservicename The name of the web service to create.
+     * @param int $userid The ID of the user to associate with the web service.
+     * @return array An array containing the details of the created web service.
      */
     public static function auth_edwiserbridge_create_service($webservicename, $userid) {
 
@@ -50,13 +51,19 @@ trait create_service {
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
         
-        $settingshandler = new auth_edwiserbridge\settings_handler();
+        $settingshandler = new auth_edwiserbridge\local\settings_handler();
         $response = $settingshandler->eb_create_externle_service($webservicename, $userid);
         return $response;
     }
 
     /**
-     * Paramters defined for create service function.
+     * Defines the parameters for the auth_edwiserbridge_create_service external function.
+     *
+     * This function returns an external_function_parameters object that defines the
+     * parameters required for the auth_edwiserbridge_create_service function.
+     *
+     * @return external_function_parameters The parameters for the
+     *         auth_edwiserbridge_create_service function.
      */
     public static function auth_edwiserbridge_create_service_parameters() {
         return new external_function_parameters(
@@ -74,7 +81,13 @@ trait create_service {
     }
 
     /**
-     * paramters which will be returned from create service function.
+     * Defines the structure of the return value for the auth_edwiserbridge_create_service external function.
+     *
+     * This function returns an external_single_structure object that defines the
+     * structure of the array that will be returned by the auth_edwiserbridge_create_service function.
+     *
+     * @return external_single_structure The structure of the return value for the
+     *         auth_edwiserbridge_create_service function.
      */
     public static function auth_edwiserbridge_create_service_returns() {
         return new external_single_structure(

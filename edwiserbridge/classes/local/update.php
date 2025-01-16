@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace auth_edwiserbridge;
+namespace auth_edwiserbridge\local;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -121,6 +121,7 @@ class update {
      * @return bool false on error
      */
     protected function download_plugin_zip_file($url, $tofile) {
+        include_once($CFG->libdir . '/filelib.php'); // Ensure Moodle's curl class is available.
 
         $checkurl = str_replace('download', 'verify-package', $url);
 
@@ -209,12 +210,12 @@ class update {
     }
 
     /**
-     * Get plugin details from version.php file
+     * Get plugin details from version.php file.
      *
-     * @param string $path        path of plugin
-     * @param array  $zipcontents zip file contents
+     * @param string $path        Path of the plugin.
+     * @param array  $zipcontents Contents of the zip file.
      *
-     * @return stdClass|bool   plugin details
+     * @return stdClass|bool Plugin details, or false if unable to retrieve.
      */
     public function get_plugin_details($path, $zipcontents) {
 
@@ -235,12 +236,13 @@ class update {
     }
 
     /**
-     * Unzip zip file of plugin file and return its content
-     * @param  object $pluginman Plugin manager
-     * @param  string $zip       Zip file path
-     * @param  string $temp      Temporary path
-     * @param  string $root      Root directory path
-     * @return array             Zip file content array
+     * Unzips a plugin file and returns its contents.
+     *
+     * @param object $pluginman Plugin manager object.
+     * @param string $zip       Path to the zip file.
+     * @param string $temp      Path to the temporary directory.
+     * @param string $root      Root directory path.
+     * @return array            Contents of the zip file.
      */
     public function unzip_plugin_file($pluginman, $zip, $temp, $root) {
         ini_set('log_errors', 'Off');
@@ -317,26 +319,23 @@ class update {
         return $zipserror == true ? false : $zips;
     }
 
-
     /**
-     * Fetch plugin update from edwiser.org or from cache
-     * @return array plugins and errors list
+     * Fetch plugin update data from the edwiser.org cache or directly from the server.
+     *
+     * @return array An associative array containing the plugin update data, with the plugin name as the key.
      */
     public function fetch_plugins_update() {
-        global $CFG;
-
         $plugindata = get_config('auth_edwiserbridge', 'edwiserbridge_update_data');
-
         return ['auth_edwiserbridge' => json_decode($plugindata)];
     }
 
     /**
-     * Validate zip file before installing plugin
+     * Validates the given plugin zip file before installing it.
      *
      * @param core_plugin_manager      $pluginman core plugin manager object
      * @param \core\update\remote_info $plugin    plugin information
      * @param string                   $zipfile   zip file path
-     * @param bool                     $silent    true if dont wanna show debugg error
+     * @param bool                     $silent    true if don't want to show debug error
      *
      * @return bool                 validation result
      */
@@ -539,11 +538,12 @@ class update {
     }
 
     /**
-     * Display the continue / cancel widgets for the plugins management pages.
+     * Displays the continue and cancel buttons for the plugins management pages.
      *
      * @param null|moodle_url $continue URL for the continue button, should it be displayed
+     * @param null|moodle_url $download URL for the download button, should it be displayed
      * @param null|moodle_url $cancel URL for the cancel link, defaults to the current page
-     * @return string HTML
+     * @return string HTML containing the buttons
      */
     public function plugins_management_confirm_buttons(
         moodle_url $continue = null,
@@ -571,17 +571,18 @@ class update {
     }
 
     /**
-     * Helper procedure/macro for installing remote pluginsat block/edwiser_site_monitor/plugin.php
+     * Handles the installation and validation of a remote plugin.
      *
-     * Does not return, always redirects or exits.
+     * This method is responsible for displaying the validation results and
+     * providing the necessary buttons for the user to proceed with the
+     * installation or cancel the process.
      *
-     * @param \core\update\remote_info  $installable list of \core\update\remote_info
-     * @param bool                      $confirmed   false: display the validation screen, true: proceed installation
-     * @param string                    $heading     validation screen heading
-     * @param mixed                     $continue    URL to proceed with installation at the validation screen
-     * @param mixed                     $return      URL to go back on cancelling at the validation screen
-     *
-     * @return void
+     * @param \core\update\remote_info $installable The plugin information to be installed.
+     * @param bool $confirmed Whether the installation has been confirmed by the user.
+     * @param string $heading The heading to display on the validation screen.
+     * @param null|moodle_url $continue The URL to proceed with the installation.
+     * @param null|moodle_url $download The URL to download the plugin.
+     * @param null|moodle_url $return The URL to go back to on cancellation.
      */
     public function upgrade_install_plugin(
         \core\update\remote_info $installable,
@@ -644,9 +645,10 @@ class update {
     }
 
     /**
-     * Dowload plugin file of requested plugin.
-     * @param  object $plugin Plugin object
-     * @return bool           Return false if unable to download
+     * Downloads the plugin file for the requested plugin.
+     *
+     * @param object $plugin The plugin object to download.
+     * @return bool False if unable to download the plugin file.
      */
     public function download_plugin($plugin) {
         $pluginman = core_plugin_manager::instance();
@@ -703,9 +705,10 @@ class update {
     }
 
     /**
-     * Get plugin update details for install update page
-     * @param  array $params Plugin details parameter
-     * @return array         Plugin update details
+     * Get plugin update details for install update page.
+     *
+     * @param array $params Plugin details parameter
+     * @return array Plugin update details
      */
     public function get_plugin_update($params) {
         $component = $params['installupdate'];

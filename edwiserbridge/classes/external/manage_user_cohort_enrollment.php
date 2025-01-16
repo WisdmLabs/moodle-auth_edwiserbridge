@@ -45,8 +45,12 @@ require_once($CFG->dirroot. '/cohort/lib.php');
  */
 trait manage_user_cohort_enrollment {
     /**
-     * Returns description of method parameters
-     * @return external_function_parameters
+     * Returns the description of the parameters for the auth_edwiserbridge_manage_user_cohort_enrollment external function.
+     *
+     * This function defines the parameters that can be passed to the auth_edwiserbridge_manage_user_cohort_enrollment function,
+     * including the cohort ID and an array of user data (firstname, lastname, password, username, email).
+     *
+     * @return external_function_parameters The description of the function parameters.
      */
     public static function auth_edwiserbridge_manage_user_cohort_enrollment_parameters() {
         return new external_function_parameters(
@@ -87,11 +91,21 @@ trait manage_user_cohort_enrollment {
     }
 
     /**
-     * Function responsible for enrolling cohort in course
-     * @return string welcome message
+     * Enrolls users in a specified cohort.
+     *
+     * This function checks if the cohort exists, and then processes the provided user data.
+     * If the user does not exist, it creates a new user account. It then adds the user to the specified cohort.
+     * The function returns an array containing information about the enrollment process, including any errors that occurred.
+     *
+     * @param int $cohortid The ID of the cohort to enroll users in.
+     * @param array $users An array of user data, including firstname, lastname, password, username, and email.
+     * @return array An array containing the following keys:
+     *   - error: 0 if successful, 1 if an error occurred.
+     *   - error_msg: A string describing the error, if any.
+     *   - users: An array of user enrollment information, including user_id, username, password, email, enrolled, cohort_id, and creation_error.
      */
     public static function auth_edwiserbridge_manage_user_cohort_enrollment($cohortid, $users) {
-        global $USER, $DB, $CFG;
+        global $DB, $CFG;
         
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
@@ -186,8 +200,10 @@ trait manage_user_cohort_enrollment {
     }
 
     /**
-     * Returns description of method result value
-     * @return external_description
+     * Returns the description of the method result value for the
+     * auth_edwiserbridge_manage_user_cohort_enrollment function.
+     *
+     * @return external_function_parameters The description of the method result value.
      */
     public static function auth_edwiserbridge_manage_user_cohort_enrollment_returns() {
 

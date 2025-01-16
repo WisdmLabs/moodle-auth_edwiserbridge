@@ -40,8 +40,9 @@ trait test_connection {
     /**
      * Request to test connection
      *
-     * @param  string $wpurl   wpurl.
-     * @param  string $wptoken wptoken.
+     * @param string $wpurl   wpurl.
+     * @param string $wptoken wptoken.
+     * @param string $testconnection Test connection type, defaults to "moodle".
      *
      * @return array
      */
@@ -144,7 +145,16 @@ trait test_connection {
     }
 
     /**
-     * Request to test connection parameter.
+     * Defines the parameters for the 'auth_edwiserbridge_test_connection' web service function.
+     *
+     * This function returns an external_function_parameters object that defines the parameters
+     * for the 'auth_edwiserbridge_test_connection' web service function. The parameters include:
+     *
+     * - 'wp_url': The URL of the WordPress site to test the connection with.
+     * - 'wp_token': The token used to authenticate the connection to the WordPress site.
+     * - 'test_connection': The text to be used for the 'test_connection' parameter, with a default value of 'moodle'.
+     *
+     * @return external_function_parameters The parameters for the 'auth_edwiserbridge_test_connection' web service function.
      */
     public static function auth_edwiserbridge_test_connection_parameters() {
         return new external_function_parameters(
@@ -168,7 +178,17 @@ trait test_connection {
     }
 
     /**
-     * paramters which will be returned from test connection function.
+     * Defines the return parameters for the 'auth_edwiserbridge_test_connection' web service function.
+     *
+     * This function returns an external_single_structure object that defines the parameters
+     * that will be returned by the 'auth_edwiserbridge_test_connection' web service function.
+     * The returned parameters include:
+     *
+     * - 'status': The status of the connection test, as a text value.
+     * - 'msg': The message returned from the connection test, as a raw value.
+     * - 'warnings': An optional array of warning messages, as text values.
+     *
+     * @return external_single_structure The return parameters for the 'auth_edwiserbridge_test_connection' web service function.
      */
     public static function auth_edwiserbridge_test_connection_returns() {
         return new external_single_structure(

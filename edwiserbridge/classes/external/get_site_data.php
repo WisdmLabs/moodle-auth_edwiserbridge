@@ -38,9 +38,10 @@ use core_completion\progress;
 trait get_site_data {
 
     /**
-     * functionality to get all site related data.
-     * @param  string $siteindex siteindex
-     * @return array
+     * Retrieves site-specific synchronization settings.
+     *
+     * @param string $siteindex The index of the site to retrieve settings for.
+     * @return array An array of site-specific synchronization settings.
      */
     public static function auth_edwiserbridge_get_site_data($siteindex) {
 
@@ -56,7 +57,9 @@ trait get_site_data {
     }
 
     /**
-     * paramters defined for get site data function.
+     * Defines the parameters for the auth_edwiserbridge_get_site_data function.
+     *
+     * @return external_function_parameters The parameters for the auth_edwiserbridge_get_site_data function.
      */
     public static function auth_edwiserbridge_get_site_data_parameters() {
         return new external_function_parameters(
@@ -70,7 +73,11 @@ trait get_site_data {
     }
 
     /**
-     * paramters which will be returned from get site data function.
+     * Defines the return structure for the auth_edwiserbridge_get_site_data function.
+     * This structure includes various synchronization settings for the site, such as
+     * course enrollment, user creation, and course creation.
+     *
+     * @return external_single_structure The return structure for the auth_edwiserbridge_get_site_data function.
      */
     public static function auth_edwiserbridge_get_site_data_returns() {
         return new external_single_structure(

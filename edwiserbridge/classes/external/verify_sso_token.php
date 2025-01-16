@@ -35,11 +35,11 @@ use external_value;
  * Trait implementing the external function auth_edwiserbridge_verify_sso_token
  */
 trait verify_sso_token {
+
     /**
-     * Returns description of method parameters.
+     * Returns the external function parameters for the auth_edwiserbridge_verify_sso_token function.
      *
-     * @return external_function_parameters
-     *
+     * @return external_function_parameters The function parameters.
      * @since SSO 1.2.1
      */
     public static function auth_edwiserbridge_verify_sso_token_parameters() {
@@ -51,11 +51,10 @@ trait verify_sso_token {
     }
 
     /**
-     * Returns description of method parameters.
+     * Verifies the provided SSO token.
      *
-     * @return bool
-     *
-     * @since SSO 1.2.1
+     * @param string $token The token to verify.
+     * @return array An array containing the success status and a message.
      */
     public static function auth_edwiserbridge_verify_sso_token($token) {
 
@@ -78,10 +77,9 @@ trait verify_sso_token {
     }
 
     /**
-     * Returns description of method parameters.
+     * Returns the external function return structure for the auth_edwiserbridge_verify_sso_token function.
      *
-     * @return bool
-     *
+     * @return external_single_structure The function return structure.
      * @since SSO 1.2.1
      */
     public static function auth_edwiserbridge_verify_sso_token_returns() {

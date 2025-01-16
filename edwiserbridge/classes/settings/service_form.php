@@ -26,15 +26,18 @@ namespace auth_edwiserbridge\settings;
 use moodleform;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
 /**
- * Used to create web service.
+ * Defines the web services form for the Edwiser Bridge plugin.
+ * This class extends the moodleform class and provides the functionality to create and manage web services.
  */
 class service_form extends moodleform {
 
     /**
-     * Defining web services form.
+     * Defines the web services form for the Edwiser Bridge plugin.
+     * This method is responsible for creating and managing the web services form, including adding various form elements such as service list, service input, user list, site language, site URL, and token.
      */
     public function definition() {
         global $CFG;

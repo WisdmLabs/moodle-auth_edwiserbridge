@@ -38,12 +38,13 @@ use core_completion\progress;
 trait get_courses {
 
     /**
-     * functionality to get courses in chunk.
-     * @param  int $offset offset
-     * @param  int $limit  limit
-     * @param  string $searchstring searchstring
-     * @param  int $totalcourses totalcourses
-     * @return array array of courses.
+     * Functionality to get courses in chunk.
+     *
+     * @param int $offset Offset for the course list.
+     * @param int $limit Limit the number of courses to return.
+     * @param string $searchstring Search string to filter the courses.
+     * @param int $totalcourses Flag to indicate if the total course count should be returned.
+     * @return array Array of courses.
      */
     public static function auth_edwiserbridge_get_courses($offset, $limit, $searchstring, $totalcourses) {
         global $DB;
@@ -75,7 +76,19 @@ trait get_courses {
     }
 
     /**
-     * paramters defined for get courses function.
+     * Defines the parameters for the auth_edwiserbridge_get_courses external function.
+     *
+     * This function returns an external_function_parameters object that defines the
+     * expected parameters for the auth_edwiserbridge_get_courses function. The
+     * parameters include:
+     *
+     * - offset: The offset for the course list.
+     * - limit: The maximum number of courses to return.
+     * - search_string: A search string to filter the courses.
+     * - total_courses: A flag to indicate if the total course count should be returned.
+     *
+     * @return external_function_parameters The parameters for the
+     *         auth_edwiserbridge_get_courses function.
      */
     public static function auth_edwiserbridge_get_courses_parameters() {
         return new external_function_parameters(
@@ -101,7 +114,17 @@ trait get_courses {
     }
 
     /**
-     * paramters which will be returned from get courses function.
+     * Defines the return structure for the auth_edwiserbridge_get_courses external function.
+     *
+     * This function returns an external_function_parameters object that defines the
+     * expected return structure for the auth_edwiserbridge_get_courses function. The
+     * return structure includes:
+     *
+     * - total_courses: The total number of courses.
+     * - courses: An array of course information, including the course ID, full name, and category ID.
+     *
+     * @return external_function_parameters The return structure for the
+     *         auth_edwiserbridge_get_courses function.
      */
     public static function auth_edwiserbridge_get_courses_returns() {
         return new external_function_parameters(

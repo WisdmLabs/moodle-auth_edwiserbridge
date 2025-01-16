@@ -24,13 +24,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+global $CFG;
 require_once("{$CFG->libdir}/completionlib.php");
 
 /**
- * Function to check if the older edwiser bridge plugin is installed or not.
+ * Checks if the older Edwiser Bridge plugin is installed.
  *
- * @return bool true if not installed, false if installed.
+ * @return bool true if the older Edwiser Bridge plugin is not installed, false if it is installed.
  */
 function auth_edwiserbridge_check_pro_dependancy() {
     $clear       = true;
@@ -71,10 +71,10 @@ if (!auth_edwiserbridge_check_pro_dependancy()) {
 }
 
 /**
- * Saving test connection form data.
- * Saves forntend form data with all the available data like multiple WP site and token.
+ * Saves the connection form settings for the Edwiser Bridge plugin.
  *
- * @param object $formdata formdata
+ * @param object $formdata The form data containing the connection settings.
+ * @param bool $mform Whether the form is being saved from a Moodle form.
  */
 function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = false) {
     // Checking if provided data count is correct or not.
@@ -96,9 +96,10 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
 }
 
 /**
- * Save the synch settings for the individual site
+ * Saves the synchronization settings for the individual site.
  *
- * @param object $formdata formdata
+ * @param object $formdata The form data containing the synchronization settings.
+ * @param bool $mform Whether the form is being saved from a Moodle form.
  */
 function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform = false) {
     global $CFG;
@@ -122,24 +123,26 @@ function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform
     }
     set_config('eb_synch_settings', serialize($synchsettings));
 }
+
 /**
- * Save the sso settings for the individual site
+ * Saves the SSO settings for the individual site.
  *
- * @param object $formdata formdata
+ * @param object $formdata The form data containing the SSO settings.
+ * @param bool $mform Whether the form is being saved from a Moodle form.
  */
 function auth_edwiserbridge_save_sso_form_settings($formdata, $mform = false) {
-    global $CFG;
-
     set_config('sharedsecret', $formdata->sharedsecret, 'auth_edwiserbridge');
     set_config('wpsiteurl', $formdata->wpsiteurl, 'auth_edwiserbridge');
     set_config('logoutredirecturl', $formdata->logoutredirecturl, 'auth_edwiserbridge');
     set_config('wploginenablebtn', $formdata->wploginenablebtn, 'auth_edwiserbridge');
     set_config('wploginbtntext', $formdata->wploginbtntext, 'auth_edwiserbridge');
 }
+
 /**
- * Save the general settings for Moodle.
+ * Saves the general settings for Moodle.
  *
- * @param object $formdata formdata
+ * @param object $formdata The form data containing the general settings.
+ * @param bool $mform Whether the form is being saved from a Moodle form.
  */
 function auth_edwiserbridge_save_settings_form_settings($formdata, $mform = false) {
     global $CFG;
@@ -164,7 +167,12 @@ function auth_edwiserbridge_save_settings_form_settings($formdata, $mform = fals
 }
 
 /**
- * Get required settings fromm DB.
+ * Retrieves the required settings for the Edwiser Bridge plugin from the Moodle configuration.
+ *
+ * This function retrieves the values of various Moodle settings that are required for the Edwiser Bridge plugin to function properly.
+ * The settings include the status of the web services, whether extended username characters are enabled, the password policy, and whether automatic update checks are enabled.
+ *
+ * @return array An associative array containing the required settings.
  */
 function auth_edwiserbridge_get_required_settings() {
     global $CFG;
@@ -188,6 +196,11 @@ function auth_edwiserbridge_get_required_settings() {
 
 /**
  * Returns connection settings saved in the settings form.
+ *
+ * This function retrieves the connection settings for the Edwiser Bridge plugin that have been saved in the Moodle configuration.
+ * The settings are stored in the $CFG->eb_connection_settings variable, which is unserialized and returned as an associative array.
+ *
+ * @return array An associative array containing the connection settings, or false if the settings are not found.
  */
 function auth_edwiserbridge_get_connection_settings() {
     global $CFG;
@@ -196,10 +209,14 @@ function auth_edwiserbridge_get_connection_settings() {
 }
 
 /**
- * Returns individual sites data.
+ * Returns the synchronization settings for the given index.
  *
- * @param  int $index [description]
- * @return array returns selected sites data.
+ * This function retrieves the synchronization settings for the Edwiser Bridge plugin based on the provided index.
+ * The settings are stored in the $CFG->eb_synch_settings variable, which is unserialized and returned as an associative array.
+ * If the settings are not found, a default array is returned.
+ *
+ * @param int $index The index of the synchronization settings to retrieve.
+ * @return array The synchronization settings for the given index, or a default array if the settings are not found.
  */
 function auth_edwiserbridge_get_synch_settings($index) {
     global $CFG;
@@ -222,9 +239,13 @@ function auth_edwiserbridge_get_synch_settings($index) {
 }
 
 /**
- * Returns all the sites created in the edwiser settings.
+ * Returns a list of all the sites created in the Edwiser settings.
  *
- * @return array sites list
+ * This function retrieves the list of sites that have been configured in the Edwiser Bridge plugin settings. It checks if the
+ * $CFG->eb_connection_settings variable is set and unserializes it to get the site information. If the variable is not set or
+ * empty, it returns a single-element array with a default message.
+ *
+ * @return array An associative array of site keys and names, or a single-element array with a default message if no sites are found.
  */
 function auth_edwiserbridge_get_site_list() {
     global $CFG;
@@ -245,17 +266,17 @@ function auth_edwiserbridge_get_site_list() {
  *
  * @since  1.0.0
  *
- * @return EDW
+ * @return \auth_edwiserbridge\local\api_handler The main instance of the EDW API handler.
  */
 function auth_edwiserbridge_api_handler_instance() {
-    return auth_edwiserbridge\api_handler::instance();
+    return auth_edwiserbridge\local\api_handler::instance();
 }
 
 /**
- * returns the list of courses in which user is enrolled
+ * Returns an array of course IDs that the specified user is enrolled in.
  *
- * @param int $userid user id.
- * @return array array of courses.
+ * @param int $userid The ID of the user to get the enrolled courses for.
+ * @return array An array of course IDs that the user is enrolled in.
  */
 function auth_edwiserbridge_get_array_of_enrolled_courses($userid) {
     $enrolledcourses = enrol_get_users_courses($userid);
@@ -268,11 +289,12 @@ function auth_edwiserbridge_get_array_of_enrolled_courses($userid) {
 }
 
 /**
+ * Removes a specific course ID from the provided array of course IDs. 
  * Removes processed coureses from the course whose progress is already provided.
  *
- * @param int   $courseid course id.
- * @param array $courses courses array.
- * @return array courses array.
+ * @param int   $courseid The ID of the course to remove from the array.
+ * @param array $courses  The array of course IDs to remove the specified course from.
+ * @return array The updated array of course IDs with the specified course removed.
  */
 function auth_edwiserbridge_remove_processed_coures($courseid, $courses) {
     $key = array_search($courseid, $courses);
@@ -283,7 +305,13 @@ function auth_edwiserbridge_remove_processed_coures($courseid, $courses) {
 }
 
 /**
- * Functionality to check if the request is from WordPress and the stop processing the enrollment and unenrollment.
+ * Checks if the current request is from WordPress and stops processing the enrollment and unenrollment.
+ *
+ * This function checks if the current request contains the 'enrolments' or 'cohort' POST parameters,
+ * which are used for enrollment and unenrollment processing. If either of these parameters is present,
+ * the function returns 1 to indicate that the request is from WordPress and the processing should be stopped.
+ *
+ * @return int 1 if the request is from WordPress, 0 otherwise.
  */
 function auth_edwiserbridge_check_if_request_is_from_wp() {
     $required = 0;
@@ -301,8 +329,16 @@ function auth_edwiserbridge_check_if_request_is_from_wp() {
 -----------------------------------------------------------
 *   Functions used in Settings page
 *----------------------------------------------------------*/
+
 /**
- * Functionality to get all available Moodle sites administrator.
+ * Retrieves a list of Moodle site administrators and their email addresses.
+ *
+ * This function fetches the list of Moodle site administrators using the `get_admins()` function,
+ * and then creates an associative array where the keys are the administrator IDs and the values
+ * are their email addresses. An empty string key is also included with the value of a localized
+ * string for the "new service user" label.
+ *
+ * @return array An associative array of administrator IDs and their email addresses.
  */
 function auth_edwiserbridge_get_administrators() {
     $admins          = get_admins();
@@ -316,7 +352,15 @@ function auth_edwiserbridge_get_administrators() {
 }
 
 /**
- * Functionality to get all available Moodle sites services.
+ * Retrieves a list of available Moodle site services.
+ *
+ * This function fetches the list of external services from the Moodle database and
+ * creates an associative array where the keys are the service IDs and the values
+ * are the service names. It also includes a special entry with an empty key and
+ * the value of a localized string for the "existing service" label, as well as
+ * a "create" entry for creating a new service.
+ *
+ * @return array An associative array of available Moodle site services.
  */
 function auth_edwiserbridge_get_existing_services() {
     global $DB;
@@ -333,10 +377,14 @@ function auth_edwiserbridge_get_existing_services() {
 }
 
 /**
- * Functionality to get all available Moodle sites tokens.
+ * Gets the list of service tokens for the given service ID. 
  *
- * @param int $serviceid service id.
- * @return array settings array.
+ * This function fetches the list of external tokens from the Moodle database and
+ * creates an associative array where the keys are the token values and the values
+ * are the associated external service IDs.
+ *
+ * @param int $serviceid The ID of the external service.
+ * @return array An array of tokens and their associated service IDs.
  */
 function auth_edwiserbridge_get_service_tokens($serviceid) {
     global $DB;
@@ -355,51 +403,49 @@ function auth_edwiserbridge_get_service_tokens($serviceid) {
 }
 
 /**
- * Functionality to create token.
+ * Generates an HTML field for creating a token.
  *
- * @param int $serviceid service id.
- * @param int $existingtoken existing token.
- * @return string html content.
+ * This function generates an HTML field that allows the user to create a token
+ * for the specified external service. It retrieves the list of existing tokens
+ * for the service and populates the field with the options. The function also
+ * provides a "Copy" button to allow the user to easily copy the selected token.
+ *
+ * @param int $serviceid The ID of the external service.
+ * @param string $existingtoken The existing token, if any.
+ * @return string The HTML content for the token creation field.
  */
 function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') {
-
+    global $PAGE;
     $tokenslist = auth_edwiserbridge_get_service_tokens($serviceid);
 
-    $html = '<div class="eb_copy_txt_wrap">
-                <div style="width:60%;">
-                    <select class="eb_copy" class="custom-select" name="eb_token" id="id_eb_token">
-                    <option value="">' . get_string('token_dropdown_lbl', 'auth_edwiserbridge') . '</option>';
-
+    $tokens = [];
     foreach ($tokenslist as $token) {
-        $selected = '';
-        $display  = '';
-
-        if (isset($token['token']) && $token['token'] == $existingtoken) {
-            $selected = ' selected';
-        }
-
-        if (isset($token['id']) && $token['id'] != $serviceid) {
-            $display = 'style="display:none"';
-        }
-
-        $html .= '<option data-id="' . $token['id'] . '" value="' . $token['token'] . '" '
-        . $display . ' ' . $selected . '>' . $token['token'] . '</option>';
+        $tokens[] = [
+            'id' => $token['id'] ?? '',
+            'token' => $token['token'] ?? '',
+            'display' => (isset($token['id']) && $token['id'] != $serviceid) ? 'style="display:none"' : '',
+            'selected' => (isset($token['token']) && $token['token'] == $existingtoken) ? 'selected' : ''
+        ];
     }
 
-    $html .= '      </select>
-                </div>
-                <div> <button class="btn btn-primary eb_primary_copy_btn">' . get_string('copy', 'auth_edwiserbridge')
-    . '</button> </div>
-            </div>';
+    $data = [
+        'token_dropdown_lbl' => get_string('token_dropdown_lbl', 'auth_edwiserbridge'),
+        'tokens' => $tokens,
+        'copy_btn_text' => get_string('copy', 'auth_edwiserbridge')
+    ];
+
+    $output = $PAGE->get_renderer('core');
+    $html = $output->render_from_template('auth_edwiserbridge/create_token_field', $data);
 
     return $html;
 }
 
 /**
+ * Gets the list of service tokens for the given service ID. 
  * Functionality to get count of not available services which are required for Edwiser-Bridge.
  *
- * @param int $serviceid service id.
- * @return string count of not available services.
+ * @param int $serviceid The ID of the external service.
+ * @return array An array of service tokens, with the token and ID for each.
  */
 function auth_edwiserbridge_get_service_list($serviceid) {
     global $DB;
@@ -478,8 +524,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
         ],
     ];
 
-    global $CFG;
-    $license = new auth_edwiserbridge\eb_pro_license_controller();
+    $license = new auth_edwiserbridge\local\eb_pro_license_controller();
     if ($license->get_data_from_db() == 'available') {
         $bulkpurchase = [
             [
@@ -551,7 +596,16 @@ function auth_edwiserbridge_get_service_list($serviceid) {
 }
 
 /**
- * Functionality to get summary status.
+ * Checks the status of various Edwiser Bridge settings and returns a summary status.
+ *
+ * This function checks the values of various Edwiser Bridge settings, such as
+ * 'enablewebservices', 'passwordpolicy', 'extendedusernamechars', and
+ * 'webserviceprotocols'. It also checks for the existence of certain configuration
+ * variables, such as 'ebexistingserviceselect' and 'edwiser_bridge_last_created_token'.
+ * Based on the results of these checks, the function returns one of three possible
+ * status values: 'error', 'warning', or 'success'.
+ *
+ * @return string The summary status of the Edwiser Bridge settings.
  */
 function auth_edwiserbridge_get_summary_status() {
     global $CFG;
@@ -590,7 +644,11 @@ function auth_edwiserbridge_get_summary_status() {
 }
 
 /**
- * Serves the files from the auth_edwiserbridge file areas
+ * Serves the files from the auth_edwiserbridge file areas.
+ *
+ * This function is responsible for serving files from the auth_edwiserbridge plugin's file areas.
+ * It checks the context level, retrieves the file based on the provided arguments, and sends the
+ * stored file to the client, forcing the download.
  *
  * @param stdClass $course the course object
  * @param stdClass $cm the course module object
@@ -624,7 +682,12 @@ function auth_edwiserbridge_pluginfile(
 }
 
 /**
- * Check active webservices and update functions for auth_edwiserbridge plugin.
+ * Checks and updates the web service functions for the auth_edwiserbridge plugin.
+ *
+ * This function retrieves the connection settings for the Edwiser Bridge plugin,
+ * and then checks and updates the web service functions associated with the
+ * external service ID. It adds any missing functions to the
+ * external_services_functions table.
  */
 function auth_edwiserbridge_check_and_update_webservice_functions() {
 
@@ -710,11 +773,15 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
         }
     }
 }
+
 /**
- * Enable the plugin in the default authentication method.
+ * Enables the Edwiser Bridge authentication plugin in the default authentication method.
+ *
+ * This function checks if the Edwiser Bridge authentication plugin is enabled, and if not, adds it to the list of
+ * enabled authentication plugins. It then removes any stale sessions and resets the plugin caches.
  */
 function auth_edwiserbridge_enable_plugin() {
-    global $DB, $CFG;
+    global $CFG;
 
     $auth = 'edwiserbridge';
     get_enabled_auth_plugins(true); // Fix the list of enabled auths.
@@ -736,32 +803,39 @@ function auth_edwiserbridge_enable_plugin() {
 }
 
 /**
- * Check plugin update.
+ * Checks for updates to the Edwiser Bridge plugin and prepares a notification if an update is available.
+ *
+ * This function retrieves the latest version information for the Edwiser Bridge plugin from a remote server,
+ * compares it to the currently installed version, and if an update is available, it prepares a notification
+ * to be displayed to the user.
+ *
+ * The notification includes information about the new version, a changelog URL, and links to download and
+ * update the plugin.
  */
 function auth_edwiserbridge_check_plugin_update() {
-    if (! function_exists('curl_version')) {
-        return false;
-    }
-
-    $curl = curl_init();
-    curl_setopt_array(
-        $curl,
-        [
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL            => 'https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json',
-            CURLOPT_TIMEOUT        => 100,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
-        ]
-    );
+    include_once($CFG->libdir . '/filelib.php'); // Include Moodle's filelib for the `curl` class.
+    
     // Construct a user agent string.
     global $CFG;
     $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Update Checker';
 
-    curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-    $output   = curl_exec($curl);
-    $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
+    // Set up Moodle's curl instance.
+    $curl = new \curl([
+        'timeout' => 100,
+        'sslverifyhost' => false,
+        'sslverifypeer' => false,
+    ]);
+
+    $url = 'https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json';
+    $options = [
+        'CURLOPT_USERAGENT' => $useragent,
+    ];
+
+    $output = $curl->get($url, null, $options);
+
+    // Check the HTTP response code.
+    $httpcode = $curl->info['http_code'];
+
     if (200 === $httpcode) {
         $data = [
             'time' => time() + (60 * 60 * 24),
@@ -791,9 +865,13 @@ function auth_edwiserbridge_check_plugin_update() {
 }
 
 /**
- * Prepare Plugin update notification
+ * Prepare the plugin update notification.
  *
- * @param object $updatedata updatedata
+ * This function is responsible for preparing the plugin update notification
+ * that will be displayed to the user when a new version of the Edwiser Bridge
+ * plugin is available.
+ *
+ * @param object $updatedata The update data for the Edwiser Bridge plugin.
  */
 function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
     global $CFG, $PAGE;
@@ -828,10 +906,10 @@ function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
 }
 
 /**
- * Show plugin update notification
+ * Shows the plugin update notification if an update is available and the user has not dismissed the notification.
+ * This function checks the configuration settings, retrieves the update message and URLs, and adds the notification to the Moodle interface.
  *
  * @return void
- * @package auth_edwiserbridge
  */
 function auth_edwiserbridge_show_plugin_update_notification() {
     global $PAGE, $ME, $CFG;
@@ -881,15 +959,24 @@ function auth_edwiserbridge_show_plugin_update_notification() {
 }
 
 /**
- * Check secret key is set or not.
- * If not set then redirect to the WordPress site.
+ * Get the shared secret key for SSO authentication.
+ * If the secret key is not set, redirect the user to the WordPress site with an error parameter.
  *
- * @return string secret key.
- * @package auth_edwiserbridge
+ * @return string The shared secret key, or an empty string if the key is not set and the user is redirected.
  */
 function auth_edwiserbridge_get_sso_secret_key() {
+    global $CFG;
     $secretkey = get_config('auth_edwiserbridge', 'sharedsecret');
-    if (!isset($secretkey)) {
+    $tempurl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+    if ($tempurl == null) {
+        $tempurl = get_config('auth_edwiserbridge', 'wpsiteurl');
+    }
+
+    if ($tempurl == '') {
+        $tempurl = $CFG->wwwroot;
+    }
+
+    if (empty($secretkey)) {
         $wordpressurl = str_replace('wp-login.php', '', $tempurl);
         if (strpos($wordpressurl, '?') !== false) {
             $wordpressurl .= '&wdm_moodle_error=wdm_moodle_error';
@@ -903,9 +990,14 @@ function auth_edwiserbridge_get_sso_secret_key() {
 }
 
 /**
- * Handler for decrypting incoming data (specially handled base-64) in which is encoded a string of key=value pairs.
+ * Decrypts a base64-encoded string using the provided key.
  *
- * @package auth_edwiserbridge
+ * This function is used to decrypt incoming data that has been specially encoded in base64 format, where the
+ * encoded data contains a string of key=value pairs.
+ *
+ * @param string $base64 The base64-encoded string to decrypt.
+ * @param string $key The key to use for decryption.
+ * @return string The decrypted string, or an empty string if the input is invalid.
  */
 function auth_edwiserbridge_decrypt_string($base64, $key) {
     if (!$base64) {
@@ -931,6 +1023,9 @@ function auth_edwiserbridge_decrypt_string($base64, $key) {
  * Query string helper, returns the value of a key in a string formatted in key=value&key=value&key=value pairs,
  * e.g. saved querystrings.
  *
+ * @param string $string The string containing the key-value pairs.
+ * @param string $key The key to search for in the string.
+ * @return string The value of the specified key, or an empty string if the key is not found.
  * @package auth_edwiserbridge
  */
 function auth_edwiserbridge_get_key_value($string, $key) {
@@ -955,7 +1050,7 @@ function auth_edwiserbridge_get_key_value($string, $key) {
  * @package auth_edwiserbridge
  */
 function auth_edwiserbridge_get_user_session($userid, $sessionkey) {
-    global $DB, $CFG;
+    global $DB;
     $table = 'user_preferences';
     $record = $DB->get_record($table, ['userid' => $userid, 'name' => $sessionkey]);
 
@@ -983,13 +1078,14 @@ function auth_edwiserbridge_set_user_session($userid, $sessionkey, $wdmdata) {
  * @package auth_edwiserbridge
  */
 function auth_edwiserbridge_remove_user_session($userid) {
-    global $DB, $CFG;
     unset_user_preference('eb_sso_user_session_id', $userid);
 }
 
 /**
- * Redirect to root.
- * @package auth_edwiserbridge
+ * Redirect the user to the root URL of the Moodle site.
+ *
+ * This function is used to redirect the user to the root URL of the Moodle site, which is stored in the $CFG->wwwroot global variable.
+ * The current URL that the user wants to access is stored in the $SESSION->wantsurl global variable, and this function uses the redirect() function to redirect the user to the root URL.
  */
 function auth_edwiserbridge_redirect_to_root() {
     global $CFG, $SESSION;
