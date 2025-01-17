@@ -48,24 +48,26 @@ trait update_course_enrollment_method {
     public static function auth_edwiserbridge_update_course_enrollment_method($courseid) {
         global $DB, $CFG;
 
-        // Validation for context is needed.
-        $systemcontext = \context_system::instance();
-        self::validate_context($systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_update_course_enrollment_method_parameters(),
             [
                 'courseid'   => $courseid,
-            ]
-        );
-
-        // Include manual enrollment file.
-        require_once($CFG->dirroot.'/enrol/manual/locallib.php');
-
-        $enrollplugins = enrol_get_plugins(true);
-        $response = [];
-        if (isset($enrollplugins['manual'])) {
-            foreach ($params['courseid'] as $singlecourseid) {
+                ]
+            );
+            
+            // Include manual enrollment file.
+            require_once($CFG->dirroot.'/enrol/manual/locallib.php');
+            
+            $enrollplugins = enrol_get_plugins(true);
+            $response = [];
+            if (isset($enrollplugins['manual'])) {
+                foreach ($params['courseid'] as $singlecourseid) {
+                // Validation for context is needed.
+                $coursecontext = \context_course::instance( $singlecourseid );
+                self::validate_context($coursecontext);
+        
+                require_capability('moodle/course:enrolconfig', $coursecontext);
                 // Add enrolment instance.
                 $enrolinstance = new \enrol_manual_plugin();
 

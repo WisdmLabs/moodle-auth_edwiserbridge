@@ -66,6 +66,8 @@ trait enable_plugin_settings {
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
         
+        require_capability('moodle/site:config', $systemcontext);
+        
         // Call the function to get the list of protocols
         $activewebservices = core_webservice_get_protocols();
 

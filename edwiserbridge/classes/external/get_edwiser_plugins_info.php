@@ -47,9 +47,11 @@ trait get_edwiser_plugins_info {
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info() {
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
         
         $response    = [];
         $pluginman   = \core_plugin_manager::instance();

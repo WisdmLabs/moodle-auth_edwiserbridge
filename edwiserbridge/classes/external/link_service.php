@@ -46,10 +46,11 @@ trait link_service {
      * @return array An array containing the status and message of the linking operation.
      */
     public static function auth_edwiserbridge_link_service($serviceid, $token) {
-
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/webservice:managealltokens', $systemcontext);
         
         $response           = [];
         $response['status'] = 0;
@@ -87,8 +88,8 @@ trait link_service {
     public static function auth_edwiserbridge_link_service_returns() {
         return new external_single_structure(
             [
-                'status' => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge')),
-                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge')),
+                'status' => new external_value(PARAM_INT, get_string('web_service_creation_status', 'auth_edwiserbridge'), VALUE_REQUIRED),
+                'msg'    => new external_value(PARAM_TEXT, get_string('web_service_creation_msg', 'auth_edwiserbridge'), VALUE_REQUIRED),
             ]
         );
     }

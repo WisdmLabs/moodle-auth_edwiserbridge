@@ -68,8 +68,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
             foreach ($sites as $value) {
                 if ($synchconditions[$value['wp_name']]['course_enrollment'] && $value['wp_token']) {
                     // Adding Token for verification in WP from Moodle.
@@ -108,8 +108,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if ($synchconditions[$value['wp_name']]['course_un_enrollment'] && $value['wp_token']) {
@@ -140,8 +140,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if ($synchconditions[$value["wp_name"]]["user_creation"] && $value['wp_token']) {
@@ -194,8 +194,8 @@ class observer {
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
 
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -262,8 +262,8 @@ class observer {
         $apihandler  = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
 
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -315,8 +315,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if (isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
@@ -343,8 +343,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -382,8 +382,8 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         if (isset($CFG->eb_connection_settings)) {
-            $sites = unserialize($CFG->eb_connection_settings);
-            $synchconditions = unserialize($CFG->eb_synch_settings);
+            $sites = json_decode($CFG->eb_connection_settings, true);
+            $synchconditions = json_decode($CFG->eb_synch_settings, true);
 
             foreach ($sites as $value) {
                 if (

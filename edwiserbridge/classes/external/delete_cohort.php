@@ -79,9 +79,12 @@ trait delete_cohort {
     public static function auth_edwiserbridge_delete_cohort($cohort) {
         global $USER, $DB;
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+
+        require_capability('moodle/cohort:delete', $systemcontext);
         
         // Parameter validation.
         $params = self::validate_parameters(
@@ -120,16 +123,16 @@ trait delete_cohort {
      * Returns the external structure for the connection status.
      *
      * @return external_single_structure External structure containing:
-     *                                   - status (string): This will return "1" for a successful connection and "0" on failure.
+     *                                   - status (int): Operation status (1 for success, 0 for failure)
+     *                                   - message (string): Status message
      */
     public static function auth_edwiserbridge_delete_cohort_returns() {
-        return new external_single_structure(
-            [
-                'status' => new external_value(
-                    PARAM_TEXT,
-                    'This will return 1 if successful connection and 0 on failure'
-                ),
-            ]
-        );
+        return new external_single_structure([
+            'status' => new external_value(
+                PARAM_INT,
+                'Operation status (1 for success, 0 for failure)',
+                VALUE_REQUIRED
+            )
+        ]);
     }
 }

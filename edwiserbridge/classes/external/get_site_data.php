@@ -45,9 +45,11 @@ trait get_site_data {
      */
     public static function auth_edwiserbridge_get_site_data($siteindex) {
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_site_data_parameters(),
@@ -84,31 +86,38 @@ trait get_site_data {
             [
                 'course_enrollment'    => new external_value(
                     PARAM_INT,
-                    get_string('web_service_course_enrollment', 'auth_edwiserbridge')
+                    get_string('web_service_course_enrollment', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'course_un_enrollment' => new external_value(
                     PARAM_INT,
-                    get_string('web_service_course_un_enrollment', 'auth_edwiserbridge')
+                    get_string('web_service_course_un_enrollment', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'user_creation'        => new external_value(
                     PARAM_INT,
-                    get_string('web_service_user_creation', 'auth_edwiserbridge')
+                    get_string('web_service_user_creation', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'user_updation'        => new external_value(
                     PARAM_INT,
-                    get_string('web_service_user_update', 'auth_edwiserbridge')
+                    get_string('web_service_user_update', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'user_deletion'        => new external_value(
                     PARAM_INT,
-                    get_string('web_service_user_deletion', 'auth_edwiserbridge')
+                    get_string('web_service_user_deletion', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'course_creation'        => new external_value(
                     PARAM_INT,
-                    get_string('web_service_course_creation', 'auth_edwiserbridge')
+                    get_string('web_service_course_creation', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'course_deletion'        => new external_value(
                     PARAM_INT,
-                    get_string('web_service_course_deletion', 'auth_edwiserbridge')
+                    get_string('web_service_course_deletion', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
             ]
         );

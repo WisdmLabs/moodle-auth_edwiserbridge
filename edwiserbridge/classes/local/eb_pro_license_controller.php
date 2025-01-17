@@ -165,7 +165,7 @@ class eb_pro_license_controller {
             $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
-            $dataobject->value = serialize(['server_did_not_respond', time() + (60 * 60 * 24)]);
+            $dataobject->value = json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]);
             $DB->insert_record('config_plugins', $dataobject);
 
             return false;
@@ -287,12 +287,21 @@ class eb_pro_license_controller {
         );
 
         if ($transient) {
-            $transient = unserialize($transient);
-
-            if (is_array($transient) && time() > $transient[1] && $transient[1] > 0) {
-
+            $transient = json_decode($transient, true);
+            if ( json_last_error() === JSON_ERROR_NONE ) {
+                if (is_array($transient) && time() > $transient[1] && $transient[1] > 0) {
+    
+                    $transexpired = true;
+    
+                    // Delete previous record.
+                    $DB->delete_records_select(
+                        'config_plugins',
+                        'name = :name',
+                        ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
+                    );
+                }
+            } else {
                 $transexpired = true;
-
                 // Delete previous record.
                 $DB->delete_records_select(
                     'config_plugins',
@@ -324,7 +333,7 @@ class eb_pro_license_controller {
                 $dataobject = new \stdClass();
                 $dataobject->plugin         = 'auth_edwiserbridge';
                 $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
-                $dataobject->value = serialize([$licensestatus, $time]);
+                $dataobject->value = json_encode([$licensestatus, $time]);
                 $DB->insert_record('config_plugins', $dataobject);
             }
         }
@@ -408,7 +417,7 @@ class eb_pro_license_controller {
             $dataobject = new \stdClass();
             $dataobject->plugin = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
-            $dataobject->value = serialize([$licensedata->license, 0]);
+            $dataobject->value = json_encode([$licensedata->license, 0]);
             $DB->insert_record('config_plugins', $dataobject);
         }
     }
@@ -438,11 +447,20 @@ class eb_pro_license_controller {
         );
 
         if ($transient) {
-            $transient = unserialize($transient);
-
-            if (is_array($transient) && time() > $transient[1] && $transient[1] > 0) {
+            $transient = json_decode($transient, true);
+            if ( json_last_error() === JSON_ERROR_NONE ) {
+                if (is_array($transient) && time() > $transient[1] && $transient[1] > 0) {
+                    $transexpired = true;
+    
+                    // Delete previous license transient.
+                    $DB->delete_records_select(
+                        'config_plugins',
+                        'name = :name',
+                        ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
+                    );
+                }
+            } else {
                 $transexpired = true;
-
                 // Delete previous license transient.
                 $DB->delete_records_select(
                     'config_plugins',
@@ -450,6 +468,7 @@ class eb_pro_license_controller {
                     ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
                 );
             }
+
         } else {
             $transexpired = true;
         }
@@ -508,7 +527,7 @@ class eb_pro_license_controller {
                         $dataobject = new \stdClass();
                         $dataobject->plugin = 'auth_edwiserbridge';
                         $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
-                        $dataobject->value = serialize(['server_did_not_respond', time() + (60 * 60 * 24)]);
+                        $dataobject->value = json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]);
                         $DB->insert_record('config_plugins', $dataobject);
                     }
                 } else {
@@ -588,7 +607,7 @@ class eb_pro_license_controller {
             $dataobject = new \stdClass();
             $dataobject->plugin         = 'auth_edwiserbridge';
             $dataobject->name = 'wdm_' . $pluginslug . '_license_trans';
-            $dataobject->value = serialize([$licensestatus, time() + (60 * 60 * 24)]);
+            $dataobject->value = json_encode([$licensestatus, time() + (60 * 60 * 24)]);
             $DB->insert_record('config_plugins', $dataobject);
         }
     }
@@ -617,7 +636,24 @@ class eb_pro_license_controller {
             IGNORE_MISSING
         );
 
-        $sites = unserialize($sites);
+        $sites2 = json_decode($sites, true);
+        if ( JSON_ERROR_NONE !== json_last_error() ) {
+            $sites = unserialize($sites2);// For legacy data or data received from licensing server.
+            // Delete previous record.
+            $DB->delete_records_select(
+                'config_plugins',
+                'name = :name',
+                ['name' => 'wdm_' . $this->pluginslug . '_license_key_sites']
+            );
+            // Add Json encoded data instead of serialized data.
+            $dataobject = new \stdClass();
+            $dataobject->plugin         = 'auth_edwiserbridge';
+            $dataobject->name = 'wdm_' . $this->pluginslug . '_license_key_sites';
+            $dataobject->value = json_encode($sites);
+            $DB->insert_record('config_plugins', $dataobject);
+        } else {
+            $sites = $sites2;
+        }
 
         $currentsite    = $CFG->wwwroot;
         $currentsite    = preg_replace('#^https?://#', '', $currentsite);

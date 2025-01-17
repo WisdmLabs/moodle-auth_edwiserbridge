@@ -86,9 +86,12 @@ trait manage_cohort_enrollment {
     public static function auth_edwiserbridge_manage_cohort_enrollment($cohort) {
         global $USER, $DB;
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+
+        require_capability('moodle/cohort:assign', $systemcontext );
         
         // Parameter validation.
         $params = self::validate_parameters(

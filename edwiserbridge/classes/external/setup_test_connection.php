@@ -44,12 +44,14 @@ trait setup_test_connection {
      * @return array An array containing the status and message of the connection test.
      */
     public static function auth_edwiserbridge_setup_test_connection($wpurl) {
-
-        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.
-
+        global $CFG;
+        
+        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.  
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
 
         $params = self::validate_parameters(
             self::auth_edwiserbridge_setup_test_connection_parameters(),

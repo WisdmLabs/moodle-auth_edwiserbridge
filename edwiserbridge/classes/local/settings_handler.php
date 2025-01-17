@@ -25,7 +25,7 @@
 
 namespace auth_edwiserbridge\local;
 defined('MOODLE_INTERNAL') || die();
-
+global $CFG;
 require_once($CFG->libdir . "/externallib.php");
 
 /**
@@ -45,69 +45,73 @@ class settings_handler {
      * @return array An array containing the response status, message, token, site URL, and service ID.
      */
     public function eb_create_externle_service($name, $userid) {
-        global $DB, $CFG;
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        
         // Response initializations.
-        $response               = [];
-        $response['status']     = 1;
-        $response['msg']        = '';
-        $response['token']      = 0;
-        $response['site_url']   = $CFG->wwwroot;
-        $response['service_id'] = 0;
-
-        // Service creation default data.
-        $service                       = [];
-        $service['name']               = $name;
-        $service['enabled']            = 1;
-        $service['requiredcapability'] = null;
-        $service['restrictedusers']    = 1;
-        $service['component']          = null;
-        $service['timecreated']        = time();
-        $service['timemodified']       = null;
-
-        $service['shortname']          = $this->eb_generate_service_shortname();
+        $response = [
+            'status' => 1,
+            'msg' => '',
+            'token' => 0,
+            'site_url' => $CFG->wwwroot,
+            'service_id' => 0
+        ];
 
         // User id validation.
         if (empty($userid)) {
             $response['status'] = 0;
-            $response['msg']    = get_string('empty_userid_err', 'auth_edwiserbridge');
+            $response['msg'] = get_string('empty_userid_err', 'auth_edwiserbridge');
             return $response;
         }
 
-        // Creates unique shortname.
-        if (empty($service['shortname'])) {
+        $shortname = $this->eb_generate_service_shortname();
+        if (empty($shortname)) {
             $response['status'] = 0;
-            $response['msg']    = get_string('create_service_shortname_err', 'auth_edwiserbridge');
+            $response['msg'] = get_string('create_service_shortname_err', 'auth_edwiserbridge');
             return $response;
         }
 
-        // Checks if the name is avaialble.
         if (!$this->eb_check_if_service_name_available($name)) {
             $response['status'] = 0;
-            $response['msg']    = get_string('create_service_name_err', 'auth_edwiserbridge');
+            $response['msg'] = get_string('create_service_name_err', 'auth_edwiserbridge');
             return $response;
         }
 
-        $service['downloadfiles'] = 0;
-        $service['uploadfiles']   = 0;
+        $webservicemanager = new \webservice();
 
-        $serviceid = $DB->insert_record('external_services', $service);
+        // Service creation default data.
+        $servicedata = [
+            'name' => $name,
+            'shortname' => $shortname,
+            'enabled' => 1,
+            'restrictedusers' => 1,
+            'downloadfiles' => 0,
+            'uploadfiles' => 0,
+            'requiredcapability' => null,
+            'component' => null,
+            'timecreated' => time(),
+            'timemodified' => null,
+        ];
 
-        if ($serviceid) {
-            // Add auth user.
-            $this->eb_add_auth_user($serviceid, $userid);
-            // Adding functions in web service.
-            $this->eb_add_default_web_service_functions($serviceid);
-
-            // Creating token iwith service id.
-            $token = $this->eb_create_token($serviceid, $userid);
-            $response['service_id'] = $serviceid;
-            $response['token'] = $token;
-        } else {
+        try {
+            $service = $webservicemanager->create_external_service($servicedata);
+            
+            if ($service) {
+                $this->eb_add_auth_user($service->id, $userid);
+                $this->eb_add_default_web_service_functions($service->id);
+                $token = $this->eb_create_token($service->id, $userid);
+                
+                $response['service_id'] = $service->id;
+                $response['token'] = $token;
+            } else {
+                $response['status'] = 0;
+                $response['msg']    = get_string('create_service_creation_err', 'auth_edwiserbridge');
+                return $response;
+            }
+        } catch (Exception $e) {
             $response['status'] = 0;
-            $response['msg']    = get_string('create_service_creation_err', 'auth_edwiserbridge');
-            return $response;
+            $response['msg'] = get_string('create_service_creation_err', 'auth_edwiserbridge');
         }
-
         return $response;
     }
 
@@ -124,7 +128,9 @@ class settings_handler {
      *         be generated after 100 attempts.
      */
     public function eb_generate_service_shortname() {
-        global $DB;
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
         $shortname = 'edwiser';
         $numtries  = 0;
         do {
@@ -132,9 +138,8 @@ class settings_handler {
             $newshortname = $shortname . $numtries;
             if ($numtries > 100) {
                 return 0;
-                break;
             }
-        } while ($DB->record_exists('external_services', ['shortname' => $newshortname]));
+        } while ($webservicemanager->service_shortname_exists($newshortname));
 
         return $newshortname;
     }
@@ -150,11 +155,11 @@ class settings_handler {
      * @return int 0 if the service name is already registered, 1 if it is available.
      */
     public function eb_check_if_service_name_available($servicename) {
-        global $DB;
-        if ($DB->record_exists('external_services', ['name' => $servicename])) {
-            return 0;
-        }
-        return 1;
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
+        
+        return !$webservicemanager->service_name_exists($servicename);
     }
 
     /**
@@ -168,14 +173,19 @@ class settings_handler {
      * @param int $userid The ID of the user to be added as an authorized user.
      */
     public function eb_add_auth_user($serviceid, $userid) {
-        global $DB;
-        $dbarr = [];
-        $dbarr['externalserviceid'] = $serviceid;
-        $dbarr['userid'] = $userid;
-        $dbarr['iprestriction'] = null;
-        $dbarr['validuntil'] = null;
-        $dbarr['timecreated'] = time();
-        $DB->insert_record('external_services_users', $dbarr);
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
+        
+        $userdata = [
+            'externalserviceid' => $serviceid,
+            'userid' => $userid,
+            'iprestriction' => null,
+            'validuntil' => null,
+            'timecreated' => time()
+        ];
+
+        $webservicemanager->add_ws_authorised_user($serviceid, $userid, $userdata);
     }
 
     /**
@@ -188,34 +198,36 @@ class settings_handler {
      * @param int $serviceid The ID of the external service to add the functions to.
      */
     public function eb_add_default_web_service_functions($serviceid) {
-        global $DB;
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
+        
         $functions = [
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_create_users'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_get_users_by_field'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_user_update_users'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_courses_by_field'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_course_get_categories'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_enrol_users'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'enrol_manual_unenrol_users'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_enrol_get_users_courses'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_test_connection'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_site_data'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_course_progress'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_edwiser_plugins_info'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_course_enrollment_method'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_update_course_enrollment_method'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_mandatory_settings'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_enable_plugin_settings'],
+            'core_user_create_users',
+            'core_user_get_users_by_field',
+            'core_user_update_users',
+            'core_course_get_courses',
+            'core_course_get_courses_by_field',
+            'core_course_get_categories',
+            'enrol_manual_enrol_users',
+            'enrol_manual_unenrol_users',
+            'core_enrol_get_users_courses',
+            'auth_edwiserbridge_test_connection',
+            'auth_edwiserbridge_get_site_data',
+            'auth_edwiserbridge_get_course_progress',
+            'auth_edwiserbridge_get_edwiser_plugins_info',
+            'auth_edwiserbridge_get_course_enrollment_method',
+            'auth_edwiserbridge_update_course_enrollment_method',
+            'auth_edwiserbridge_get_mandatory_settings',
+            'auth_edwiserbridge_enable_plugin_settings'
         ];
 
-        foreach ($functions as $function) {
-            if ($DB->record_exists('external_functions', ['name' => $function['functionname']])) {
-                $DB->insert_record('external_services_functions', $function);
+        foreach ($functions as $functionname) {
+            if ($webservicemanager->service_function_exists($functionname)) {
+                $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }
 
-        // Add extension functions if they are present.
         $this->eb_extensions_web_service_function($serviceid);
     }
 
@@ -225,33 +237,32 @@ class settings_handler {
      * @param int $serviceid The ID of the external service to add the extension functions to.
      */
     public function eb_extensions_web_service_function($serviceid) {
-        global $DB;
-        $ssofunctions = [
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_verify_sso_token'],
-        ];
+        global $CFG;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
 
-        $selsyncfunctions = [
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_users'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_get_courses'],
-        ];
+        $allfunctions = array_merge(
+            ['auth_edwiserbridge_verify_sso_token'], // SSO functions
+            [ // Selective sync functions
+                'auth_edwiserbridge_get_users',
+                'auth_edwiserbridge_get_courses'
+            ],
+            [ // Bulk purchase functions
+                'core_cohort_add_cohort_members',
+                'core_cohort_create_cohorts',
+                'core_role_assign_roles',
+                'core_role_unassign_roles',
+                'core_cohort_delete_cohort_members',
+                'core_cohort_get_cohorts',
+                'auth_edwiserbridge_manage_cohort_enrollment',
+                'auth_edwiserbridge_delete_cohort',
+                'auth_edwiserbridge_manage_user_cohort_enrollment'
+            ]
+        );
 
-        $bulkpurchase = [
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_add_cohort_members'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_create_cohorts'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_role_assign_roles'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_role_unassign_roles'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_delete_cohort_members'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'core_cohort_get_cohorts'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_manage_cohort_enrollment'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_delete_cohort'],
-            ['externalserviceid' => $serviceid, 'functionname' => 'auth_edwiserbridge_manage_user_cohort_enrollment'],
-        ];
-
-        $allfunctions = array_merge($ssofunctions, $selsyncfunctions, $bulkpurchase);
-
-        foreach ($allfunctions as $function) {
-            if ($DB->record_exists('external_functions', ['name' => $function['functionname']])) {
-                $DB->insert_record('external_services_functions', $function);
+        foreach ($allfunctions as $functionname) {
+            if ($webservicemanager->service_function_exists($functionname)) {
+                $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }
     }
@@ -266,12 +277,21 @@ class settings_handler {
      * @return bool          Returns a success message.
      */
     public function eb_link_exitsing_service($serviceid, $token) {
-        $this->eb_add_default_web_service_functions($serviceid);
-        $this->eb_extensions_web_service_function($serviceid);
-        set_config('ebexistingserviceselect', $serviceid);
-        set_config("edwiser_bridge_last_created_token", $token);
+        global $CFG;
 
-        return 1;
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
+
+        if ($webservicemanager->get_external_service_by_id($serviceid)) {
+            $this->eb_add_default_web_service_functions($serviceid);
+            $this->eb_extensions_web_service_function($serviceid);
+            
+            set_config('ebexistingserviceselect', $serviceid);
+            set_config("edwiser_bridge_last_created_token", $token);
+            
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -282,13 +302,22 @@ class settings_handler {
      * @return string        The generated token.
      */
     public function eb_create_token($serviceid, $userid) {
-        $tokentype   = EXTERNAL_TOKEN_PERMANENT; // Check this add for testing purpose.
-        $contextorid = 1;
+        global $CFG;
 
-        // Default function of Moodle to create the token.
-        $token = external_generate_token($tokentype, $serviceid, $userid, $contextorid);
-        set_config("edwiser_bridge_last_created_token", $token);
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservicemanager = new \webservice();
+        
+        $tokendata = [
+            'tokentype' => EXTERNAL_TOKEN_PERMANENT,
+            'userid' => $userid,
+            'contextid' => 1,
+            'purpose' => 'Edwiser Bridge Service Token'
+        ];
+        
+        $token = $webservicemanager->generate_user_ws_token($serviceid, $userid, 1, $tokendata);
+        set_config("edwiser_bridge_last_created_token", $token->token);
         set_config('ebexistingserviceselect', $serviceid);
-        return $token;
+        
+        return $token->token;
     }
 }

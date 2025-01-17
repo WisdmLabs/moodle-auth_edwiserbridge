@@ -52,6 +52,8 @@ trait get_courses {
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+
+        require_capability('moodle/course:view', $systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_courses_parameters(),

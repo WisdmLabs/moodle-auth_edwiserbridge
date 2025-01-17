@@ -48,10 +48,12 @@ trait get_users {
      */
     public static function auth_edwiserbridge_get_users($offset, $limit, $searchstring, $totalusers) {
         global $DB;
-
+        
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/user:viewalldetails', $systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_users_parameters(),

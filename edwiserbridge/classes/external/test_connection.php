@@ -48,9 +48,11 @@ trait test_connection {
      */
     public static function auth_edwiserbridge_test_connection($wpurl, $wptoken, $testconnection = "moodle") {
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_test_connection_parameters(),
@@ -157,24 +159,26 @@ trait test_connection {
      * @return external_function_parameters The parameters for the 'auth_edwiserbridge_test_connection' web service function.
      */
     public static function auth_edwiserbridge_test_connection_parameters() {
-        return new external_function_parameters(
-            [
-                'wp_url' => new external_value(
-                    PARAM_TEXT,
-                    get_string('web_service_wp_url', 'auth_edwiserbridge')
-                ),
-                'wp_token' => new external_value(
-                    PARAM_TEXT,
-                    get_string('web_service_wp_token', 'auth_edwiserbridge')
-                ),
-                'test_connection' => new external_value(
-                    PARAM_TEXT,
-                    get_string('web_service_test_conn', 'auth_edwiserbridge'),
-                    VALUE_DEFAULT,
-                    "moodle"
-                ),
-            ]
-        );
+        return new external_function_parameters([
+            'wp_url' => new external_value(
+                PARAM_URL,
+                get_string('web_service_wp_url', 'auth_edwiserbridge'),
+                VALUE_REQUIRED
+            ),
+            'wp_token' => new external_value(
+                PARAM_TEXT,
+                get_string('web_service_wp_token', 'auth_edwiserbridge'),
+                VALUE_REQUIRED,
+                null,
+                NULL_NOT_ALLOWED
+            ),
+            'test_connection' => new external_value(
+                PARAM_TEXT,
+                get_string('web_service_test_connection', 'auth_edwiserbridge'),
+                VALUE_DEFAULT,
+                'moodle'
+            )
+        ]);
     }
 
     /**
@@ -195,11 +199,13 @@ trait test_connection {
             [
                 'status' => new external_value(
                     PARAM_TEXT,
-                    get_string('web_service_test_conn_status', 'auth_edwiserbridge')
+                    get_string('web_service_test_conn_status', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'msg' => new external_value(
                     PARAM_RAW,
-                    get_string('web_service_test_conn_msg', 'auth_edwiserbridge')
+                    get_string('web_service_test_conn_msg', 'auth_edwiserbridge'),
+                    VALUE_REQUIRED
                 ),
                 'warnings' => new external_multiple_structure(
                     new external_value(

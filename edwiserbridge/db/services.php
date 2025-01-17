@@ -30,7 +30,8 @@ $functions = [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_create_service',
         'description'   => 'Create web service',
-        'type'          => 'read',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/webservice:createtoken',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_get_course_progress' => [
@@ -39,6 +40,7 @@ $functions = [
         'description'   => 'Get course wise progress',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'report/progress:view',
     ],
     'auth_edwiserbridge_test_connection' => [
         'classname'     => 'auth_edwiserbridge\external\api',
@@ -46,6 +48,7 @@ $functions = [
         'description'   => 'Course completion status of the user with the given user id',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_get_site_data' => [
         'classname'     => 'auth_edwiserbridge\external\api',
@@ -53,19 +56,22 @@ $functions = [
         'description'   => 'Get site wise synchronization settings',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_get_users' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_get_users',
         'description'   => 'Get Users',
         'type'          => 'read',
+        'capabilities'  => 'moodle/user:viewalldetails',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_link_service' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_link_service',
         'description'   => 'Link web service',
-        'type'          => 'read',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/webservice:managealltokens',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_get_service_info' => [
@@ -73,6 +79,7 @@ $functions = [
         'methodname'    => 'auth_edwiserbridge_get_service_info',
         'description'   => 'Get service information',
         'type'          => 'read',
+        'capabilities'  => 'moodle/webservice:managealltokens',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_get_edwiser_plugins_info' => [
@@ -81,6 +88,7 @@ $functions = [
         'description'   => 'Get plugins information',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_get_course_enrollment_method' => [
         'classname'     => 'auth_edwiserbridge\external\api',
@@ -88,27 +96,31 @@ $functions = [
         'description'   => 'Get course enrollment methods',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_update_course_enrollment_method' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_update_course_enrollment_method',
         'description'   => 'Update course enrollment method',
-        'type'          => 'read',
+        'type'          => 'write',
         'ajax'          => true,
+        'capabilities'  => 'moodle/course:enrolconfig',
     ],
     // Setup Wizard.
     'auth_edwiserbridge_setup_wizard_save_and_continue' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_setup_wizard_save_and_continue',
         'description'   => 'Setup wizard save and continue functionality',
-        'type'          => 'read',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/site:config',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_enable_plugin_settings' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_enable_plugin_settings',
         'description'   => 'Enables default plugin settings.',
-        'type'          => 'read',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/site:config',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_setup_test_connection' => [
@@ -117,6 +129,7 @@ $functions = [
         'description'   => 'Enables default plugin settings.',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_get_mandatory_settings' => [
         'classname'     => 'auth_edwiserbridge\external\api',
@@ -124,12 +137,14 @@ $functions = [
         'description'   => 'Gets all mandatory settings for edwiser bridge.',
         'type'          => 'read',
         'ajax'          => true,
+        'capabilities'  => 'moodle/site:config',
     ],
     'auth_edwiserbridge_get_courses' => [
         'classname'     => 'auth_edwiserbridge\external\api',
         'methodname'    => 'auth_edwiserbridge_get_courses',
         'description'   => 'Get Courses',
         'type'          => 'read',
+        'capabilities'  => 'moodle/course:view',
         'ajax'          => true,
     ],
     'auth_edwiserbridge_verify_sso_token' => [
@@ -137,23 +152,27 @@ $functions = [
         'methodname' => 'auth_edwiserbridge_verify_sso_token',
         'description' => 'Verify SSO token',
         'type' => 'read',
+        'capabilities' => 'moodle/site:config',
     ],
     'auth_edwiserbridge_manage_cohort_enrollment' => [
         'classname'   => 'auth_edwiserbridge\external\api',
         'methodname'  => 'auth_edwiserbridge_manage_cohort_enrollment',
         'description' => 'Enroll cohort in course',
-        'type'        => 'read',
+        'type'        => 'write',
+        'capabilities'  => 'moodle/cohort:assign'
     ],
     'auth_edwiserbridge_delete_cohort' => [
         'classname'   => 'auth_edwiserbridge\external\api',
         'methodname'  => 'auth_edwiserbridge_delete_cohort',
         'description' => 'Delete cohort',
-        'type'        => 'read',
+        'type'        => 'write',
+        'capabilities'  => 'moodle/cohort:delete'
     ],
     'auth_edwiserbridge_manage_user_cohort_enrollment' => [
         'classname'   => 'auth_edwiserbridge\external\api',
         'methodname'  => 'auth_edwiserbridge_manage_user_cohort_enrollment',
         'description' => 'Enroll user in cohort',
-        'type'        => 'read',
+        'type'        => 'write',
+        'capabilities'  => 'moodle/cohort:assign'
     ],
 ];

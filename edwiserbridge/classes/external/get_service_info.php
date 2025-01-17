@@ -47,10 +47,12 @@ trait get_service_info {
      * @return array Response array with status and message.
      */
     public static function auth_edwiserbridge_get_service_info($serviceid) {
-
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        
+        require_capability('moodle/webservice:managealltokens', $systemcontext);
         
         $response           = [];
         $response['status'] = 1;
@@ -71,13 +73,16 @@ trait get_service_info {
      * @return external_function_parameters The parameters for the external function.
      */
     public static function auth_edwiserbridge_get_service_info_parameters() {
-        return new external_function_parameters(
-            [
-                'service_id' => new external_value(PARAM_TEXT, get_string('web_service_id', 'auth_edwiserbridge')),
-            ]
-        );
+        return new external_function_parameters([
+            'service_id' => new external_value(
+                PARAM_INT,
+                get_string('web_service_id', 'auth_edwiserbridge'),
+                VALUE_REQUIRED,
+                null,
+                NULL_NOT_ALLOWED
+            )
+        ]);
     }
-
     /**
      * Returns the parameters that will be returned from the get_service_info function.
      *

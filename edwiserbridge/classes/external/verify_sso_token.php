@@ -43,13 +43,16 @@ trait verify_sso_token {
      * @since SSO 1.2.1
      */
     public static function auth_edwiserbridge_verify_sso_token_parameters() {
-        return new external_function_parameters(
-            [
-                'token' => new external_value(PARAM_TEXT, 'Token to verify'),
-            ]
-        );
+        return new external_function_parameters([
+            'token' => new external_value(
+                PARAM_TEXT,
+                'Token to verify',
+                VALUE_REQUIRED,
+                null,
+                NULL_NOT_ALLOWED
+            )
+        ]);
     }
-
     /**
      * Verifies the provided SSO token.
      *
@@ -60,7 +63,10 @@ trait verify_sso_token {
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
+
         self::validate_context($systemcontext);
+
+        require_capability('moodle/site:config', $systemcontext);
         
         $params = self::validate_parameters(
             self::auth_edwiserbridge_verify_sso_token_parameters(),

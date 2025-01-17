@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
  *
  * @return bool True to continue the upgrade process.
  */
-function xmldb_auth_edwiserbridge_upgrade() {
+function xmldb_auth_edwiserbridge_upgrade($oldversion) {
 
     if ( ! auth_edwiserbridge_check_pro_dependancy() ) {
         edwiser_bridge_pro_dependancy_notice();
@@ -46,6 +46,14 @@ function xmldb_auth_edwiserbridge_upgrade() {
 
     // Check and upgrade webservice functions.
     auth_edwiserbridge_check_and_update_webservice_functions();
+
+    // Migrate serialized data to json format.
+    if ($oldversion < 2025010701) {
+        $migrationhelper = new \auth_edwiserbridge\local\migration_helper();
+        $migrationhelper->execute_migration();
+        
+        upgrade_plugin_savepoint(true, 2025010701, 'auth', 'edwiserbridge');
+    }
 
     return true; // Return true to continue, it is must.
 }

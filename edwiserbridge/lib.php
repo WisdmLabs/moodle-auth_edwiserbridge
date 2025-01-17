@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("{$CFG->libdir}/completionlib.php");
+require_once($CFG->dirroot . '/webservice/lib.php');
 
 /**
  * Checks if the older Edwiser Bridge plugin is installed.
@@ -92,7 +93,7 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
             ];
         }
     }
-    set_config('eb_connection_settings', serialize($connectionsettings));
+    set_config('eb_connection_settings', json_encode($connectionsettings));
 }
 
 /**
@@ -104,11 +105,11 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
 function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform = false) {
     global $CFG;
     $synchsettings          = [];
-    $connectionsettings     = unserialize($CFG->eb_connection_settings);
+    $connectionsettings     = json_decode($CFG->eb_connection_settings, true);
     $connectionsettingskeys = array_keys($connectionsettings);
 
     if (in_array($formdata->wp_site_list, $connectionsettingskeys)) {
-        $existingsynchsettings = isset($CFG->eb_synch_settings) ? unserialize($CFG->eb_synch_settings) : [];
+        $existingsynchsettings = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : [];
         $synchsettings         = $existingsynchsettings;
 
         $synchsettings[$formdata->wp_site_list] = [
@@ -121,7 +122,7 @@ function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform
             'user_updation'        => $formdata->user_updation,
         ];
     }
-    set_config('eb_synch_settings', serialize($synchsettings));
+    set_config('eb_synch_settings', json_encode($synchsettings));
 }
 
 /**
@@ -204,7 +205,7 @@ function auth_edwiserbridge_get_required_settings() {
  */
 function auth_edwiserbridge_get_connection_settings() {
     global $CFG;
-    $reponse['eb_connection_settings'] = isset($CFG->eb_connection_settings) ? unserialize($CFG->eb_connection_settings) : false;
+    $reponse['eb_connection_settings'] = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : false;
     return $reponse;
 }
 
@@ -220,7 +221,7 @@ function auth_edwiserbridge_get_connection_settings() {
  */
 function auth_edwiserbridge_get_synch_settings($index) {
     global $CFG;
-    $reponse = isset($CFG->eb_synch_settings) ? unserialize($CFG->eb_synch_settings) : false;
+    $reponse = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : false;
 
     $data = [
         'course_enrollment'    => 0,
@@ -249,7 +250,7 @@ function auth_edwiserbridge_get_synch_settings($index) {
  */
 function auth_edwiserbridge_get_site_list() {
     global $CFG;
-    $reponse = isset($CFG->eb_connection_settings) ? unserialize($CFG->eb_connection_settings) : false;
+    $reponse = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : false;
 
     if ($reponse && count($reponse)) {
         foreach ($reponse as $key => $value) {
@@ -363,14 +364,17 @@ function auth_edwiserbridge_get_administrators() {
  * @return array An associative array of available Moodle site services.
  */
 function auth_edwiserbridge_get_existing_services() {
-    global $DB;
-    $settingsarr           = [];
-    $result                = $DB->get_records('external_services', null, '', 'id, name');
-    $settingsarr['']       = get_string('existing_service_lbl', 'auth_edwiserbridge');
+    $webservicemanager = new webservice();
+
+    $settingsarr = [];
+    $services = $webservicemanager->get_external_services();
+    
+    // Maintain original return format
+    $settingsarr[''] = get_string('existing_service_lbl', 'auth_edwiserbridge');
     $settingsarr['create'] = ' - ' . get_string('new_web_new_service', 'auth_edwiserbridge') . ' - ';
 
-    foreach ($result as $value) {
-        $settingsarr[$value->id] = $value->name;
+    foreach ($services as $service) {
+        $settingsarr[$service->id] = $service->name;
     }
 
     return $settingsarr;
@@ -387,19 +391,8 @@ function auth_edwiserbridge_get_existing_services() {
  * @return array An array of tokens and their associated service IDs.
  */
 function auth_edwiserbridge_get_service_tokens($serviceid) {
-    global $DB;
-
-    $settingsarr = [];
-    $result      = $DB->get_records('external_tokens', null, '', 'token, externalserviceid');
-
-    foreach ($result as $value) {
-        $settingsarr[] = [
-            'token' => $value->token,
-            'id'    => $value->externalserviceid,
-        ];
-    }
-
-    return $settingsarr;
+    $webservicemanager = new webservice();
+    return $webservicemanager->get_ws_tokens($serviceid);
 }
 
 /**
@@ -448,151 +441,66 @@ function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') 
  * @return array An array of service tokens, with the token and ID for each.
  */
 function auth_edwiserbridge_get_service_list($serviceid) {
-    global $DB;
-    $functions = [
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_user_create_users',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_user_get_users_by_field',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_user_update_users',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_course_get_courses',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_course_get_categories',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'enrol_manual_enrol_users',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'enrol_manual_unenrol_users',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'core_enrol_get_users_courses',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_test_connection',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_site_data',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_course_progress',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_edwiser_plugins_info',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_course_enrollment_method',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_update_course_enrollment_method',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_mandatory_settings',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_enable_plugin_settings',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_users',
-        ],
-        [
-            'externalserviceid' => $serviceid,
-            'functionname'      => 'auth_edwiserbridge_get_courses',
-        ],
+    $webservicemanager = new webservice();
+    $service = $webservicemanager->get_external_service_by_id($serviceid);
+    
+    if (!$service) {
+        return 0;
+    }
+
+    $requiredFunctions = [
+        'core_user_create_users',
+        'core_user_get_users_by_field',
+        'core_user_update_users',
+        'core_course_get_courses',
+        'core_course_get_categories',
+        'enrol_manual_enrol_users',
+        'enrol_manual_unenrol_users',
+        'core_enrol_get_users_courses',
+        'auth_edwiserbridge_test_connection',
+        'auth_edwiserbridge_get_site_data',
+        'auth_edwiserbridge_get_course_progress',
+        'auth_edwiserbridge_get_edwiser_plugins_info',
+        'auth_edwiserbridge_get_course_enrollment_method',
+        'auth_edwiserbridge_update_course_enrollment_method',
+        'auth_edwiserbridge_get_mandatory_settings',
+        'auth_edwiserbridge_enable_plugin_settings',
+        'auth_edwiserbridge_get_users',
+        'auth_edwiserbridge_get_courses',
     ];
 
     $license = new auth_edwiserbridge\local\eb_pro_license_controller();
+
     if ($license->get_data_from_db() == 'available') {
         $bulkpurchase = [
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_add_cohort_members',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_create_cohorts',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_role_assign_roles',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_role_unassign_roles',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_delete_cohort_members',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_get_cohorts',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_manage_cohort_enrollment',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_delete_cohort',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_manage_user_cohort_enrollment',
-            ],
+            'core_cohort_add_cohort_members',
+            'core_cohort_create_cohorts',
+            'core_role_assign_roles',
+            'core_role_unassign_roles',
+            'core_cohort_delete_cohort_members',
+            'core_cohort_get_cohorts',
+            'auth_edwiserbridge_manage_cohort_enrollment',
+            'auth_edwiserbridge_delete_cohort',
+            'auth_edwiserbridge_manage_user_cohort_enrollment',
         ];
         $ssofunctions = [
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_verify_sso_token',
-            ],
+            'auth_edwiserbridge_verify_sso_token',
         ];
     } else {
         $bulkpurchase = [];
         $ssofunctions = [];
     }
 
-    $functions = array_merge($functions, $bulkpurchase, $ssofunctions);
+    $requiredFunctions = array_merge($requiredFunctions, $bulkpurchase, $ssofunctions);
 
-    $count = 0;
-
-    foreach ($functions as $function) {
-        if (!$DB->record_exists(
-                'external_services_functions',
-                [
-                    'functionname'      => $function['functionname'],
-                    'externalserviceid' => $serviceid,
-                ]
-            )
-        ) {
-            $count++;
+    $missingCount = 0;
+    foreach ($requiredFunctions as $function) {
+        if (!$webservicemanager->service_has_function($serviceid, $function)) {
+            $missingCount++;
         }
     }
-    // Add extension functions if they are present.
-    return $count;
+
+    return $missingCount;
 }
 
 /**
@@ -690,85 +598,38 @@ function auth_edwiserbridge_pluginfile(
  * external_services_functions table.
  */
 function auth_edwiserbridge_check_and_update_webservice_functions() {
-
-    global $DB, $CFG;
-    // Get connection settings.
-    $connections = isset($CFG->eb_connection_settings) ? unserialize($CFG->eb_connection_settings) : [];
+    global $CFG;
+    $webservicemanager = new \webservice();
+    $connections = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : [];
 
     foreach ($connections as $connection) {
-        $data      = $DB->get_record('external_tokens', ['token' => $connection['wp_token']], 'externalserviceid');
-        $serviceid = isset($data->externalserviceid) ? $data->externalserviceid : '';
+        $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
+        $serviceid = $token ? $token->externalserviceid : '';
 
         if (empty($serviceid)) {
             continue;
         }
 
-        $ssofunctions = [
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_verify_sso_token',
-            ],
-        ];
-
+        // Define required functions
+        $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
         $bulkpurchasefunctions = [
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_add_cohort_members',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_create_cohorts',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_role_assign_roles',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_role_unassign_roles',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_delete_cohort_members',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'core_cohort_get_cohorts',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_manage_cohort_enrollment',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_delete_cohort',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'wdm_manage_cohort_enrollment',
-            ],
-            [
-                'externalserviceid' => $serviceid,
-                'functionname'      => 'auth_edwiserbridge_manage_user_cohort_enrollment',
-            ],
+            'core_cohort_add_cohort_members',
+            'core_cohort_create_cohorts',
+            'core_role_assign_roles',
+            'core_role_unassign_roles',
+            'core_cohort_delete_cohort_members',
+            'core_cohort_get_cohorts',
+            'auth_edwiserbridge_manage_cohort_enrollment',
+            'auth_edwiserbridge_delete_cohort',
+            'auth_edwiserbridge_manage_user_cohort_enrollment'
         ];
 
         $webservicefunctions = array_merge($ssofunctions, $bulkpurchasefunctions);
 
-        foreach ($ssofunctions as $function) {
-
-            // Adding function without check because services.php runs after install.php
-            // and at this time there are no functions from this plugin.
-            // check if function already exists.
-            if (!$DB->record_exists(
-                    'external_services_functions',
-                    [
-                        'externalserviceid' => $function['externalserviceid'],
-                        'functionname'      => $function['functionname'],
-                    ]
-                )
-            ) {
-                $DB->insert_record('external_services_functions', $function);
+        foreach ($webservicefunctions as $functionname) {
+            if ($webservicemanager->service_function_exists($functionname) && 
+                !$webservicemanager->service_has_function($serviceid, $functionname)) {
+                $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }
     }

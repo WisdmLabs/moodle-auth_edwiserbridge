@@ -47,17 +47,13 @@ trait get_course_progress {
     public static function auth_edwiserbridge_get_course_progress($userid) {
         global $DB;
 
-        // Validation for context is needed.
-        $systemcontext = \context_system::instance();
-        self::validate_context($systemcontext);
-        
         $params = self::validate_parameters(
-        self::auth_edwiserbridge_get_course_progress_parameters(),
+            self::auth_edwiserbridge_get_course_progress_parameters(),
         ['user_id' => $userid]
         );
-
+        
         $result = $DB->get_records_sql(
-        'SELECT ctx.instanceid course, count(cmc.completionstate) as completed, count(cm.id)
+            'SELECT ctx.instanceid course, count(cmc.completionstate) as completed, count(cm.id)
             as  outoff FROM {user} u
 			LEFT JOIN {role_assignments} ra ON u.id = ra.userid and u.id = ?
 			JOIN {context} ctx ON ra.contextid = ctx.id
@@ -70,11 +66,17 @@ trait get_course_progress {
 
         $enrolledcourses  = auth_edwiserbridge_get_array_of_enrolled_courses( $params['user_id'], 1 );
         $processedcourses = $enrolledcourses;
-
+        
         $response = [];
-
+        
         if ( $result && ! empty( $result ) ) {
             foreach ($result as $key => $value) {
+                
+                // Validation for context is needed.
+                $coursecontext = \context_course::instance($value->course);
+                self::validate_context($coursecontext);
+                require_capability('report/progress:view', $coursecontext);
+                
                 $course     = get_course( $value->course );
                 $cinfo      = new completion_info( $course );
                 $iscomplete = $cinfo->is_course_complete( $params['user_id'] );
@@ -111,11 +113,15 @@ trait get_course_progress {
      * @return external_function_parameters The parameters for the function.
      */
     public static function auth_edwiserbridge_get_course_progress_parameters() {
-        return new external_function_parameters(
-            [
-            'user_id' => new external_value( PARAM_TEXT, '' ),
-            ]
-        );
+        return new external_function_parameters([
+            'user_id' => new external_value(
+                PARAM_TEXT,
+                'User ID to get progress for',
+                VALUE_REQUIRED,
+                null,
+                NULL_NOT_ALLOWED
+            )
+        ]);
     }
 
     /**
@@ -132,8 +138,8 @@ trait get_course_progress {
         return new external_multiple_structure(
             new external_single_structure(
                 [
-                    'course_id'  => new external_value( PARAM_TEXT, '' ),
-                    'completion' => new external_value( PARAM_INT, '' ),
+                    'course_id'  => new external_value( PARAM_TEXT, 'Course ID', VALUE_REQUIRED ),
+                    'completion' => new external_value( PARAM_INT, 'Completion percentage', VALUE_REQUIRED ),
                 ]
             )
         );

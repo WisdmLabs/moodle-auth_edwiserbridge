@@ -58,9 +58,11 @@ trait get_course_enrollment_method {
     public static function auth_edwiserbridge_get_course_enrollment_method() {
         global $DB, $CFG;
 
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
         
         // Check if Moodle manual enrollment plugin is disabled.
         $enrolplugins = explode(',', $CFG->enrol_plugins_enabled);
@@ -72,6 +74,7 @@ trait get_course_enrollment_method {
         $result = $DB->get_records('enrol', ['status' => 0, 'enrol' => 'manual'], 'sortorder,id');
 
         foreach ($result as $instance) {
+
             $response[] = [
                 'courseid' => $instance->courseid,
                 'enabled'  => 1,

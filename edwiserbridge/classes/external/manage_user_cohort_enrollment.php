@@ -32,6 +32,7 @@ use external_single_structure;
 use external_value;
 
 defined('MOODLE_INTERNAL') || die();
+global $CFG;
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
@@ -107,9 +108,12 @@ trait manage_user_cohort_enrollment {
     public static function auth_edwiserbridge_manage_user_cohort_enrollment($cohortid, $users) {
         global $DB, $CFG;
         
+        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        // Check if the user has the capability to assign users to a cohort.
+        require_capability( 'moodle/cohort:assign', $systemcontext );
 
         $error          = 0;
         $errormsg      = '';

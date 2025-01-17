@@ -754,7 +754,7 @@ class setup_wizard {
         $prevurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $prevstep;
         $nexturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
 
-        $synchsettings = isset($CFG->eb_synch_settings) ? unserialize($CFG->eb_synch_settings) : [];
+        $synchsettings = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : [];
         $sitename = $CFG->eb_setup_wp_site_name;
         if (isset($synchsettings[$sitename])) {
             $data = $synchsettings[$sitename];

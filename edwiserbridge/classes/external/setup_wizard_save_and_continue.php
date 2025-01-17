@@ -43,11 +43,15 @@ trait setup_wizard_save_and_continue {
      * @return external_function_parameters The parameter description.
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_parameters() {
-        return new external_function_parameters(
-            [
-                'data' => new external_value(PARAM_RAW, get_string('web_service_name', 'auth_edwiserbridge')),
-            ]
-        );
+        return new external_function_parameters([
+            'data' => new external_value(
+                PARAM_RAW, 
+                get_string('web_service_name', 'auth_edwiserbridge'), 
+                VALUE_REQUIRED,
+                null,
+                NULL_NOT_ALLOWED
+            )
+        ]);
     }
 
     /**
@@ -62,6 +66,7 @@ trait setup_wizard_save_and_continue {
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
+        require_capability('moodle/site:config', $systemcontext);
         
         global $PAGE;
         $PAGE->set_context(\context_system::instance());
@@ -120,7 +125,7 @@ trait setup_wizard_save_and_continue {
                         "wp_name"  => $data->site_name,
                     ];
 
-                    set_config( 'eb_connection_settings', serialize( $connectionsettings ) );
+                    set_config( 'eb_connection_settings', json_encode( $connectionsettings ) );
                     set_config( 'eb_setup_wp_site_name', $data->site_name );
                 } else if ( isset( $data->site_name ) ) {
                     set_config( 'eb_setup_wp_site_name', $data->site_name );
@@ -129,7 +134,7 @@ trait setup_wizard_save_and_continue {
             case 'user_and_course_sync':
 
                 // Update Moodle Wordpress site details.
-                $existingsynchsettings = isset($CFG->eb_synch_settings) ? unserialize($CFG->eb_synch_settings) : [];
+                $existingsynchsettings = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : [];
                 $synchsettings = $existingsynchsettings;
                 $sitename = $CFG->eb_setup_wp_site_name;
 
@@ -142,7 +147,7 @@ trait setup_wizard_save_and_continue {
                     "course_deletion"      => $data->course_deletion,
                     "user_updation"        => $data->user_update,
                 ];
-                set_config( 'eb_synch_settings', serialize($synchsettings));
+                set_config( 'eb_synch_settings', json_encode($synchsettings));
                break;
             case 'complete_details':
                 set_config('eb_setup_progress', '');

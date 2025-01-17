@@ -51,7 +51,10 @@ trait get_mandatory_settings {
 
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
+
         self::validate_context($systemcontext);
+        
+        require_capability('moodle/site:config', $systemcontext);
         
         $settings = [];
         // Get all settings and form array.
