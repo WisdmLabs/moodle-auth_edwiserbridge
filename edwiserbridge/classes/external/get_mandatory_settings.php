@@ -78,7 +78,7 @@ trait get_mandatory_settings {
         
         require_once($CFG->libdir . '/accesslib.php');
 
-        $studentroles = role_get_archetype_roles('student');
+        $studentroles = \role_get_archetype_roles('student');
         if ($studentroles) {
             // Assuming the first role in the list is the one we want
             $studentroleid = $studentroles[0]->id;
