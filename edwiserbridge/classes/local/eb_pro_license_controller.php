@@ -24,6 +24,7 @@
  */
 
 namespace auth_edwiserbridge\local;
+
  /**
   * License controller class.
   */

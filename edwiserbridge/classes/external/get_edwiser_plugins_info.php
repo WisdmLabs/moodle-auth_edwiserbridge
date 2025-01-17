@@ -65,7 +65,7 @@ trait get_edwiser_plugins_info {
         }
 
         // Check licensing.
-        $license = new auth_edwiserbridge\local\eb_pro_license_controller();
+        $license = new \auth_edwiserbridge\local\eb_pro_license_controller();
         if ($license->get_data_from_db() == 'available') {
             $plugins[] = [
                 'plugin_name' => 'moodle_edwiser_bridge_pro',

@@ -46,14 +46,16 @@ function xmldb_auth_edwiserbridge_upgrade($oldversion) {
 
     // Check and upgrade webservice functions.
     auth_edwiserbridge_check_and_update_webservice_functions();
-
+    var_dump($oldversion);
+    var_dump('yaha');
     // Migrate serialized data to json format.
-    if ($oldversion < 2025010701) {
+    // if ($oldversion < 2025010710) {
+        var_dump('yaha2');
         $migrationhelper = new \auth_edwiserbridge\local\migration_helper();
         $migrationhelper->execute_migration();
         
-        upgrade_plugin_savepoint(true, 2025010701, 'auth', 'edwiserbridge');
-    }
+        upgrade_plugin_savepoint(true, 2025010710, 'auth', 'edwiserbridge');
+    // }
 
     return true; // Return true to continue, it is must.
 }

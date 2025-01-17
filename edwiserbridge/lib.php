@@ -364,11 +364,12 @@ function auth_edwiserbridge_get_administrators() {
  * @return array An associative array of available Moodle site services.
  */
 function auth_edwiserbridge_get_existing_services() {
-    $webservicemanager = new \webservice();
+    global $DB;
 
     $settingsarr = [];
-    $services = $webservicemanager->get_external_services();
-    
+    // No method to fetch all the enabled webservices in the Moodle Webservice class so fetching directly from DB.
+    $services = $DB->get_records('external_services', ['enabled' => 1], 'id ASC', 'id,name');
+
     // Maintain original return format
     $settingsarr[''] = get_string('existing_service_lbl', 'auth_edwiserbridge');
     $settingsarr['create'] = ' - ' . get_string('new_web_new_service', 'auth_edwiserbridge') . ' - ';
@@ -391,8 +392,21 @@ function auth_edwiserbridge_get_existing_services() {
  * @return array An array of tokens and their associated service IDs.
  */
 function auth_edwiserbridge_get_service_tokens($serviceid) {
-    $webservicemanager = new \webservice();
-    return $webservicemanager->get_ws_tokens($serviceid);
+    global $DB;
+
+    $settingsarr = [];
+    // No method to fetch all the tokens in the Moodle's webservice class so fetching directly from DB.
+    // To be replaced in the future if available.
+    $result      = $DB->get_records('external_tokens', null, '', 'token, externalserviceid');
+
+    foreach ($result as $value) {
+        $settingsarr[] = [
+            'token' => $value->token,
+            'id'    => $value->externalserviceid,
+        ];
+    }
+
+    return $settingsarr;
 }
 
 /**
@@ -469,7 +483,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
         'auth_edwiserbridge_get_courses',
     ];
 
-    $license = new auth_edwiserbridge\local\eb_pro_license_controller();
+    $license = new \auth_edwiserbridge\local\eb_pro_license_controller();
 
     if ($license->get_data_from_db() == 'available') {
         $bulkpurchase = [

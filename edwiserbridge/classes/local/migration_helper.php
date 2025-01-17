@@ -38,7 +38,7 @@ class migration_helper {
      */
     public function execute_migration() {
         global $CFG;
-
+        var_dump('execute_migration');
         $result = true;
         $result = $result && $this->migrate_connection_settings();
         $result = $result && $this->migrate_sync_settings();
@@ -52,14 +52,22 @@ class migration_helper {
      * @return bool Success status
      */
     protected function migrate_connection_settings() {
-        $settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        global $CFG;
+        $settings = $CFG->eb_connection_settings;
+        var_dump($settings);
         if (empty($settings)) {
             return true;
         }
-
+        $temp = json_decode($settings, true);
+        if ( JSON_ERROR_NONE === json_last_error() ) {
+            return true;
+        }
         list($success, $data) = $this->convert_serialized_to_json($settings);
+        
+        var_dump($success);
+        var_dump($data);
         if ($success) {
-            set_config('eb_connection_settings', $data, 'auth_edwiserbridge');
+            set_config( 'eb_connection_settings', $data);
             return true;
         }
 
@@ -73,14 +81,18 @@ class migration_helper {
      * @return bool Success status
      */
     protected function migrate_sync_settings() {
-        $settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        global $CFG;
+        $settings = $CFG->eb_synch_settings;
         if (empty($settings)) {
             return true;
         }
-
+        $temp = json_decode($settings, true);
+        if ( JSON_ERROR_NONE === json_last_error() ) {
+            return true;
+        }
         list($success, $data) = $this->convert_serialized_to_json($settings);
         if ($success) {
-            set_config('eb_synch_settings', $data, 'auth_edwiserbridge');
+            set_config( 'eb_synch_settings', $data );
             return true;
         }
 
