@@ -25,71 +25,71 @@
     Setup wizard complete details template
 
     Context variables required for this template:
-    * what_next: The heading text for the "What's Next?" section.
-    * setup_completion_note1: The note text for the "What's Next?" section.
-    * setup_completion_note2: The heading text for the setup completion cards section.
-    * mdl_url: The heading text for the Moodle URL card.
+    * whatnext: The heading text for the "What's Next?" section.
+    * setupcompletionnote1: The note text for the "What's Next?" section.
+    * setupcompletionnote2: The heading text for the setup completion cards section.
+    * mdlurl: The heading text for the Moodle URL card.
     * url: The Moodle URL value.
-    * wp_token: The heading text for the WordPress token card.
+    * wptoken: The heading text for the WordPress token card.
     * token: The WordPress token value.
-    * eb_mform_lang_desc: The heading text for the language code card.
+    * ebmformlangdesc: The heading text for the language code card.
     * lang: The language code value.
     * or: The text to display between the setup completion cards and the download credentials button.
-    * setup_completion_note3: The heading text for the download credentials section.
-    * mdl_edwiser_bridge_txt_download: The text for the download credentials button.
-    * setup_completion_note4: The note text for the final section.
+    * setupcompletionnote3: The heading text for the download credentials section.
+    * mdledwiserbridgetxtdownload: The text for the download credentials button.
+    * setupcompletionnote4: The note text for the final section.
     * back: The text for the "Back" button.
     * prevurl: The URL for the "Back" button.
-    * continue_wp_wizard_btn: The text for the "Continue to WordPress Wizard" button.
+    * continuewpwizardbtn: The text for the "Continue to WordPress Wizard" button.
     * wpurl: The URL for the "Continue to WordPress Wizard" button.
     * step: The current step in the setup wizard.
     * nextstep: The next step in the setup wizard.
     * isnextsubstep: A flag indicating whether the next step is a sub-step.
-    * setup_continue_btn: The text for the "Continue" button (hidden by default).
-    * eb_setup_redirection_popup: The HTML content for the redirection popup.
-    * eb_setup_completion_popup: The HTML content for the completion popup.
+    * setupcontinuebtn: The text for the "Continue" button (hidden by default).
+    * ebsetupredirectionpopup: The HTML content for the redirection popup.
+    * ebsetupcompletionpopup: The HTML content for the completion popup.
 
     Example context (JSON):
     {
-        "what_next": "value1",
-        "setup_completion_note1": "value1",
-        "setup_completion_note2": "value1",
-        "mdl_url": "value1",
+        "whatnext": "value1",
+        "setupcompletionnote1": "value1",
+        "setupcompletionnote2": "value1",
+        "mdlurl": "value1",
         "url": "value1",
-        "wp_token": "value1",
+        "wptoken": "value1",
         "token": "value1",
-        "eb_mform_lang_desc": "value1",
+        "ebmformlangdesc": "value1",
         "lang": "value1",
         "or": "value1",
-        "setup_completion_note3": "value1",
-        "mdl_edwiser_bridge_txt_download": "value1",
-        "setup_completion_note4": "value1",
+        "setupcompletionnote3": "value1",
+        "mdledwiserbridgetxtdownload": "value1",
+        "setupcompletionnote4": "value1",
         "back": "value1",
         "prevurl": "value2",
-        "continue_wp_wizard_btn": "value1",
+        "continuewpwizardbtn": "value1",
         "wpurl": "value2",
         "step": "value1",
         "nextstep": "value1",
         "isnextsubstep": "value1",
-        "setup_continue_btn": "value1",
-        "eb_setup_redirection_popup": "value1",
-        "eb_setup_completion_popup": "value1"
+        "setupcontinuebtn": "value1",
+        "ebsetupredirectionpopup": "value1",
+        "ebsetupcompletionpopup": "value1"
     }
 }}
 <div class="eb_setup_complete_details es-w-80">
     <div>
         <div>
-            <span class='eb_setup_h2'>{{{what_next}}}</span>
-            <div>{{{setup_completion_note1}}}</div>
+            <span class='eb_setup_h2'>{{{whatnext}}}</span>
+            <div>{{{setupcompletionnote1}}}</div>
         </div>
         <div class="eb_setup_complete_card_wrap">
             <div class="eb_setup_h2">
                 <i class="fa-solid fa-circle-chevron-right"></i>
-                {{{setup_completion_note2}}}</div>
+                {{{setupcompletionnote2}}}</div>
             <div class="eb_setup_complete_cards">
                 <div class="eb_setup_complete_card eb_setup_copy" data-copy='{{url}}'>
                     <div>
-                        <span class="eb_setup_h2">{{{mdl_url}}}</span>
+                        <span class="eb_setup_h2">{{{mdlurl}}}</span>
                         <div class="eb_setup_copy_url">{{url}}</div>
                     </div>
                     <div class="eb_setup_copy_icon" data-copy='{{url}}'>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="eb_setup_complete_card eb_setup_copy" data-copy='{{token}}'>
                     <div>
-                        <span class="eb_setup_h2">{{{wp_token}}}</span>
+                        <span class="eb_setup_h2">{{{wptoken}}}</span>
                         <div class="eb_setup_copy_token" style="word-break:break-all;">{{token}}</div>
                     </div>
                     <div class="eb_setup_copy_icon" data-copy='{{token}}'>
@@ -107,7 +107,7 @@
                 </div>
                 <div class='eb_setup_complete_card eb_setup_copy' data-copy='{{lang}}'>
                     <div>
-                        <span class='eb_setup_h2'>{{{eb_mform_lang_desc}}}</span>
+                        <span class='eb_setup_h2'>{{{ebmformlangdesc}}}</span>
                         <div class="eb_setup_copy_lang">{{lang}}</div>
                     </div>
                     <div class="eb_setup_copy_icon" data-copy='{{lang}}'>
@@ -128,25 +128,25 @@
             </div>
             <p class="eb_setup_h2">
                 <i class="fa-solid fa-circle-chevron-right"></i>
-                {{{setup_completion_note3}}}</p>
+                {{{setupcompletionnote3}}}</p>
             <button class="eb_setup_sec_btn eb_setup_download_creds">
-                {{{mdl_edwiser_bridge_txt_download}}}</button>
+                {{{mdledwiserbridgetxtdownload}}}</button>
         </div>
         <div>
-            <p>{{{setup_completion_note4}}}</p>
+            <p>{{{setupcompletionnote4}}}</p>
             <div class="eb_setup_btn_wrap">
                 <a class="eb_setup_sec_btn" href="{{prevurl}}">
                     {{{back}}}
                 </a>
                 <a class='eb_setup_btn eb_redirect_to_wp' target='_blank' href="{{wpurl}}" data-step='{{step}}' data-next-step='{{nextstep}}' data-is-next-sub-step='{{isnextsubstep}}'>
-                    {{{continue_wp_wizard_btn}}}
+                    {{{continuewpwizardbtn}}}
                 </a>
                 <a style='display: none;' class='eb_setup_btn eb_redirect_to_wp_btn' target='_blank' href="{{wpurl}}">
-                    {{{setup_continue_btn}}}
+                    {{{setupcontinuebtn}}}
                 </a>
             </div>
         </div>
     </div>
-    <div>{{{eb_setup_redirection_popup}}}</div>
-    <div>{{{eb_setup_completion_popup}}}</div>
+    <div>{{{ebsetupredirectionpopup}}}</div>
+    <div>{{{ebsetupcompletionpopup}}}</div>
 </div>

@@ -25,28 +25,28 @@
     Setup wizard footer template
 
     Context variables required for this template:
-    * footerText: footer text
-    * contactUsText: contact us text
-    * closeSetup: close setup text
+    * footertext: footer text
+    * contactustext: contact us text
+    * closesetup: close setup text
 
     Example context (JSON):
     {
-        "footerText": "value1",
-        "contactUsText": "value2",
-        "closeSetup": "value3"
+        "footertext": "value1",
+        "contactustext": "value2",
+        "closesetup": "value3"
     }
 
 }}
 <footer class='eb-setup-wizard-footer'>
     <div class='eb-setup-footer-copyright'>
-        {{footerText}}
+        {{footertext}}
     </div>
     <div class='eb-setup-footer-button'>
         <a href='https://edwiser.org/contact-us/' target='_blank'>
-            {{contactUsText}}
+            {{contactustext}}
         </a>
     </div>
-    <div>{{{closeSetup}}}</div>
+    <div>{{{closesetup}}}</div>
 </footer>
 </body>
 </html>

@@ -25,30 +25,30 @@
     Edwiser Bridge license form template
 
     Context variables required for this template:
-    * is_valid_license: Is valid license
+    * isvalidlicense: Is valid license
     * licensekey: License key
     * deactivate: Deactivate
     * licensestatus: License status
-    * eb_active: Active
+    * ebactive: Active
     * activate: Activate
 
     Example context (JSON):
     {
-        "is_valid_license": "value1",
+        "isvalidlicense": "value1",
         "licensekey": "value2",
         "deactivate": "value3",
         "licensestatus": "value4",
-        "eb_active": "value5",
+        "ebactive": "value5",
         "activate": "value6"
 }}
 <form method="post">
     <input type="text" class="eb_pro_license_input" name="eb_license_key" placeholder="License key" value="{{ licensekey }}" />
-    {{# is_valid_license }}
-        <span class="eb_pro_license_active">{{{ eb_active }}}</span>
+    {{# isvalidlicense }}
+        <span class="eb_pro_license_active">{{{ ebactive }}}</span>
         <input type="submit" name="eb_license_deactivate" class="eb_pro_license_btn" value="{{ deactivate }}" />
-    {{/ is_valid_license }}
-    {{^ is_valid_license }}
+    {{/ isvalidlicense }}
+    {{^ isvalidlicense }}
         <span class="eb_pro_license_not_active">{{ licensestatus }}</span>
         <input type="submit" name="eb_license_activate" class="eb_pro_license_btn" value="{{ activate }}" />
-    {{/ is_valid_license }}
+    {{/ isvalidlicense }}
 </form>

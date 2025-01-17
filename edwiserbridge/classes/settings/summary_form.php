@@ -416,8 +416,8 @@ class summary_form extends moodleform {
         $templatecontext = [
             'licensekey' => $licensekey,
             'licensestatus' => $licensestatus,
-            'is_valid_license' => ($licensestatus == 'valid'),
-            'eb_active' => get_string('eb_active', 'auth_edwiserbridge'),
+            'isvalidlicense' => ($licensestatus == 'valid'),
+            'ebactive' => get_string('eb_active', 'auth_edwiserbridge'),
             'deactivate' => get_string('deactivate', 'auth_edwiserbridge'),
             'activate' => get_string('activate', 'auth_edwiserbridge'),
         ];

@@ -25,21 +25,21 @@
     Setup wizard header template
 
     Context variables required for this template:
-    * close_quest: Close quest
+    * closequest: Close quest
     * yes: Yes
     * no: No
     * note: Note
-    * close_note: Close note
+    * closenote: Close note
     * wwwroot: Wwwroot
 
 
     Example context (JSON):
     {
-        "close_quest": "value1",
+        "closequest": "value1",
         "yes": "value2",
         "no": "value3",
         "note": "value4",
-        "close_note": "value5",
+        "closenote": "value5",
         "wwwroot": "value6",
     }
 }}
@@ -47,7 +47,7 @@
     <div class="eb_setup_popup_content">
         <div>
             <p><i class="fa-solid fa-triangle-exclamation eb_setup_pupup_warning_icon"></i></p>
-            <p class="eb_setup_h2">{{{ close_quest }}}</p>
+            <p class="eb_setup_h2">{{{ closequest }}}</p>
             <div class="eb_setup_user_sync_btn_wrap">
                 <a href="{{{ wwwroot }}}" class="eb_setup_sec_btn">{{{ yes }}}</a>
                 <button class="eb_setup_sec_btn eb_setup_do_not_close">{{{ no }}}</button>
@@ -56,7 +56,7 @@
         <div>
             <fieldset>
                 <legend>{{{ note }}}</legend>
-                <div>{{{ close_note }}}</div>
+                <div>{{{ closenote }}}</div>
             </fieldset>
         </div>
     </div>

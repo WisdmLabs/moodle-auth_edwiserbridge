@@ -25,56 +25,56 @@
     Test connection template
 
     Context variables required for this template:
-    * wp_site_details_note: Note about WordPress site details
-    * name_label: Label for site name
-    * wp_site_name_tip: Tooltip text for site name
+    * wpsitedetailsnote: Note about WordPress site details
+    * namelabel: Label for site name
+    * wpsitenametip: Tooltip text for site name
     * name: Site name value
-    * url_label: Label for site URL
-    * wp_site_url_tip: Tooltip text for site URL
+    * urllabel: Label for site URL
+    * wpsiteurltip: Tooltip text for site URL
     * url: Site URL value
     * prevurl: Previous URL
     * back: Back button text
-    * wp_test_conn_btn: Test connection button text
+    * wptestconnbtn: Test connection button text
     * step: Current step
     * nextstep: Next step
     * isnextsubstep: Flag indicating if next step is a sub-step
-    * setup_continue_btn: Continue button text
+    * setupcontinuebtn: Continue button text
 
     Example context (JSON):
     {
-        "wp_site_details_note": "value1",
-        "name_label": "value2",
-        "wp_site_name_tip": "value3",
+        "wpsitedetailsnote": "value1",
+        "namelabel": "value2",
+        "wpsitenametip": "value3",
         "name": "value4",
-        "url_label": "value5",
-        "wp_site_url_tip": "value6",
+        "urllabel": "value5",
+        "wpsiteurltip": "value6",
         "url": "value7",
         "prevurl": "value8",
         "back": "value9",
-        "wp_test_conn_btn": "value10",
+        "wptestconnbtn": "value10",
         "step": "value11",
         "nextstep": "value12",
         "isnextsubstep": "value13",
-        "setup_continue_btn": "value14"
+        "setupcontinuebtn": "value14"
     }
 }}
 <div class="eb_setup_wordpress_site_details es-w-80">
     <div>
         <div class="eb_setup_conn_url_inp_wrap">
-            <span>{{{wp_site_details_note}}}</span>
+            <span>{{{wpsitedetailsnote}}}</span>
             <p>
-                <label class="eb_setup_h2">{{{name_label}}}</label>
+                <label class="eb_setup_h2">{{{namelabel}}}</label>
                 <i class="fa-solid fa-info eb-tooltip es-info-icon">
-                    <span class='eb-tooltiptext'>{{{wp_site_name_tip}}}</span>
+                    <span class='eb-tooltiptext'>{{{wpsitenametip}}}</span>
                 </i>
             </p>
             <input class="eb_setup_inp eb_setup_site_name" name="eb_setup_site_name" type="text" value="{{name}}" disabled>
         </div>
         <div class="eb_setup_conn_url_inp_wrap">
             <p>
-                <label class="eb_setup_h2">{{{url_label}}}</label>
+                <label class="eb_setup_h2">{{{urllabel}}}</label>
                 <i class="fa-solid fa-info eb-tooltip es-info-icon">
-                    <span class='eb-tooltiptext'>{{{wp_site_url_tip}}}</span>
+                    <span class='eb-tooltiptext'>{{{wpsiteurltip}}}</span>
                 </i>
             </p>
             <input class="eb_setup_inp eb_setup_site_url" name="eb_setup_site_url" type="url" value="{{url}}" disabled>
@@ -85,10 +85,10 @@
                 {{{back}}}
             </a>
             <button class="eb_setup_btn eb_setup_test_connection_btn" data-step="{{step}}" data-next-step="{{nextstep}}" data-is-next-sub-step="{{isnextsubstep}}">
-                {{{wp_test_conn_btn}}}
+                {{{wptestconnbtn}}}
             </button>
             <button class="eb_setup_btn eb_setup_save_and_continue eb_setup_test_connection_continue_btn" data-step="{{step}}" data-next-step="{{nextstep}}" data-is-next-sub-step="{{isnextsubstep}}">
-                {{{setup_continue_btn}}}
+                {{{setupcontinuebtn}}}
             </button>
         </div>
     </div>

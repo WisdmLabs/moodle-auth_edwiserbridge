@@ -25,55 +25,55 @@
     Plugin update notification template
 
     Context variables required for this template:
-    * plugin_update_notification_title: Plugin update notification title
-    * plugin_update_notification_body: Plugin update notification body
-    * plugin_update_notification_changelog: Plugin update notification changelog
-    * changelog_url: Changelog url
-    * plugin_download: Plugin download
-    * plugin_download_help_text: Plugin download help text
-    * download_url: Download url
-    * plugin_update_notification_changelog: Plugin update notification changelog
-    * plugin_download: Plugin download
-    * update_url: Update url
-    * plugin_update_help_text: Plugin update help text
-    * plugin_update: Plugin update
-    * dismiss_url: Dismiss url
+    * pluginupdatenotificationtitle: Plugin update notification title
+    * pluginupdatenotificationbody: Plugin update notification body
+    * pluginupdatenotificationchangelog: Plugin update notification changelog
+    * changelogurl: Changelog url
+    * plugindownload: Plugin download
+    * plugindownloadhelptext: Plugin download help text
+    * downloadurl: Download url
+    * pluginupdatenotificationchangelog: Plugin update notification changelog
+    * plugindownload: Plugin download
+    * updateurl: Update url
+    * pluginupdatehelptext: Plugin update help text
+    * pluginupdate: Plugin update
+    * dismissurl: Dismiss url
 
 
     Example context (JSON):
     {
-        "plugin_update_notification_title": "value1",
-        "plugin_update_notification_body": "value2",
-        "plugin_update_notification_changelog": "value3",
-        "changelog_url": "value4",
-        "plugin_download": "value5",
-        "plugin_download_help_text": "value6",
-        "download_url": "value7",
-        "plugin_update": "value8",
-        "update_url": "value9",
-        "plugin_update_help_text": "value10",
-        "dismiss_url": "value11"
-        "dismiss_url": "value12"
+        "pluginupdatenotificationtitle": "value1",
+        "pluginupdatenotificationbody": "value2",
+        "pluginupdatenotificationchangelog": "value3",
+        "changelogurl": "value4",
+        "plugindownload": "value5",
+        "plugindownloadhelptext": "value6",
+        "downloadurl": "value7",
+        "pluginupdate": "value8",
+        "updateurl": "value9",
+        "pluginupdatehelptext": "value10",
+        "dismissurl": "value11"
+        "dismissurl": "value12"
     }
 }}
 <div class="eb-plugin-update-notice">
     <p class="eb-plugin-update-notice-heading">
-        {{ plugin_update_notification_title }}
+        {{ pluginupdatenotificationtitle }}
     </p>
     <p class="eb-plugin-update-notice-body">
-        {{ plugin_update_notification_body }}
-        <a class="eb-plugin-update-changelog" target="_blank" href="{{ changelog_url }}">
-            {{ plugin_update_notification_changelog }}
+        {{ pluginupdatenotificationbody }}
+        <a class="eb-plugin-update-changelog" target="_blank" href="{{ changelogurl }}">
+            {{ pluginupdatenotificationchangelog }}
         </a>
     </p>
     <p class="eb-plugin-update-action">
-        <a href="{{ download_url }}" title="{{ plugin_download_help_text }}">
-            {{ plugin_download }}
+        <a href="{{ downloadurl }}" title="{{ plugindownloadhelptext }}">
+            {{ plugindownload }}
         </a>
         <span> | </span>
-        <a href="{{ update_url }}" title="{{ plugin_update_help_text }}">
-            {{ plugin_update }}
+        <a href="{{ updateurl }}" title="{{ pluginupdatehelptext }}">
+            {{ pluginupdate }}
         </a>
     </p>
-    <a class="eb-plugin-update-dismiss" href="{{ dismiss_url }}">x</a>
+    <a class="eb-plugin-update-dismiss" href="{{ dismissurl }}">x</a>
 </div>

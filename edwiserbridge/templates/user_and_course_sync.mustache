@@ -25,11 +25,11 @@
     User and course sync template
 
     Context variables required for this template:
-    * setup_sync_note1: Note for user and course sync
-    * select_all: Text for "Select All" option
+    * setupsyncnote1: Note for user and course sync
+    * selectall: Text for "Select All" option
     * recommended: Text indicating "Recommended" option
-    * all_checked: Boolean indicating if "Select All" option is checked
-    * sync_settings: Array of sync settings
+    * allchecked: Boolean indicating if "Select All" option is checked
+    * syncsettings: Array of sync settings
       - name: Name of the sync setting
       - label: Label for the sync setting
       - tip: Tooltip text for the sync setting
@@ -38,18 +38,18 @@
     * nexturl: URL for the next step
     * back: Text for the "Back" button
     * skip: Text for the "Skip" button
-    * setup_continue_btn: Text for the "Continue" button
+    * setupcontinuebtn: Text for the "Continue" button
     * step: Current step number
     * nextstep: Next step number
     * isnextsubstep: Boolean indicating if the next step is a sub-step
 
     Example context (JSON):
     {
-        "setup_sync_note1": "value1",
-        "select_all": "value2",
+        "setupsyncnote1": "value1",
+        "selectall": "value2",
         "recommended": "value3",
-        "all_checked": true,
-        "sync_settings": [
+        "allchecked": true,
+        "syncsettings": [
         {
             "name": "setting1",
             "label": "value4",
@@ -67,7 +67,7 @@
         "nexturl": "value9",
         "back": "value10",
         "skip": "value11",
-        "setup_continue_btn": "value12",
+        "setupcontinuebtn": "value12",
         "step": 1,
         "nextstep": 2,
         "isnextsubstep": false
@@ -76,16 +76,16 @@
 <div class="eb_setup_user_and_course_sync es-p-t-b-30 es-w-80">
     <div>
         <div>
-            <p>{{{setup_sync_note1}}}</p>
+            <p>{{{setupsyncnote1}}}</p>
             <div class="eb_setup_inp_wrap">
                 <label class='esw-cb-container'>
-                    <input type='checkbox' name='eb_setup_sync_all' id='eb_setup_sync_all' {{#all_checked}}checked{{/all_checked}}>
+                    <input type='checkbox' name='eb_setup_sync_all' id='eb_setup_sync_all' {{#allchecked}}checked{{/allchecked}}>
                     <span class='esw-cb-checkmark'></span>
-                    <span class="eb_setup_h2">{{{select_all}}} {{{recommended}}}</span>
+                    <span class="eb_setup_h2">{{{selectall}}} {{{recommended}}}</span>
                 </label>
             </div>
             <hr>
-            {{#sync_settings}}
+            {{#syncsettings}}
             <div class="eb_setup_inp_wrap">
                 <label class='esw-cb-container'>
                     <input type='checkbox' class="eb_setup_sync_cb" name='{{name}}' id='{{name}}' {{#checked}}checked{{/checked}}>
@@ -96,7 +96,7 @@
                     </i>
                 </label>
             </div>
-            {{/sync_settings}}
+            {{/syncsettings}}
             <div class="eb_setup_btn_wrap">
                 <a class="eb_setup_sec_btn" href="{{prevurl}}">
                     {{{back}}}
@@ -105,7 +105,7 @@
                     {{{skip}}}
                 </a>
                 <button class="eb_setup_btn eb_setup_save_and_continue" data-step="{{step}}" data-next-step="{{nextstep}}" data-is-next-sub-step="{{isnextsubstep}}">
-                    {{{setup_continue_btn}}}
+                    {{{setupcontinuebtn}}}
                 </button>
             </div>
         </div>

@@ -25,11 +25,11 @@
     Setup wizard permalink template
 
     Context variables required for this template:
-    * setup_permalink_note1: Setup permalink note 1
-    * setup_permalink_note2: Setup permalink note 2
-    * setup_permalink_note3: Setup permalink note 3
-    * es_postname: Post name
-    * setup_permalink_click: Setup permalink click
+    * setuppermalinknote1: Setup permalink note 1
+    * setuppermalinknote2: Setup permalink note 2
+    * setuppermalinknote3: Setup permalink note 3
+    * espostname: Post name
+    * setuppermalinkclick: Setup permalink click
     * url: Url
     * prevurl: Previous url
     * back: Back
@@ -41,11 +41,11 @@
 
     Example context (JSON):
     {
-        "setup_permalink_note1": "value1",
-        "setup_permalink_note2": "value2",
-        "setup_permalink_note3": "value3",
-        "es_postname": "value4",
-        "setup_permalink_click": "value5",
+        "setuppermalinknote1": "value1",
+        "setuppermalinknote2": "value2",
+        "setuppermalinknote3": "value3",
+        "espostname": "value4",
+        "setuppermalinkclick": "value5",
         "url": "value6",
         "prevurl": "value7",
         "back": "value8",
@@ -59,14 +59,14 @@
     <div>
         <div>
             <p class="">
-                {{{setup_permalink_note1}}}<b>{{{es_postname}}}</b>
+                {{{setuppermalinknote1}}}<b>{{{espostname}}}</b>
             </p>
             <p class="">
-                {{{setup_permalink_click}}}
+                {{{setuppermalinkclick}}}
                 <a class="es_text_links" target="_blank" href="{{url}}">{{url}}</a>
-                {{{setup_permalink_note2}}}
+                {{{setuppermalinknote2}}}
             </p>
-            <div class="">{{{setup_permalink_note3}}}</div>
+            <div class="">{{{setuppermalinknote3}}}</div>
         </div>
         <div>
             <div class="eb_setup_btn_wrap">

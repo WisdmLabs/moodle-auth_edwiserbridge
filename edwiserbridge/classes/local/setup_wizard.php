@@ -151,10 +151,10 @@ class setup_wizard {
                 }
 
                 $templatecontext['steps'][] = [
-                    'top_level' => true,
-                    'is_completed' => ($completed === 1),
-                    'is_active' => ($currentstep === $key),
-                    'html_icon' => $htmlicon,
+                    'toplevel' => true,
+                    'iscompleted' => ($completed === 1),
+                    'isactive' => ($currentstep === $key),
+                    'htmlicon' => $htmlicon,
                     'key' => $key,
                     'name' => $step['name'],
                 ];
@@ -271,9 +271,9 @@ class setup_wizard {
 
         // Template context.
         $data = [
-            'pageTitle' => get_string('edwiserbridge', 'auth_edwiserbridge'),
-            'logoSrc' => 'images/moodle-logo.png',
-            'headerTitle' => $title,
+            'pagetitle' => get_string('edwiserbridge', 'auth_edwiserbridge'),
+            'logosrc' => 'images/moodle-logo.png',
+            'headertitle' => $title,
         ];
 
         // Render the template with the data.
@@ -294,9 +294,9 @@ class setup_wizard {
 
         // Template context.
         $data = [
-            'footerText' => get_string('setup_footer', 'auth_edwiserbridge'),
-            'contactUsText' => get_string('setup_contact_us', 'auth_edwiserbridge'),
-            'closeSetup' => $this->eb_setup_close_setup(),
+            'footertext' => get_string('setup_footer', 'auth_edwiserbridge'),
+            'contactustext' => get_string('setup_contact_us', 'auth_edwiserbridge'),
+            'closesetup' => $this->eb_setup_close_setup(),
         ];
 
         // Render the template with the data.
@@ -376,25 +376,25 @@ class setup_wizard {
 
         // Template context.
         $data = [
-            'installationNote1' => get_string('setup_installation_note1', 'auth_edwiserbridge'),
-            'moduleNameFreeWPPlugin' => get_string('modulename', 'auth_edwiserbridge') . ' '
+            'installationnote1' => get_string('setup_installation_note1', 'auth_edwiserbridge'),
+            'modulenamefreewpplugin' => get_string('modulename', 'auth_edwiserbridge') . ' '
                 . get_string('setup_free', 'auth_edwiserbridge') . ' '
                 . get_string('setup_wp_plugin', 'auth_edwiserbridge'),
-            'moduleNameFreeMDLPlugin' => get_string('modulename', 'auth_edwiserbridge') . ' '
+            'modulenamefreemdlplugin' => get_string('modulename', 'auth_edwiserbridge') . ' '
                 . get_string('setup_free', 'auth_edwiserbridge') . ' '
                 . get_string('setup_mdl_plugin', 'auth_edwiserbridge'),
-            'installationNote2' => get_string('setup_installation_note2', 'auth_edwiserbridge'),
+            'installationnote2' => get_string('setup_installation_note2', 'auth_edwiserbridge'),
             'step' => 'installation_guide',
-            'nextStep' => $this->get_next_step('installation_guide'),
-            'isNextSubStep' => 0,
-            'continueBtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
-            'installationFaq' => get_string('setup_installation_faq', 'auth_edwiserbridge'),
-            'faqDownloadPlugin' => get_string('setup_faq_download_plugin', 'auth_edwiserbridge'),
-            'faqSteps' => get_string('setup_faq_steps', 'auth_edwiserbridge'),
-            'faqStep1' => get_string('setup_faq_step1', 'auth_edwiserbridge'),
-            'faqStep2' => get_string('setup_faq_step2', 'auth_edwiserbridge'),
-            'faqStep3' => get_string('setup_faq_step3', 'auth_edwiserbridge'),
-            'faqStep4' => get_string('setup_faq_step4', 'auth_edwiserbridge'),
+            'nextstep' => $this->get_next_step('installation_guide'),
+            'isnextsubstep' => 0,
+            'continuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'installationfaq' => get_string('setup_installation_faq', 'auth_edwiserbridge'),
+            'faqdownloadplugin' => get_string('setup_faq_download_plugin', 'auth_edwiserbridge'),
+            'faqsteps' => get_string('setup_faq_steps', 'auth_edwiserbridge'),
+            'faqstep1' => get_string('setup_faq_step1', 'auth_edwiserbridge'),
+            'faqstep2' => get_string('setup_faq_step2', 'auth_edwiserbridge'),
+            'faqstep3' => get_string('setup_faq_step3', 'auth_edwiserbridge'),
+            'faqstep4' => get_string('setup_faq_step4', 'auth_edwiserbridge'),
         ];
 
         // Render the template with the data.
@@ -464,17 +464,17 @@ class setup_wizard {
         ];
 
         $templatecontext = (object)[
-            'setup_mdl_plugin_note1' => get_string('setup_mdl_plugin_note1', 'auth_edwiserbridge'),
+            'setupmdlpluginnote1' => get_string('setup_mdl_plugin_note1', 'auth_edwiserbridge'),
             'checks' => $checks,
-            'setup_mdl_settings_success_msg' => get_string('setup_mdl_settings_success_msg', 'auth_edwiserbridge'),
-            'display_note' => $allenabled === 1 ? 'display:none;' : '',
-            'setup_mdl_plugin_note2' => get_string('setup_mdl_plugin_note2', 'auth_edwiserbridge'),
+            'setupmdlsettingssuccessmsg' => get_string('setup_mdl_settings_success_msg', 'auth_edwiserbridge'),
+            'displaynote' => $allenabled === 1 ? 'display:none;' : '',
+            'setupmdlpluginnote2' => get_string('setup_mdl_plugin_note2', 'auth_edwiserbridge'),
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
-            'setup_enable_settings' => get_string('setup_enable_settings', 'auth_edwiserbridge'),
-            'display_continue' => $allenabled === 1 ? 'display:initial;' : '',
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'setupenablesettings' => get_string('setup_enable_settings', 'auth_edwiserbridge'),
+            'displaycontinue' => $allenabled === 1 ? 'display:initial;' : '',
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/plugin_configuration', $templatecontext);
@@ -519,20 +519,20 @@ class setup_wizard {
         }
 
         $templatecontext = (object)[
-            'setup_web_service_note1' => get_string('setup_web_service_note1', 'auth_edwiserbridge'),
-            'setup_web_service_h1' => get_string('setup_web_service_h1', 'auth_edwiserbridge'),
+            'setupwebservicenote1' => get_string('setup_web_service_note1', 'auth_edwiserbridge'),
+            'setupwebserviceh1' => get_string('setup_web_service_h1', 'auth_edwiserbridge'),
             'or' => get_string('or', 'auth_edwiserbridge'),
-            'setup_web_service_h2' => get_string('setup_web_service_h2', 'auth_edwiserbridge'),
-            'sum_web_services' => get_string('sum_web_services', 'auth_edwiserbridge'),
-            'web_service_tip' => get_string('web_service_tip', 'auth_edwiserbridge'),
+            'setupwebserviceh2' => get_string('setup_web_service_h2', 'auth_edwiserbridge'),
+            'sumwebservices' => get_string('sum_web_services', 'auth_edwiserbridge'),
+            'webservicetip' => get_string('web_service_tip', 'auth_edwiserbridge'),
             'existingservices' => $services,
-            'new_service_inp_lbl' => get_string('new_service_inp_lbl', 'auth_edwiserbridge'),
-            'name_web_service_tip' => get_string('name_web_service_tip', 'auth_edwiserbridge'),
+            'newserviceinplbl' => get_string('new_service_inp_lbl', 'auth_edwiserbridge'),
+            'namewebservicetip' => get_string('name_web_service_tip', 'auth_edwiserbridge'),
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
             'disable' => $disable,
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/web_service', $templatecontext);
@@ -591,26 +591,26 @@ class setup_wizard {
         }
 
         $templatecontext = (object)[
-            'setup_wp_site_note1' => get_string('setup_wp_site_note1', 'auth_edwiserbridge'),
-            'setup_wp_site_dropdown' => get_string('setup_wp_site_dropdown', 'auth_edwiserbridge'),
-            'wp_site_tip' => get_string('wp_site_tip', 'auth_edwiserbridge'),
+            'setupwpsitenote1' => get_string('setup_wp_site_note1', 'auth_edwiserbridge'),
+            'setupwpsitedropdown' => get_string('setup_wp_site_dropdown', 'auth_edwiserbridge'),
+            'wpsitetip' => get_string('wp_site_tip', 'auth_edwiserbridge'),
             'select' => get_string('select', 'auth_edwiserbridge'),
-            'create_wp_site' => get_string('create_wp_site', 'auth_edwiserbridge'),
+            'createwpsite' => get_string('create_wp_site', 'auth_edwiserbridge'),
             'sites' => $sitesoptions,
-            'setup_wp_site_note2' => get_string('setup_wp_site_note2', 'auth_edwiserbridge'),
-            'name_label' => get_string('name', 'auth_edwiserbridge'),
-            'wp_site_name_tip' => get_string('wp_site_name_tip', 'auth_edwiserbridge'),
-            'selected_name' => $selectedname,
-            'url_label' => get_string('url', 'auth_edwiserbridge'),
-            'wp_site_url_tip' => get_string('wp_site_url_tip', 'auth_edwiserbridge'),
-            'selected_url' => $selectedurl,
-            'prev_url' => $prevurl,
+            'setupwpsitenote2' => get_string('setup_wp_site_note2', 'auth_edwiserbridge'),
+            'namelabel' => get_string('name', 'auth_edwiserbridge'),
+            'wpsitenametip' => get_string('wp_site_name_tip', 'auth_edwiserbridge'),
+            'selectedname' => $selectedname,
+            'urllabel' => get_string('url', 'auth_edwiserbridge'),
+            'wpsiteurltip' => get_string('wp_site_url_tip', 'auth_edwiserbridge'),
+            'selectedurl' => $selectedurl,
+            'prevurl' => $prevurl,
             'back' => get_string('back', 'auth_edwiserbridge'),
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
             'btnclass' => $btnclass,
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/wordpress_site_details', $templatecontext);
@@ -656,12 +656,12 @@ class setup_wizard {
         }
 
         $templatecontext = (object)[
-            'setup_permalink_note1' => get_string('setup_permalink_note1', 'auth_edwiserbridge'),
-            'es_postname' => get_string('es_postname', 'auth_edwiserbridge'),
-            'setup_permalink_click' => get_string('setup_permalink_click', 'auth_edwiserbridge'),
+            'setuppermalinknote1' => get_string('setup_permalink_note1', 'auth_edwiserbridge'),
+            'espostname' => get_string('es_postname', 'auth_edwiserbridge'),
+            'setuppermalinkclick' => get_string('setup_permalink_click', 'auth_edwiserbridge'),
             'url' => $url,
-            'setup_permalink_note2' => get_string('setup_permalink_note2', 'auth_edwiserbridge'),
-            'setup_permalink_note3' => get_string('setup_permalink_note3', 'auth_edwiserbridge'),
+            'setuppermalinknote2' => get_string('setup_permalink_note2', 'auth_edwiserbridge'),
+            'setuppermalinknote3' => get_string('setup_permalink_note3', 'auth_edwiserbridge'),
             'prevurl' => $prevurl,
             'back' => get_string('back', 'auth_edwiserbridge'),
             'step' => $step,
@@ -710,20 +710,20 @@ class setup_wizard {
         $prevurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $prevstep;
 
         $templatecontext = (object)[
-            'wp_site_details_note' => get_string('wp_site_details_note', 'auth_edwiserbridge'),
-            'name_label' => get_string('name', 'auth_edwiserbridge'),
-            'wp_site_name_tip' => get_string('wp_site_name_tip', 'auth_edwiserbridge'),
+            'wpsitedetailsnote' => get_string('wp_site_details_note', 'auth_edwiserbridge'),
+            'namelabel' => get_string('name', 'auth_edwiserbridge'),
+            'wpsitenametip' => get_string('wp_site_name_tip', 'auth_edwiserbridge'),
             'name' => $name,
-            'url_label' => get_string('url', 'auth_edwiserbridge'),
-            'wp_site_url_tip' => get_string('wp_site_url_tip', 'auth_edwiserbridge'),
+            'urllabel' => get_string('url', 'auth_edwiserbridge'),
+            'wpsiteurltip' => get_string('wp_site_url_tip', 'auth_edwiserbridge'),
             'url' => $url,
             'prevurl' => $prevurl,
             'back' => get_string('back', 'auth_edwiserbridge'),
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
-            'wp_test_conn_btn' => get_string('wp_test_conn_btn', 'auth_edwiserbridge'),
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'wptestconnbtn' => get_string('wp_test_conn_btn', 'auth_edwiserbridge'),
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/test_connection', $templatecontext);
@@ -782,11 +782,11 @@ class setup_wizard {
         }
 
         $templatecontext = (object)[
-            'setup_sync_note1' => get_string('setup_sync_note1', 'auth_edwiserbridge'),
-            'select_all' => get_string('select_all', 'auth_edwiserbridge'),
+            'setupsyncnote1' => get_string('setup_sync_note1', 'auth_edwiserbridge'),
+            'selectall' => get_string('select_all', 'auth_edwiserbridge'),
             'recommended' => get_string('recommended', 'auth_edwiserbridge'),
-            'all_checked' => $sum == 7,
-            'sync_settings' => [
+            'allchecked' => $sum == 7,
+            'syncsettings' => [
                 [
                     'name' => 'eb_setup_sync_user_enrollment',
                     'checked' => $oldsettings['course_enrollment'],
@@ -837,7 +837,7 @@ class setup_wizard {
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/user_and_course_sync', $templatecontext);
@@ -887,29 +887,29 @@ class setup_wizard {
         }
 
         $templatecontext = (object)[
-            'what_next' => get_string('what_next', 'auth_edwiserbridge'),
-            'setup_completion_note1' => get_string('setup_completion_note1', 'auth_edwiserbridge'),
-            'setup_completion_note2' => get_string('setup_completion_note2', 'auth_edwiserbridge'),
-            'mdl_url' => get_string('mdl_url', 'auth_edwiserbridge'),
+            'whatnext' => get_string('what_next', 'auth_edwiserbridge'),
+            'setupcompletionnote1' => get_string('setup_completion_note1', 'auth_edwiserbridge'),
+            'setupcompletionnote2' => get_string('setup_completion_note2', 'auth_edwiserbridge'),
+            'mdlurl' => get_string('mdl_url', 'auth_edwiserbridge'),
             'url' => $url,
-            'wp_token' => get_string('wp_token', 'auth_edwiserbridge'),
+            'wptoken' => get_string('wp_token', 'auth_edwiserbridge'),
             'token' => $token,
-            'eb_mform_lang_desc' => get_string('eb_mform_lang_desc', 'auth_edwiserbridge'),
+            'ebmformlangdesc' => get_string('eb_mform_lang_desc', 'auth_edwiserbridge'),
             'lang' => $CFG->lang,
             'or' => get_string('or', 'auth_edwiserbridge'),
-            'setup_completion_note3' => get_string('setup_completion_note3', 'auth_edwiserbridge'),
-            'mdl_edwiser_bridge_txt_download' => get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge'),
-            'setup_completion_note4' => get_string('setup_completion_note4', 'auth_edwiserbridge'),
+            'setupcompletionnote3' => get_string('setup_completion_note3', 'auth_edwiserbridge'),
+            'mdledwiserbridgetxtdownload' => get_string('mdl_edwiser_bridge_txt_download', 'auth_edwiserbridge'),
+            'setupcompletionnote4' => get_string('setup_completion_note4', 'auth_edwiserbridge'),
             'prevurl' => $prevurl,
             'back' => get_string('back', 'auth_edwiserbridge'),
             'wpurl' => $wpurl,
             'step' => $step,
             'nextstep' => $nextstep,
             'isnextsubstep' => $isnextsubstep,
-            'continue_wp_wizard_btn' => get_string('continue_wp_wizard_btn', 'auth_edwiserbridge'),
-            'setup_continue_btn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
-            'eb_setup_redirection_popup' => $this->eb_setup_redirection_popup(),
-            'eb_setup_completion_popup' => $this->eb_setup_completion_popup(),
+            'continuewpwizardbtn' => get_string('continue_wp_wizard_btn', 'auth_edwiserbridge'),
+            'setupcontinuebtn' => get_string('setup_continue_btn', 'auth_edwiserbridge'),
+            'ebsetupredirectionpopup' => $this->eb_setup_redirection_popup(),
+            'ebsetupcompletionpopup' => $this->eb_setup_completion_popup(),
         ];
 
         $output = $renderer->render_from_template('auth_edwiserbridge/setup_complete_details', $templatecontext);
@@ -933,11 +933,11 @@ class setup_wizard {
 
         $templatecontext = [
             'wwwroot' => $CFG->wwwroot,
-            'close_quest' => get_string('close_quest', 'auth_edwiserbridge'),
+            'closequest' => get_string('close_quest', 'auth_edwiserbridge'),
             'yes' => get_string('yes', 'auth_edwiserbridge'),
             'no' => get_string('no', 'auth_edwiserbridge'),
             'note' => get_string('note', 'auth_edwiserbridge'),
-            'close_note' => get_string('close_note', 'auth_edwiserbridge'),
+            'closenote' => get_string('close_note', 'auth_edwiserbridge'),
         ];
 
         return $renderer->render_from_template('auth_edwiserbridge/setup_close', $templatecontext);
@@ -969,7 +969,7 @@ class setup_wizard {
         $renderer = $PAGE->get_renderer('core');
 
         $templatecontext = [
-            'setup_completion_note5' => get_string('setup_completion_note5', 'auth_edwiserbridge'),
+            'setupcompletionnote5' => get_string('setup_completion_note5', 'auth_edwiserbridge'),
         ];
 
         return $renderer->render_from_template('auth_edwiserbridge/setup_completion_popup', $templatecontext);

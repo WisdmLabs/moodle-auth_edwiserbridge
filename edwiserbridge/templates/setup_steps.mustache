@@ -28,10 +28,10 @@
     steps: An array of step objects, each containing the following properties:
     key: A unique identifier for the step.
     name: The display name of the step.
-    html_icon: The HTML code for the step icon.
-    is_completed: A boolean indicating whether the step has been completed.
-    is_active: A boolean indicating whether the step is currently active.
-    top_level: A boolean indicating whether the step is a top-level step.
+    htmlicon: The HTML code for the step icon.
+    iscompleted: A boolean indicating whether the step has been completed.
+    isactive: A boolean indicating whether the step is currently active.
+    toplevel: A boolean indicating whether the step is a top-level step.
     
     Example context (JSON):
     {
@@ -39,31 +39,31 @@
           {
             "key": "step1",
             "name": "Step 1",
-            "html_icon": "<i class='icon fa fa-check'></i>",
-            "is_completed": true,
-            "is_active": false,
-            "top_level": true
+            "htmlicon": "<i class='icon fa fa-check'></i>",
+            "iscompleted": true,
+            "isactive": false,
+            "toplevel": true
           },
           {
             "key": "step2",
             "name": "Step 2",
-            "html_icon": "<i class='icon fa fa-times'></i>",
-            "is_completed": false,
-            "is_active": true,
-            "top_level": true
+            "htmlicon": "<i class='icon fa fa-times'></i>",
+            "iscompleted": false,
+            "isactive": true,
+            "toplevel": true
           }
         ]
     }
 }}
 <ul class="eb-setup-steps">
     {{#steps}}
-        {{#top_level}}
-            <li class="eb-setup-step eb-setup-step-{{key}} {{#is_completed}}eb-setup-step-completed{{/is_completed}}{{#is_active}}eb-setup-step-active{{/is_active}}-wrap">
-                {{{html_icon}}}
-                <span class="eb-setup-steps-title {{#is_completed}}eb-setup-step-completed{{/is_completed}}" data-step="{{key}}">
+        {{#toplevel}}
+            <li class="eb-setup-step eb-setup-step-{{key}} {{#iscompleted}}eb-setup-step-completed{{/iscompleted}}{{#isactive}}eb-setup-step-active{{/isactive}}-wrap">
+                {{{htmlicon}}}
+                <span class="eb-setup-steps-title {{#iscompleted}}eb-setup-step-completed{{/iscompleted}}" data-step="{{key}}">
                     {{name}}
                 </span>
             </li>
-        {{/top_level}}
+        {{/toplevel}}
     {{/steps}}
 </ul>

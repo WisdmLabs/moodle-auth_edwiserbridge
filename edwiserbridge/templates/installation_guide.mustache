@@ -25,71 +25,71 @@
     Setup wizard footer template
 
     Context variables required for this template:
-    * installationNote1 - Installation note 1
-    * moduleNameFreeWPPlugin - Module name for free WP plugin
-    * moduleNameFreeMDLPlugin - Module name for free MDL plugin
-    * installationNote2 - Installation note 2
-    * continueBtn - Continue button text
+    * installationnote1 - Installation note 1
+    * modulenamefreewpplugin - Module name for free WP plugin
+    * modulenamefreemdlplugin - Module name for free MDL plugin
+    * installationnote2 - Installation note 2
+    * continuebtn - Continue button text
     * step - Current step
-    * nextStep - Next step
-    * isNextSubStep - Is next step a sub step
-    * installationFaq - Installation FAQ
-    * faqDownloadPlugin - Download plugin text
-    * faqSteps - FAQ steps
-    * faqStep1 - FAQ step 1
-    * faqStep2 - FAQ step 2
-    * faqStep3 - FAQ step 3
-    * faqStep4 - FAQ step 4
+    * nextstep - Next step
+    * isnextsubstep - Is next step a sub step
+    * installationfaq - Installation FAQ
+    * faqdownloadplugin - Download plugin text
+    * faqsteps - FAQ steps
+    * faqstep1 - FAQ step 1
+    * faqstep2 - FAQ step 2
+    * faqstep3 - FAQ step 3
+    * faqstep4 - FAQ step 4
 
 
     Example context (JSON):
     {
-        "installationNote1": "value1",
-        "moduleNameFreeWPPlugin": "value2",
-        "moduleNameFreeMDLPlugin": "value3",
-        "installationNote2": "value4",
-        "continueBtn": "value5",
+        "installationnote1": "value1",
+        "modulenamefreewpplugin": "value2",
+        "modulenamefreemdlplugin": "value3",
+        "installationnote2": "value4",
+        "continuebtn": "value5",
         "step": "value6",
-        "nextStep": "value7",
-        "isNextSubStep": "value8",
-        "installationFaq": "value9",
-        "faqDownloadPlugin": "value10",
-        "faqSteps": "value11",
-        "faqStep1": "value12",
-        "faqStep2": "value13",
-        "faqStep3": "value14",
-        "faqStep4": "value15"
+        "nextstep": "value7",
+        "isnextsubstep": "value8",
+        "installationfaq": "value9",
+        "faqdownloadplugin": "value10",
+        "faqsteps": "value11",
+        "faqstep1": "value12",
+        "faqstep2": "value13",
+        "faqstep3": "value14",
+        "faqstep4": "value15"
     }
 
 }}
 <div class="eb_setup_installation_guide es-w-80">
     <div>
-        <p class="eb_setup_p"> {{installationNote1}} </p>
+        <p class="eb_setup_p"> {{installationnote1}} </p>
         <div class="eb_setup_p_wrap">
-            <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> {{moduleNameFreeWPPlugin}} </p>
-            <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> {{moduleNameFreeMDLPlugin}} </p>
+            <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> {{modulenamefreewpplugin}} </p>
+            <p class="eb_setup_h2"> <i class="fa-solid fa-circle-chevron-right"></i> {{modulenamefreemdlplugin}} </p>
         </div>
-        <span class="eb_setup_p"> {{installationNote2}} </span>
+        <span class="eb_setup_p"> {{installationnote2}} </span>
         <div class="eb_setup_btn_wrap">
-            <button class="eb_setup_btn eb_setup_save_and_continue" data-step='{{step}}' data-next-step='{{nextStep}}' data-is-next-sub-step='{{isNextSubStep}}'>
-                {{continueBtn}}
+            <button class="eb_setup_btn eb_setup_save_and_continue" data-step='{{step}}' data-next-step='{{nextstep}}' data-is-next-sub-step='{{isnextsubstep}}'>
+                {{continuebtn}}
             </button>
         </div>
     </div>
     <div>
         <div class='es-p-t-10'>
-            <div class='accordion'> <i class="fa-solid fa-circle-question"></i> {{installationFaq}} <i class="fa-solid fa-chevron-down"></i> <i class="fa-solid fa-chevron-up"></i> </div>
+            <div class='accordion'> <i class="fa-solid fa-circle-question"></i> {{installationfaq}} <i class="fa-solid fa-chevron-down"></i> <i class="fa-solid fa-chevron-up"></i> </div>
             <div class="panel">
                 <div>
-                    <a class="eb_setup_sec_btn" href='https://downloads.wordpress.org/plugin/edwiser-bridge.zip'> {{faqDownloadPlugin}} </a>
+                    <a class="eb_setup_sec_btn" href='https://downloads.wordpress.org/plugin/edwiser-bridge.zip'> {{faqdownloadplugin}} </a>
                 </div>
                 <p>
-                    <p class='es-p-t-10'> {{faqSteps}} </p>
+                    <p class='es-p-t-10'> {{faqsteps}} </p>
                     <ol>
-                        <li class='es-p-b-10'> {{faqStep1}} </li>
-                        <li class='es-p-b-10'> {{faqStep2}} </li>
-                        <li class='es-p-b-10'> {{faqStep3}} </li>
-                        <li class='es-p-b-10'> {{faqStep4}} </li>
+                        <li class='es-p-b-10'> {{faqstep1}} </li>
+                        <li class='es-p-b-10'> {{faqstep2}} </li>
+                        <li class='es-p-b-10'> {{faqstep3}} </li>
+                        <li class='es-p-b-10'> {{faqstep4}} </li>
                     </ol>
                 </p>
             </div>

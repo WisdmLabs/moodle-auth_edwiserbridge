@@ -364,7 +364,7 @@ function auth_edwiserbridge_get_administrators() {
  * @return array An associative array of available Moodle site services.
  */
 function auth_edwiserbridge_get_existing_services() {
-    $webservicemanager = new webservice();
+    $webservicemanager = new \webservice();
 
     $settingsarr = [];
     $services = $webservicemanager->get_external_services();
@@ -391,7 +391,7 @@ function auth_edwiserbridge_get_existing_services() {
  * @return array An array of tokens and their associated service IDs.
  */
 function auth_edwiserbridge_get_service_tokens($serviceid) {
-    $webservicemanager = new webservice();
+    $webservicemanager = new \webservice();
     return $webservicemanager->get_ws_tokens($serviceid);
 }
 
@@ -441,7 +441,7 @@ function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') 
  * @return array An array of service tokens, with the token and ID for each.
  */
 function auth_edwiserbridge_get_service_list($serviceid) {
-    $webservicemanager = new webservice();
+    $webservicemanager = new \webservice();
     $service = $webservicemanager->get_external_service_by_id($serviceid);
     
     if (!$service) {
@@ -742,17 +742,17 @@ function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
     if (isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check == true) {
         // Mustache rendering data
         $templatecontext = [
-            'plugin_update_notification_title' => get_string('plugin_update_notification_title', 'auth_edwiserbridge'),
-            'plugin_update_notification_body' => get_string('plugin_update_notification_body', 'auth_edwiserbridge'),
-            'plugin_update_notification_changelog' => get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'),
-            'changelog_url' => 'https://wordpress.org/plugins/edwiser-bridge/#developers', // Replace with actual changelog URL
-            'download_url' => $updatedata->url,
-            'plugin_download_help_text' => get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'),
-            'plugin_download' => get_string('plugin_download', 'auth_edwiserbridge'),
-            'update_url' => 'UPDATE_URL', // Replace with actual update URL
-            'plugin_update_help_text' => get_string('plugin_update_help_text', 'auth_edwiserbridge'),
-            'plugin_update' => get_string('plugin_update', 'auth_edwiserbridge'),
-            'dismiss_url' => 'DISMISS_URL', // Replace with actual dismiss URL
+            'pluginupdatenotificationtitle' => get_string('plugin_update_notification_title', 'auth_edwiserbridge'),
+            'pluginupdatenotificationbody' => get_string('plugin_update_notification_body', 'auth_edwiserbridge'),
+            'pluginupdatenotificationchangelog' => get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'),
+            'changelogurl' => 'https://wordpress.org/plugins/edwiser-bridge/#developers', // Replace with actual changelog URL
+            'downloadurl' => $updatedata->url,
+            'plugindownloadhelptext' => get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'),
+            'plugindownload' => get_string('plugin_download', 'auth_edwiserbridge'),
+            'updateurl' => 'UPDATE_URL', // Replace with actual update URL
+            'pluginupdatehelptext' => get_string('plugin_update_help_text', 'auth_edwiserbridge'),
+            'pluginupdate' => get_string('plugin_update', 'auth_edwiserbridge'),
+            'dismissurl' => 'DISMISS_URL', // Replace with actual dismiss URL
         ];
 
         // Rendering Mustache template with data

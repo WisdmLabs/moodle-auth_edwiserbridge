@@ -25,36 +25,36 @@
     Setup wizard plugin configuration template
 
     Context variables required for this template:
-    * setup_mdl_plugin_note1 : Setup mdl plugin note 1
+    * setupmdlpluginnote1 : Setup mdl plugin note 1
     * checks: Checks
-    * setup_mdl_settings_success_msg: Setup mdl settings success msg
+    * setupmdlsettingssuccessmsg: Setup mdl settings success msg
     * display_note1: Display note
-    * setup_mdl_plugin_note2: Setup mdl plugin note 2
+    * setupmdlpluginnote2: Setup mdl plugin note 2
     * step: Step
     * nextstep: Next step
     * isnextsubstep: Is next sub step
-    * setup_enable_settings: Setup enable settings
-    * display_continue: Display continue
-    * setup_continue_btn: Setup continue btn
+    * setupenablesettings: Setup enable settings
+    * displaycontinue: Display continue
+    * setupcontinuebtn: Setup continue btn
 
     Example context (JSON):
     {
-        "setup_mdl_plugin_note1": "value1",
+        "setupmdlpluginnote1": "value1",
         "checks": "value2",
-        "setup_mdl_settings_success_msg": "value3",
+        "setupmdlsettingssuccessmsg": "value3",
         "display_note1": "value4",
-        "setup_mdl_plugin_note2": "value5",
+        "setupmdlpluginnote2": "value5",
         "step": "value6",
         "nextstep": "value7",
         "isnextsubstep": "value8",
-        "setup_enable_settings": "value9",
-        "display_continue": "value10",
-        "setup_continue_btn": "value11"
+        "setupenablesettings": "value9",
+        "displaycontinue": "value10",
+        "setupcontinuebtn": "value11"
     }
 }}
 <div class="eb_plugin_configuration es-w-80">
     <div>
-        <p>{{{setup_mdl_plugin_note1}}}</p>
+        <p>{{{setupmdlpluginnote1}}}</p>
         <div class="eb_plugin_configuration_checks">
             {{#checks}}
             <div class="eb_setup_h3 es-p-b-10">
@@ -67,27 +67,27 @@
             {{/checks}}
             <div class="eb_setup_settings_success_msg">
                 <i class="fa-solid fa-circle-check"></i>
-                {{{setup_mdl_settings_success_msg}}}
+                {{{setupmdlsettingssuccessmsg}}}
             </div>
         </div>
-        <div style="{{display_note}}">
-            <span class="eb_enable_plugin_settings_label">{{{setup_mdl_plugin_note2}}}</span>
+        <div style="{{displaynote}}">
+            <span class="eb_enable_plugin_settings_label">{{{setupmdlpluginnote2}}}</span>
             <button
                 class="eb_setup_btn eb_enable_plugin_settings"
                 data-step='{{step}}'
                 data-next-step='{{nextstep}}'
                 data-is-next-sub-step='{{isnextsubstep}}'>
-                {{{setup_enable_settings}}}
+                {{{setupenablesettings}}}
             </button>
         </div>
         <div class="eb_setup_btn_wrap">
             <button
                 class="eb_setup_btn eb_setup_save_and_continue"
-                style="{{display_continue}}"
+                style="{{displaycontinue}}"
                 data-step='{{step}}'
                 data-next-step='{{nextstep}}'
                 data-is-next-sub-step='{{isnextsubstep}}'>
-                {{{setup_continue_btn}}}
+                {{{setupcontinuebtn}}}
             </button>
         </div>
     </div>

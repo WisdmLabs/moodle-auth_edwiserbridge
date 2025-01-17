@@ -25,21 +25,21 @@
     Setup wizard header template
 
     Context variables required for this template:
-    * pageTitle: Page title
-    * logoSrc: Logo source
-    * headerTitle: Header title
+    * pagetitle: Page title
+    * logosrc: Logo source
+    * headertitle: Header title
 
     Example context (JSON):
     {
-        "pageTitle": "value1",
-        "logoSrc": "value2",
-        "headerTitle": "value3"
+        "pagetitle": "value1",
+        "logosrc": "value2",
+        "headertitle": "value3"
     }
 }}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{pageTitle}}</title>
+    <title>{{pagetitle}}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -48,11 +48,11 @@
     <header class="eb-setup-wizard-header">
         <div class="eb-setup-header-logo">
             <div class="eb-setup-header-logo-img-wrap">
-                <img src="{{logoSrc}}" />
+                <img src="{{logosrc}}" />
             </div>
         </div>
         <div class="eb-setup-header-title-wrap">
-            <div class="eb-setup-header-title">{{headerTitle}}</div>
+            <div class="eb-setup-header-title">{{headertitle}}</div>
             <div class='eb-setup-close-icon'> <i class="fa-solid fa-xmark"></i> </div>
         </div>
     </header>

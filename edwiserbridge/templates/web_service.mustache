@@ -25,19 +25,19 @@
     Web service template
 
     Context variables required for this template:
-    * setup_web_service_note1: Note for setting up web service
-    * setup_web_service_h1: Heading 1 for setting up web service
-    * setup_web_service_h2: Heading 2 for setting up web service
+    * setupwebservicenote1: Note for setting up web service
+    * setupwebserviceh1: Heading 1 for setting up web service
+    * setupwebserviceh2: Heading 2 for setting up web service
     * or: Text for "or" separator
-    * sum_web_services: Label for existing web services dropdown
-    * web_service_tip: Tooltip text for web services dropdown
+    * sumwebservices: Label for existing web services dropdown
+    * webservicetip: Tooltip text for web services dropdown
     * existingservices: Array of existing web services
         ** key: Key for the web service
         ** value: Value for the web service
         ** selected: Whether the option is selected or not
-    * new_service_inp_lbl: Label for new web service input
-    * name_web_service_tip: Tooltip text for new web service input
-    * setup_continue_btn: Text for continue button
+    * newserviceinplbl: Label for new web service input
+    * namewebservicetip: Tooltip text for new web service input
+    * setupcontinuebtn: Text for continue button
     * step: Current step number
     * nextstep: Next step number
     * isnextsubstep: Whether the next step is a sub-step or not
@@ -45,12 +45,12 @@
 
     Example context (JSON):
     {
-        "setup_web_service_note1": "value1",
-        "setup_web_service_h1": "value2",
-        "setup_web_service_h2": "value3",
+        "setupwebservicenote1": "value1",
+        "setupwebserviceh1": "value2",
+        "setupwebserviceh2": "value3",
         "or": "value4",
-        "sum_web_services": "value5",
-        "web_service_tip": "value6",
+        "sumwebservices": "value5",
+        "webservicetip": "value6",
         "existingservices": [
             {
                 "key": "value7",
@@ -63,9 +63,9 @@
                 "selected": false
             }
         ],
-        "new_service_inp_lbl": "value11",
-        "name_web_service_tip": "value12",
-        "setup_continue_btn": "value13",
+        "newserviceinplbl": "value11",
+        "namewebservicetip": "value12",
+        "setupcontinuebtn": "value13",
         "step": "value14",
         "nextstep": "value15",
         "isnextsubstep": true,
@@ -74,11 +74,11 @@
 }}
 <div class="eb_setup_web_service es-w-80">
     <div>
-        <p>{{{setup_web_service_note1}}}</p>
+        <p>{{{setupwebservicenote1}}}</p>
         <div class="eb_setup_p_wrap">
             <div class="eb_setup_h2">
                 <i class="fa-solid fa-circle-chevron-right"></i>
-                {{{setup_web_service_h1}}}
+                {{{setupwebserviceh1}}}
             </div>
             <div class="eb_setup_separator">
                 <div class="eb_setup_hr"><hr></div>
@@ -87,15 +87,15 @@
             </div>
             <div class="eb_setup_h2">
                 <i class="fa-solid fa-circle-chevron-right"></i>
-                {{{setup_web_service_h2}}}
+                {{{setupwebserviceh2}}}
             </div>
         </div>
         <div>
             <div class="eb_setup_conn_url_inp_wrap">
                 <p>
-                    <label class="eb_setup_h2">{{{sum_web_services}}}</label>
+                    <label class="eb_setup_h2">{{{sumwebservices}}}</label>
                     <i class="fa-solid fa-info eb-tooltip es-info-icon">
-                        <span class='eb-tooltiptext'>{{{web_service_tip}}}</span>
+                        <span class='eb-tooltiptext'>{{{webservicetip}}}</span>
                     </i>
                 </p>
                 <select name="eb_setup_web_service_list" class="eb_setup_inp eb_setup_web_service_list">
@@ -106,9 +106,9 @@
             </div>
             <div class="eb_setup_conn_url_inp_wrap eb_setup_web_service_name_wrap">
                 <p>
-                    <label class="eb_setup_h2">{{{new_service_inp_lbl}}}</label>
+                    <label class="eb_setup_h2">{{{newserviceinplbl}}}</label>
                     <i class="fa-solid fa-info eb-tooltip es-info-icon">
-                        <span class='eb-tooltiptext'>{{{name_web_service_tip}}}</span>
+                        <span class='eb-tooltiptext'>{{{namewebservicetip}}}</span>
                     </i>
                 </p>
                 <input class="eb_setup_inp eb_setup_web_service_name" id="eb_setup_web_service_name" name="eb_setup_web_service_name" type="text">
@@ -118,7 +118,7 @@
                         data-step='{{step}}'
                         data-next-step='{{nextstep}}'
                         data-is-next-sub-step='{{isnextsubstep}}' {{disable}}>
-                    {{{setup_continue_btn}}}
+                    {{{setupcontinuebtn}}}
                 </button>
             </div>
         </div>
