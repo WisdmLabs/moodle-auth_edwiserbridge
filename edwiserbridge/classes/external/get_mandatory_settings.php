@@ -75,6 +75,8 @@ trait get_mandatory_settings {
 
         // Get allow_extended_char settings.
         $settings['allow_extended_char'] = $CFG->extendedusernamechars;
+        
+        require_once($CFG->libdir . '/accesslib.php');
 
         $studentroles = role_get_archetype_roles('student');
         if ($studentroles) {
