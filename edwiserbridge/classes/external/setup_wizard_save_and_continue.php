@@ -137,6 +137,7 @@ trait setup_wizard_save_and_continue {
                 $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
                 // Update Moodle Wordpress site details.
                 $existingsynchsettings = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : [];
+                $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
                 $synchsettings = $existingsynchsettings;
                 $sitename = $eb_setup_wp_site_name;
 

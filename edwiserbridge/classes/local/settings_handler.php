@@ -94,7 +94,7 @@ class settings_handler {
         ];
 
         try {
-            $service = $webservicemanager->create_external_service($servicedata);
+            $service = $webservicemanager->add_external_service((object) $servicedata);
             
             if ($service) {
                 $this->eb_add_auth_user($service->id, $userid);
@@ -139,7 +139,7 @@ class settings_handler {
             if ($numtries > 100) {
                 return 0;
             }
-        } while ($webservicemanager->service_shortname_exists($newshortname));
+        } while ($webservicemanager->get_external_service_by_shortname($newshortname));
 
         return $newshortname;
     }
@@ -155,11 +155,13 @@ class settings_handler {
      * @return int 0 if the service name is already registered, 1 if it is available.
      */
     public function eb_check_if_service_name_available($servicename) {
-        global $CFG;
-        require_once($CFG->dirroot . '/webservice/lib.php');
-        $webservicemanager = new \webservice();
+        global $DB;
+
+        // No method to get service by name only by shortname. To be replaced in the future when method becomes available.
+        $service = $DB->get_record('external_services',
+                        array('name' => $servicename), '*', IGNORE_MISSING);
         
-        return !$webservicemanager->service_name_exists($servicename);
+        return $service;
     }
 
     /**
@@ -304,8 +306,8 @@ class settings_handler {
     public function eb_create_token($serviceid, $userid) {
         global $CFG;
 
+        require_once("$CFG->libdir/externallib.php");
         require_once($CFG->dirroot . '/webservice/lib.php');
-        $webservicemanager = new \webservice();
         
         $tokendata = [
             'tokentype' => EXTERNAL_TOKEN_PERMANENT,
@@ -314,10 +316,11 @@ class settings_handler {
             'purpose' => 'Edwiser Bridge Service Token'
         ];
         
-        $token = $webservicemanager->generate_user_ws_token($serviceid, $userid, 1, $tokendata);
-        set_config("edwiser_bridge_last_created_token", $token->token, 'auth_edwiserbridge');
+        
+        $token = \external_generate_token($tokendata['tokentype'], $serviceid, $userid, 1);
+        set_config("edwiser_bridge_last_created_token", $token, 'auth_edwiserbridge');
         set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
         
-        return $token->token;
+        return $token;
     }
 }

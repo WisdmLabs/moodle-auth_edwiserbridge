@@ -53,11 +53,11 @@ class migration_helper {
      */
     protected function migrate_connection_settings() {
         global $CFG;
-        $settings = $CFG->eb_connection_settings;
-        if (empty($settings)) {
+        
+        if (!isset($CFG->eb_connection_settings) || empty($CFG->eb_connection_settings)) {
             return true;
         }
-        $temp = json_decode($settings, true);
+        $settings = json_decode($CFG->eb_connection_settings, true);
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
         }
@@ -79,11 +79,10 @@ class migration_helper {
      */
     protected function migrate_sync_settings() {
         global $CFG;
-        $settings = $CFG->eb_synch_settings;
-        if (empty($settings)) {
+        if (!isset($CFG->eb_synch_settings) || empty($CFG->eb_synch_settings)) {
             return true;
         }
-        $temp = json_decode($settings, true);
+        $settings = json_decode($CFG->eb_synch_settings, true);
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
         }
