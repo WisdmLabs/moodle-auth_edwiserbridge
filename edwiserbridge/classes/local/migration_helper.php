@@ -38,10 +38,10 @@ class migration_helper {
      */
     public function execute_migration() {
         global $CFG;
-        var_dump('execute_migration');
         $result = true;
         $result = $result && $this->migrate_connection_settings();
         $result = $result && $this->migrate_sync_settings();
+        $result = $result && $this->migrate_global_settings();
 
         return $result;
     }
@@ -54,7 +54,6 @@ class migration_helper {
     protected function migrate_connection_settings() {
         global $CFG;
         $settings = $CFG->eb_connection_settings;
-        var_dump($settings);
         if (empty($settings)) {
             return true;
         }
@@ -64,10 +63,8 @@ class migration_helper {
         }
         list($success, $data) = $this->convert_serialized_to_json($settings);
         
-        var_dump($success);
-        var_dump($data);
         if ($success) {
-            set_config( 'eb_connection_settings', $data);
+            set_config( 'eb_connection_settings', $data, 'auth_edwiserbridge' );
             return true;
         }
 
@@ -92,7 +89,7 @@ class migration_helper {
         }
         list($success, $data) = $this->convert_serialized_to_json($settings);
         if ($success) {
-            set_config( 'eb_synch_settings', $data );
+            set_config( 'eb_synch_settings', $data, 'auth_edwiserbridge' );
             return true;
         }
 
@@ -122,5 +119,47 @@ class migration_helper {
         }
 
         return [true, $json];
+    }
+
+    /**
+     * Migrates global settings from the Moodle configuration to the plugin configuration.
+     *
+     * This function iterates through a list of global settings and moves them from the Moodle
+     * configuration to the plugin configuration. This is likely part of a migration process
+     * to move settings from the global Moodle configuration to the plugin-specific configuration.
+     *
+     * @return bool True if the migration was successful, false otherwise.
+     */
+    protected function migrate_global_settings() {
+        global $CFG;
+        $configs = [
+            'eb_connection_settings',
+            'eb_synch_settings',
+            'wploginbtnicon',
+            'edwiserbridge_dismiss_update_notification',
+            'sharedsecret',
+            'wpsiteurl',
+            'logoutredirecturl',
+            'wploginenablebtn',
+            'wploginbtntext',
+            'edwiserbridge_plugin_versions',
+            'edwiserbridge_update_msg',
+            'edwiserbridge_update_available',
+            'edwiserbridge_update_data',
+            'plugin_update_transient',
+            'eb_setup_progress',
+            'ebexistingserviceselect',
+            'edwiser_bridge_last_created_token',
+            'eb_setup_wp_site_name',
+            'edwiser_bridge_last_created_token',
+            'edwiser_bridge_last_created_token',
+        ];
+        foreach ($configs as $config) {
+            if ( isset($CFG->$config) ) {
+                set_config($config, $CFG->$config, 'auth_edwiserbridge');
+                continue;
+            }
+        }
+        return true;
     }
 }

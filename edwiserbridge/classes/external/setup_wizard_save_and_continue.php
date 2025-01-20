@@ -88,7 +88,7 @@ trait setup_wizard_save_and_continue {
         // Check if there are any sub steps available.
         $function = $steps[$nextstep]['function'];
         // Save progress data.
-        set_config('eb_setup_progress', $currentstep);
+        set_config('eb_setup_progress', $currentstep, 'auth_edwiserbridge');
 
         switch ( $currentstep ) {
             case 'web_service':
@@ -101,14 +101,14 @@ trait setup_wizard_save_and_continue {
                     $response = $settingshandler->eb_create_externle_service( $data->service_name , $adminuser->id );
                 } else if (isset($data->service_name) && isset($data->existing_service) && $data->existing_service ) {
                     // Set Service. edwiser_bridge_last_created_token.
-                    set_config('ebexistingserviceselect', $data->service_name);
+                    set_config('ebexistingserviceselect', $data->service_name, 'auth_edwiserbridge');
 
                     // Select token update web services and set token.
                     // If token is not created dreate token.
                     $token = $settingshandler->eb_create_token( $data->service_name, $adminuser->id );
 
                     // Set last created token.
-                    set_config('edwiser_bridge_last_created_token', $token);
+                    set_config('edwiser_bridge_last_created_token', $token, 'auth_edwiserbridge');
                 }
                break;
             case 'wordpress_site_details':
@@ -117,7 +117,9 @@ trait setup_wizard_save_and_continue {
                     $sites = auth_edwiserbridge_get_connection_settings();
                     $connectionsettings = $sites['eb_connection_settings'];
 
-                    $token = isset($CFG->edwiser_bridge_last_created_token) ? $CFG->edwiser_bridge_last_created_token : ' - ';
+                    $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+
+                    $token = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
                     // Update Moodle Wordpress site details.
                     $connectionsettings[$data->site_name] = [
                         "wp_url"   => $data->url,
@@ -125,18 +127,18 @@ trait setup_wizard_save_and_continue {
                         "wp_name"  => $data->site_name,
                     ];
 
-                    set_config( 'eb_connection_settings', json_encode( $connectionsettings ) );
-                    set_config( 'eb_setup_wp_site_name', $data->site_name );
+                    set_config( 'eb_connection_settings', json_encode( $connectionsettings ), 'auth_edwiserbridge' );
+                    set_config( 'eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge' );
                 } else if ( isset( $data->site_name ) ) {
-                    set_config( 'eb_setup_wp_site_name', $data->site_name );
+                    set_config( 'eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge' );
                 }
                break;
             case 'user_and_course_sync':
-
+                $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
                 // Update Moodle Wordpress site details.
-                $existingsynchsettings = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : [];
+                $existingsynchsettings = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : [];
                 $synchsettings = $existingsynchsettings;
-                $sitename = $CFG->eb_setup_wp_site_name;
+                $sitename = $eb_setup_wp_site_name;
 
                 $synchsettings[$sitename] = [
                     "course_enrollment"    => $data->user_enrollment,
@@ -147,10 +149,10 @@ trait setup_wizard_save_and_continue {
                     "course_deletion"      => $data->course_deletion,
                     "user_updation"        => $data->user_update,
                 ];
-                set_config( 'eb_synch_settings', json_encode($synchsettings));
+                set_config( 'eb_synch_settings', json_encode($synchsettings), 'auth_edwiserbridge' );
                break;
             case 'complete_details':
-                set_config('eb_setup_progress', '');
+                set_config('eb_setup_progress', '', 'auth_edwiserbridge');
                break;
             default:
                break;

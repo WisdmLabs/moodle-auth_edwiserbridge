@@ -45,8 +45,11 @@ class service_form extends moodleform {
         $mform            = $this->_form;
         $existingservices = auth_edwiserbridge_get_existing_services();
         $authusers        = auth_edwiserbridge_get_administrators();
-        $token            = isset($CFG->edwiser_bridge_last_created_token) ? $CFG->edwiser_bridge_last_created_token : ' - ';
-        $service          = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
+
+        $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+        $ebexistingserviceselect = get_config('auth_edwiserbridge', 'ebexistingserviceselect');
+        $token            = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
+        $service          = !empty($ebexistingserviceselect) ? $ebexistingserviceselect : '';
         $tokenfield       = '';
 
         // 1st Field Service list

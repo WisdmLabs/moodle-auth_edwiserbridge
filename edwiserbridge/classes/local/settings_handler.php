@@ -223,7 +223,7 @@ class settings_handler {
         ];
 
         foreach ($functions as $functionname) {
-            if ($webservicemanager->service_function_exists($functionname)) {
+            if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
                 $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }
@@ -261,7 +261,7 @@ class settings_handler {
         );
 
         foreach ($allfunctions as $functionname) {
-            if ($webservicemanager->service_function_exists($functionname)) {
+            if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
                 $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }
@@ -286,8 +286,8 @@ class settings_handler {
             $this->eb_add_default_web_service_functions($serviceid);
             $this->eb_extensions_web_service_function($serviceid);
             
-            set_config('ebexistingserviceselect', $serviceid);
-            set_config("edwiser_bridge_last_created_token", $token);
+            set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
+            set_config("edwiser_bridge_last_created_token", $token, 'auth_edwiserbridge');
             
             return 1;
         }
@@ -315,8 +315,8 @@ class settings_handler {
         ];
         
         $token = $webservicemanager->generate_user_ws_token($serviceid, $userid, 1, $tokendata);
-        set_config("edwiser_bridge_last_created_token", $token->token);
-        set_config('ebexistingserviceselect', $serviceid);
+        set_config("edwiser_bridge_last_created_token", $token->token, 'auth_edwiserbridge');
+        set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
         
         return $token->token;
     }

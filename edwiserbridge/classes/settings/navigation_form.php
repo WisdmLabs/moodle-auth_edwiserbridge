@@ -95,7 +95,8 @@ class navigation_form extends moodleform {
     private function print_tabs($tabs) {
         ob_start();
         global $CFG;
-        $service = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
+        $ebexistingserviceselect = get_config('auth_edwiserbridge', 'ebexistingserviceselect');
+        $service = !empty($ebexistingserviceselect) ? $ebexistingserviceselect : '';
         echo "<div id='web_service_id' data-serviceid='$service'></div>";
         foreach ($tabs as $tab) {
             echo "<a href='$tab[link]' class='$tab[css]'>$tab[label]</a>";

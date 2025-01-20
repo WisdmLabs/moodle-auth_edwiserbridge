@@ -93,7 +93,7 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
             ];
         }
     }
-    set_config('eb_connection_settings', json_encode($connectionsettings));
+    set_config('eb_connection_settings', json_encode($connectionsettings), 'auth_edwiserbridge');
 }
 
 /**
@@ -103,13 +103,14 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
  * @param bool $mform Whether the form is being saved from a Moodle form.
  */
 function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform = false) {
-    global $CFG;
     $synchsettings          = [];
-    $connectionsettings     = json_decode($CFG->eb_connection_settings, true);
+    $connection_db          = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $connectionsettings     = json_decode($connection_db, true);
     $connectionsettingskeys = array_keys($connectionsettings);
-
+    
     if (in_array($formdata->wp_site_list, $connectionsettingskeys)) {
-        $existingsynchsettings = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : [];
+        $sync_db               = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $existingsynchsettings = !empty($sync_db) ? json_decode($sync_db, true) : [];
         $synchsettings         = $existingsynchsettings;
 
         $synchsettings[$formdata->wp_site_list] = [
@@ -122,7 +123,7 @@ function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform
             'user_updation'        => $formdata->user_updation,
         ];
     }
-    set_config('eb_synch_settings', json_encode($synchsettings));
+    set_config('eb_synch_settings', json_encode($synchsettings), 'auth_edwiserbridge');
 }
 
 /**
@@ -204,8 +205,8 @@ function auth_edwiserbridge_get_required_settings() {
  * @return array An associative array containing the connection settings, or false if the settings are not found.
  */
 function auth_edwiserbridge_get_connection_settings() {
-    global $CFG;
-    $reponse['eb_connection_settings'] = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : false;
+    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $reponse['eb_connection_settings'] = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : false;
     return $reponse;
 }
 
@@ -220,8 +221,8 @@ function auth_edwiserbridge_get_connection_settings() {
  * @return array The synchronization settings for the given index, or a default array if the settings are not found.
  */
 function auth_edwiserbridge_get_synch_settings($index) {
-    global $CFG;
-    $reponse = isset($CFG->eb_synch_settings) ? json_decode($CFG->eb_synch_settings, true) : false;
+    $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+    $reponse = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : false;
 
     $data = [
         'course_enrollment'    => 0,
@@ -249,8 +250,8 @@ function auth_edwiserbridge_get_synch_settings($index) {
  * @return array An associative array of site keys and names, or a single-element array with a default message if no sites are found.
  */
 function auth_edwiserbridge_get_site_list() {
-    global $CFG;
-    $reponse = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : false;
+    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $reponse = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : false;
 
     if ($reponse && count($reponse)) {
         foreach ($reponse as $key => $value) {
@@ -612,9 +613,9 @@ function auth_edwiserbridge_pluginfile(
  * external_services_functions table.
  */
 function auth_edwiserbridge_check_and_update_webservice_functions() {
-    global $CFG;
     $webservicemanager = new \webservice();
-    $connections = isset($CFG->eb_connection_settings) ? json_decode($CFG->eb_connection_settings, true) : [];
+    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $connections = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : [];
 
     foreach ($connections as $connection) {
         $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
@@ -641,8 +642,7 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
         $webservicefunctions = array_merge($ssofunctions, $bulkpurchasefunctions);
 
         foreach ($webservicefunctions as $functionname) {
-            if ($webservicemanager->service_function_exists($functionname) && 
-                !$webservicemanager->service_has_function($serviceid, $functionname)) {
+            if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
                 $webservicemanager->add_external_function_to_service($functionname, $serviceid);
             }
         }

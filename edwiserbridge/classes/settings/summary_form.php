@@ -50,8 +50,12 @@ class summary_form extends moodleform {
         $servicename   = '';
         $pluginsvdata  = $this->get_plugin_version_data();
         $mform         = $this->_form;
-        $token         = isset($CFG->edwiser_bridge_last_created_token) ? $CFG->edwiser_bridge_last_created_token : ' - ';
-        $service       = isset($CFG->ebexistingserviceselect) ? $CFG->ebexistingserviceselect : '';
+
+        $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+        $ebexistingserviceselect = get_config('auth_edwiserbridge', 'ebexistingserviceselect');
+
+        $token         = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
+        $service       = !empty($ebexistingserviceselect) ? $ebexistingserviceselect : '';
         $missingcapmsg = '<span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003;</span>';
         $url           = $CFG->wwwroot . "/admin/webservice/service_users.php?id=$service";
         $functionspage = "<a href='$url' target='_blank'>here</a>";

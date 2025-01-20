@@ -33,8 +33,9 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 $setupwizard = new auth_edwiserbridge\local\setup_wizard();
 
+$eb_setup_progress = get_config('auth_edwiserbridge', 'eb_setup_progress');
 // Check progress and redirect accordingly.
-$progress  = isset( $CFG->eb_setup_progress ) ? $CFG->eb_setup_progress : '';
+$progress  = !empty( $eb_setup_progress ) ? $eb_setup_progress : '';
 if ( ! empty( $progress ) ) {
 
     $nextstep = $setupwizard->get_next_step( $progress );
