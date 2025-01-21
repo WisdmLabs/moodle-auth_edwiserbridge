@@ -70,7 +70,7 @@ class observer {
         $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
             foreach ($sites as $value) {
                 if ($synchconditions[$value['wp_name']]['course_enrollment'] && $value['wp_token']) {
                     // Adding Token for verification in WP from Moodle.
@@ -112,7 +112,7 @@ class observer {
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if ($synchconditions[$value['wp_name']]['course_un_enrollment'] && $value['wp_token']) {
@@ -146,7 +146,7 @@ class observer {
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if ($synchconditions[$value["wp_name"]]["user_creation"] && $value['wp_token']) {
@@ -203,7 +203,7 @@ class observer {
         if (!empty($eb_connection_settings)) {
 
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -274,7 +274,7 @@ class observer {
         if (!empty($eb_connection_settings)) {
 
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -329,7 +329,7 @@ class observer {
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if (isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
@@ -359,7 +359,7 @@ class observer {
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -399,7 +399,7 @@ class observer {
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_synch_settings, true);
+            $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
                 if (
