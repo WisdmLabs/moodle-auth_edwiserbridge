@@ -71,7 +71,7 @@ class settings_handler {
             return $response;
         }
 
-        if (!$this->eb_check_if_service_name_available($name)) {
+        if ($this->eb_check_if_service_name_available($name)) {
             $response['status'] = 0;
             $response['msg'] = get_string('create_service_name_err', 'auth_edwiserbridge');
             return $response;
@@ -97,11 +97,11 @@ class settings_handler {
             $service = $webservicemanager->add_external_service((object) $servicedata);
             
             if ($service) {
-                $this->eb_add_auth_user($service->id, $userid);
-                $this->eb_add_default_web_service_functions($service->id);
-                $token = $this->eb_create_token($service->id, $userid);
+                $this->eb_add_auth_user($service, $userid);
+                $this->eb_add_default_web_service_functions($service);
+                $token = $this->eb_create_token($service, $userid);
                 
-                $response['service_id'] = $service->id;
+                $response['service_id'] = $service;
                 $response['token'] = $token;
             } else {
                 $response['status'] = 0;
@@ -159,8 +159,7 @@ class settings_handler {
 
         // No method to get service by name only by shortname. To be replaced in the future when method becomes available.
         $service = $DB->get_record('external_services',
-                        array('name' => $servicename), '*', IGNORE_MISSING);
-        
+                        array('name' => $servicename), 'id', IGNORE_MISSING);
         return $service;
     }
 
@@ -184,10 +183,9 @@ class settings_handler {
             'userid' => $userid,
             'iprestriction' => null,
             'validuntil' => null,
-            'timecreated' => time()
         ];
 
-        $webservicemanager->add_ws_authorised_user($serviceid, $userid, $userdata);
+        $webservicemanager->add_ws_authorised_user((object) $userdata);
     }
 
     /**

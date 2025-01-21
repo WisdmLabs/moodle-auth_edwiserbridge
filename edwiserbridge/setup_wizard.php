@@ -22,7 +22,6 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-use auth_edwiserbridge;
 require('../../config.php');
 global $CFG, $PAGE;
 
