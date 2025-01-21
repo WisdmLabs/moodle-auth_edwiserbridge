@@ -221,7 +221,7 @@ function auth_edwiserbridge_get_connection_settings() {
  * @return array The synchronization settings for the given index, or a default array if the settings are not found.
  */
 function auth_edwiserbridge_get_synch_settings($index) {
-    $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+    $eb_synch_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
     $reponse = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : false;
 
     $data = [
