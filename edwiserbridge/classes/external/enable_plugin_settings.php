@@ -69,7 +69,7 @@ trait enable_plugin_settings {
         require_capability('moodle/site:config', $systemcontext);
         
         // Call the function to get the list of protocols
-        $activewebservices = core_webservice_get_protocols();
+        $activewebservices = \core_webservice_get_protocols();
 
         if (empty($activewebservices) || ! in_array('rest', $activewebservices)) {
             $activewebservices[] = 'rest';
