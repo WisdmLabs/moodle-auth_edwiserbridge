@@ -245,9 +245,7 @@ class update {
      * @return array            Contents of the zip file.
      */
     public function unzip_plugin_file($pluginman, $zip, $temp, $root) {
-        ini_set('log_errors', 'Off');
         $contents = $pluginman->unzip_plugin_file($zip, $temp, $root);
-        ini_set('log_errors', 'On');
         return $contents;
     }
 

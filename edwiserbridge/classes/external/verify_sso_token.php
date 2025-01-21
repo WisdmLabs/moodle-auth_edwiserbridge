@@ -72,11 +72,11 @@ trait verify_sso_token {
             self::auth_edwiserbridge_verify_sso_token_parameters(),
             ['token' => $token]
         );
-        $responce = ['success' => false, 'msg' => 'Invalid token provided,please check token and try again'];
+        $responce = ['success' => false, 'msg' => get_string('invalid_sso_token_err', 'auth_edwiserbridge')];
         $secretkey = get_config('auth_edwiserbridge', 'sharedsecret');
         if ($params['token'] == $secretkey) {
             $responce['success'] = true;
-            $responce['msg'] = 'Token verified successfully';
+            $responce['msg'] = get_string('valid_sso_token_success', 'auth_edwiserbridge');
         }
 
         return $responce;

@@ -28,8 +28,6 @@ global $CFG, $PAGE;
 require_once($CFG->libdir . '/adminlib.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
-
-
 $setupwizard = new auth_edwiserbridge\local\setup_wizard();
 
 $eb_setup_progress = get_config('auth_edwiserbridge', 'eb_setup_progress');

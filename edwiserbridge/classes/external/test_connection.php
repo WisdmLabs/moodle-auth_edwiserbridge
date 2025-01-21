@@ -123,16 +123,16 @@ trait test_connection {
 
                 $msg = '<div>
                             <div class="eb_connection_short_msg">
-                                Test Connection failed, To check more information about issue click
-                                <span class="eb_test_connection_log_open"> here </span>.
+                                ' . get_string('test_connection_fail_err_1', 'auth_edwiserbridge') . '
+                                <span class="eb_test_connection_log_open"> ' . get_string('test_connection_fail_err_close_link', 'auth_edwiserbridge') . ' </span>.
                             </div>
                             <div class="eb_test_connection_log">
                                 <div style="display:flex;">
                                     <div class="eb_connection_err_response">
-                                        <h4> An issue was detected. </h4>
-                                        <div>Status : Connection  Failed </div>
-                                        <div>Url : '. $params['wp_url'] .'/wp-json/edwiser-bridge/wisdmlabs/</div>
-                                        <div>Response : '. $servermsg .'</div>
+                                        <h4> ' . get_string('test_connection_fail_err_2', 'auth_edwiserbridge') . ' </h4>
+                                        <div>' . get_string('test_connection_fail_err_3', 'auth_edwiserbridge') . '</div>
+                                        <div>' . get_string('test_connection_fail_url', 'auth_edwiserbridge') . $params['wp_url'] .'/wp-json/edwiser-bridge/wisdmlabs/</div>
+                                        <div>' . get_string('test_connection_fail_response', 'auth_edwiserbridge') . $servermsg .'</div>
                                     </div>
                                     <div class="eb_admin_templ_dismiss_notice_message">
                                         <span class="eb_test_connection_log_close " style="color:red;"> X </span>

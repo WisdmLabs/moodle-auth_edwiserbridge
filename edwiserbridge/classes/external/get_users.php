@@ -49,7 +49,6 @@ trait get_users {
     public static function auth_edwiserbridge_get_users($offset, $limit, $searchstring, $totalusers) {
         global $DB;
         
-        
         // Validation for context is needed.
         $systemcontext = \context_system::instance();
         self::validate_context($systemcontext);
@@ -60,19 +59,22 @@ trait get_users {
             ['offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_users" => $totalusers]
         );
 
-        $query = "SELECT id, username, firstname, lastname, email FROM {user} WHERE
-        deleted = 0 AND confirmed = 1 AND username != 'guest' ";
+        $query       = "SELECT id, username, firstname, lastname, email FROM {user} WHERE
+        deleted = 0 AND confirmed = 1 AND username != 'guest'";
+        $count_query = "SELECT count(*) total_count FROM {user} WHERE
+            deleted = 0 AND confirmed = 1 AND username != 'guest'";
+        $paramsql    = [];
 
         if (!empty($params['search_string'])) {
+            $query .= " AND (firstname LIKE :searchstring OR lastname LIKE :searchstring OR username LIKE :searchstring)";
             $searchstring = "%" . $params['search_string'] . "%";
-            $query .= " AND (firstname LIKE '$searchstring' OR lastname LIKE '$searchstring' OR username LIKE '$searchstring')";
+            $paramsql['searchstring'] = $searchstring;
         }
 
-        $users = $DB->get_records_sql($query, null, $offset, $limit);
+        $users = $DB->get_records_sql($query, $paramsql, $offset, $limit);
         $usercount = 0;
         if (!empty($params['total_users'])) {
-            $usercount = $DB->get_record_sql("SELECT count(*) total_count FROM {user} WHERE
-            deleted = 0 AND confirmed = 1 AND username != 'guest' ");
+            $usercount = $DB->get_record_sql($count_query);
             $usercount = $usercount->total_count;
         }
 

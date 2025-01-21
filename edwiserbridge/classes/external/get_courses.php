@@ -61,16 +61,18 @@ trait get_courses {
         );
 
         $query = "SELECT id, fullname, category as categoryid FROM {course}";
+        $count_query = "SELECT count(*) total_count FROM {course}";
+        $paramsql = [];
 
         if (!empty($params['search_string'])) {
-            $searchstring = "%" . $params['search_string'] . "%";
-            $query .= " WHERE (fullname LIKE '$searchstring')";
+            $query .= " WHERE (fullname LIKE :searchstring)";
+            $paramsql['searchstring'] = '%' . $params['search_string'] . '%';
         }
 
-        $courses = $DB->get_records_sql($query, null, $offset, $limit);
+        $courses = $DB->get_records_sql($query, $paramsql, $offset, $limit);
         $coursecount = 0;
         if (!empty($params['total_courses'])) {
-            $coursecount = $DB->get_record_sql("SELECT count(*) total_count FROM {course}");
+            $coursecount = $DB->get_record_sql($count_query);
             $coursecount = $coursecount->total_count;
         }
 

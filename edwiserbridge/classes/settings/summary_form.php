@@ -71,8 +71,7 @@ class summary_form extends moodleform {
             $webservicemanager->get_external_service_by_id($service);
             foreach ($allowedusers as &$alloweduser) {
                 if (!is_siteadmin($alloweduser->id) && array_key_exists($alloweduser->id, $usersmissingcaps)) {
-                    $missingcapmsg = "<span class='summ_error'>User don't have web service access capabilities,
-                     click $functionspage to know more.</span>";
+                    $missingcapmsg = "<span class='summ_error'>" . get_string('incomplete_caps_error', 'auth_edwiserbridge') . $functionspage . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge') . "</span>";
                 }
             }
 
@@ -89,8 +88,7 @@ class summary_form extends moodleform {
                 $tokenfield = auth_edwiserbridge_create_token_field($service, $token);
             }
         } else {
-            $missingcapmsg = "<span class='summ_error'>User don't have web service access capabilities,
-            click $functionspage to know more.</span>";
+            $missingcapmsg = "<span class='summ_error'>" . get_string('incomplete_caps_error', 'auth_edwiserbridge') . $functionspage . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge') . "</span>";
         }
 
         $summaryarray = [
