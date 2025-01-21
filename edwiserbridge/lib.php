@@ -510,7 +510,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
 
     $missingCount = 0;
     foreach ($requiredFunctions as $function) {
-        if (!$webservicemanager->service_has_function($serviceid, $function)) {
+        if (!$webservicemanager->service_function_exists($function, $serviceid)) {
             $missingCount++;
         }
     }

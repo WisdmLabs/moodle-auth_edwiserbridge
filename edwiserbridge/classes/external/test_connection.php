@@ -174,7 +174,7 @@ trait test_connection {
             ),
             'test_connection' => new external_value(
                 PARAM_TEXT,
-                get_string('web_service_test_connection', 'auth_edwiserbridge'),
+                get_string('web_service_test_conn', 'auth_edwiserbridge'),
                 VALUE_DEFAULT,
                 'moodle'
             )
