@@ -134,7 +134,7 @@ trait setup_wizard_save_and_continue {
                 }
                break;
             case 'user_and_course_sync':
-                $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+                $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
                 // Update Moodle Wordpress site details.
                 $existingsynchsettings = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : [];
                 $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');

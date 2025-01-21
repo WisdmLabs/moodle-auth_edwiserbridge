@@ -67,7 +67,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
@@ -108,7 +108,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
@@ -142,7 +142,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
@@ -198,7 +198,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
 
@@ -269,7 +269,7 @@ class observer {
         $encmethod = 'AES-128-CTR';
         $apihandler  = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
 
@@ -325,7 +325,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
@@ -355,7 +355,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
@@ -395,7 +395,7 @@ class observer {
 
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_sync_settings');
+        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
         
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
