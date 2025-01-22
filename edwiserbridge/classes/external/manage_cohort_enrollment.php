@@ -55,12 +55,12 @@ trait manage_cohort_enrollment {
                 'cohort' => new external_multiple_structure(
                     new external_single_structure(
                         [
-                            'courseId' => new external_value(
+                            'courseid' => new external_value(
                                 PARAM_INT,
                                 'Course Id in which cohort wil be enrolled.',
                                 VALUE_REQUIRED
                             ),
-                            'cohortId' => new external_value(
+                            'cohortid' => new external_value(
                                 PARAM_INT,
                                 'Cohort Id which will be enrolled in the course.',
                                 VALUE_REQUIRED
@@ -110,10 +110,10 @@ trait manage_cohort_enrollment {
 
         foreach ($params['cohort'] as $cohortdetails) {
             $cohortdetails = (object)$cohortdetails;
-            if (isset($cohortdetails->cohortId) && !empty($cohortdetails->cohortId) &&
-                    isset($cohortdetails->courseId) && !empty($cohortdetails->courseId)) {
-                $courseid = $cohortdetails->courseId;
-                $cohortid = $cohortdetails->cohortId;
+            if (isset($cohortdetails->cohortid) && !empty($cohortdetails->cohortid) &&
+                    isset($cohortdetails->courseid) && !empty($cohortdetails->courseid)) {
+                $courseid = $cohortdetails->courseid;
+                $cohortid = $cohortdetails->cohortid;
 
                 if (isset($cohortdetails->unenroll) && $cohortdetails->unenroll == 1) {
                     $enrol = enrol_get_plugin('cohort');

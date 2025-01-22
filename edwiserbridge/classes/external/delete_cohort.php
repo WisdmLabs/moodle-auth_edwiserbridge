@@ -56,9 +56,9 @@ trait delete_cohort {
                 'cohort' => new external_multiple_structure(
                     new external_single_structure(
                         [
-                            'cohortId' => new external_value(
+                            'cohortid' => new external_value(
                                 PARAM_INT,
-                                'Cohort Id which will be deleted in Moodle',
+                                'Cohort id which will be deleted in Moodle',
                                 VALUE_REQUIRED
                             ),
                         ]
@@ -105,7 +105,7 @@ trait delete_cohort {
 
         foreach ($params["cohort"] as $cohortdetails) {
             try {
-                $cohort = $DB->get_record('cohort', ['id' => $cohortdetails["cohortId"]], '*', MUST_EXIST);
+                $cohort = $DB->get_record('cohort', ['id' => $cohortdetails["cohortid"]], '*', MUST_EXIST);
                 if (isset($cohort->id)) {
                     $context = context::instance_by_id($cohort->contextid, MUST_EXIST);
                     cohort_delete_cohort($cohort);
