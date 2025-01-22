@@ -101,9 +101,6 @@ class eb_pro_license_controller {
      * @return string License status
      */
     public function update_status($licensedata) {
-
-        global $DB;
-
         $status = "";
         if ((empty($licensedata->success)) && isset($licensedata->error) && ($licensedata->error == "expired")) {
             $status = 'expired';
@@ -127,18 +124,10 @@ class eb_pro_license_controller {
         }
 
         // Delete previous license status.
-        $DB->delete_records_select(
-            'config_plugins',
-            'name = :name',
-            ['name' => 'edd_' . $this->pluginslug. '_license_status']
-        );
+        unset_config('edd_' . $this->pluginslug. '_license_status', 'auth_edwiserbridge');
 
-        $dataobject = new \stdClass();
-        $dataobject->plugin         = 'auth_edwiserbridge';
-        $dataobject->name = 'edd_' . $this->pluginslug. '_license_status';
-        $dataobject->value = $status;
-
-        $DB->insert_record('config_plugins', $dataobject);
+        // Update license status.
+        set_config('edd_' . $this->pluginslug. '_license_status', $status, 'auth_edwiserbridge');
 
         return $status;
     }
@@ -152,22 +141,13 @@ class eb_pro_license_controller {
      * @return bool   True if there is no data or the response code is not valid, false otherwise.
      */
     public function check_if_no_data($licensedata, $currentresponsecode, $validresponsecode) {
-        global $DB;
 
         if ($licensedata == null || ! in_array($currentresponsecode, $validresponsecode)) {
             // Delete previous record.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
-            );
+            unset_config('edd_' . $this->pluginslug. '_license_trans', 'auth_edwiserbridge');
 
             // Insert new license trans.
-            $dataobject = new \stdClass();
-            $dataobject->plugin         = 'auth_edwiserbridge';
-            $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
-            $dataobject->value = json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]);
-            $DB->insert_record('config_plugins', $dataobject);
+            set_config('edd_' . $this->pluginslug. '_license_trans', json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]), 'auth_edwiserbridge');
 
             return false;
         }
@@ -181,22 +161,14 @@ class eb_pro_license_controller {
      * @return void
      */
     public function activate_license($licensekey) {
-        global $DB, $CFG;
+        global $CFG;
     
         if ($licensekey) {
             // Delete previous license key.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'edd_' . $this->pluginslug . '_license_key']
-            );
+            unset_config('edd_' . $this->pluginslug. '_license_key', 'auth_edwiserbridge');
     
             // Insert new license key.
-            $dataobject = new \stdClass();
-            $dataobject->plugin = 'auth_edwiserbridge';
-            $dataobject->name = 'edd_' . $this->pluginslug . '_license_key';
-            $dataobject->value = $licensekey;
-            $DB->insert_record('config_plugins', $dataobject);
+            set_config('edd_' . $this->pluginslug. '_license_key', $licensekey, 'auth_edwiserbridge');
     
             // Use Moodle's curl class.
             include_once($CFG->libdir . '/filelib.php');
@@ -247,19 +219,10 @@ class eb_pro_license_controller {
     
             if (isset($licensedata->renew_link) && (!empty($licensedata->renew_link) || $licensedata->renew_link != "")) {
                 // Delete previous record.
-                $DB->delete_records_select(
-                    'config_plugins',
-                    'name = :name',
-                    ['name' => 'wdm_' . $this->pluginslug . '_product_site']
-                );
+                unset_config('wdm_' . $this->pluginslug . '_product_site', 'auth_edwiserbridge');
     
                 // Add renew link.
-                $dataobject = new \stdClass();
-                $dataobject->plugin = 'auth_edwiserbridge';
-                $dataobject->name = 'wdm_' . $this->pluginslug . '_product_site';
-                $dataobject->value = $licensedata->renew_link;
-    
-                $DB->insert_record('config_plugins', $dataobject);
+                set_config('wdm_' . $this->pluginslug . '_product_site', $licensedata->renew_link, 'auth_edwiserbridge');
             }
     
             $licensestatus = $this->update_status($licensedata);
@@ -273,19 +236,10 @@ class eb_pro_license_controller {
      * @param string $licensestatus The current license status.
      */
     public function set_transient_on_activation($licensestatus) {
-
-        global $DB;
-
         $transexpired = false;
 
         // Check license trans.
-        $transient = $DB->get_field_select(
-            'config_plugins',
-            'value',
-            'name = :name',
-            ['name' => 'wdm_' . $this->pluginslug. '_license_trans'],
-            IGNORE_MISSING
-        );
+        $transient = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug. '_license_trans');
 
         if ($transient) {
             $transient = json_decode($transient, true);
@@ -295,20 +249,12 @@ class eb_pro_license_controller {
                     $transexpired = true;
     
                     // Delete previous record.
-                    $DB->delete_records_select(
-                        'config_plugins',
-                        'name = :name',
-                        ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
-                    );
+                    unset_config('wdm_' . $this->pluginslug. '_license_trans', 'auth_edwiserbridge');
                 }
             } else {
                 $transexpired = true;
                 // Delete previous record.
-                $DB->delete_records_select(
-                    'config_plugins',
-                    'name = :name',
-                    ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
-                );
+                unset_config('wdm_' . $this->pluginslug. '_license_trans', 'auth_edwiserbridge');
             }
         } else {
             $transexpired = true;
@@ -317,11 +263,7 @@ class eb_pro_license_controller {
         if ($transexpired == false) {
 
             // Delete previous license trans.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'wdm_' . $this->pluginslug. '_license_trans']
-            );
+            unset_config('wdm_' . $this->pluginslug. '_license_trans', 'auth_edwiserbridge');
 
             if (! empty($licensestatus)) {
                 if ($licensestatus == 'valid') {
@@ -331,11 +273,7 @@ class eb_pro_license_controller {
                 }
 
                 // Insert new license trans.
-                $dataobject = new \stdClass();
-                $dataobject->plugin         = 'auth_edwiserbridge';
-                $dataobject->name = 'wdm_' . $this->pluginslug. '_license_trans';
-                $dataobject->value = json_encode([$licensestatus, $time]);
-                $DB->insert_record('config_plugins', $dataobject);
+                set_config('wdm_' . $this->pluginslug. '_license_trans', json_encode([$licensestatus, $time]), 'auth_edwiserbridge');
             }
         }
     }
@@ -346,14 +284,9 @@ class eb_pro_license_controller {
      * and updates the license status and transaction records in the database accordingly.
      */
     public function deactivate_license() {
-        global $DB, $CFG;
+        global $CFG;
     
-        $licensekey = $DB->get_field_select(
-            'config_plugins',
-            'value', 'name = :name',
-            ['name' => 'edd_' . $this->pluginslug . '_license_key'],
-            IGNORE_MISSING
-        );
+        $licensekey = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_key');
     
         if (!empty($licensekey)) {
             include_once($CFG->libdir . '/filelib.php');
@@ -393,33 +326,17 @@ class eb_pro_license_controller {
     
             if ($licensedata->license == 'deactivated' || $licensedata->license == 'failed') {
                 // Delete previous license status record.
-                $DB->delete_records_select(
-                    'config_plugins',
-                    'name = :name',
-                    ['name' => 'edd_' . $this->pluginslug . '_license_status']
-                );
+                unset_config('wdm_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
     
                 // Insert deactivated license status.
-                $dataobject = new \stdClass();
-                $dataobject->plugin = 'auth_edwiserbridge';
-                $dataobject->name = 'edd_' . $this->pluginslug . '_license_status';
-                $dataobject->value = 'deactivated';
-                $DB->insert_record('config_plugins', $dataobject);
+                set_config('wdm_' . $this->pluginslug . '_license_status', 'deactivated', 'auth_edwiserbridge');
             }
     
             // Delete previous license transaction record.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
-            );
+            unset_config('wdm_' . $this->pluginslug . '_license_trans', 'auth_edwiserbridge');
     
             // Insert new license transaction record.
-            $dataobject = new \stdClass();
-            $dataobject->plugin = 'auth_edwiserbridge';
-            $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
-            $dataobject->value = json_encode([$licensedata->license, 0]);
-            $DB->insert_record('config_plugins', $dataobject);
+            set_config('wdm_' . $this->pluginslug . '_license_trans', json_encode([$licensedata->license, 0]), 'auth_edwiserbridge');
         }
     }
 
@@ -431,7 +348,7 @@ class eb_pro_license_controller {
      * @return string The response status, either 'available', 'unavailable', or 'server_did_not_respond'.
      */
     public function get_data_from_db() {
-        global $DB, $CFG;
+        global $CFG;
 
         if (null !== self::$responsedata) {
             return self::$responsedata;
@@ -439,13 +356,7 @@ class eb_pro_license_controller {
 
         $transexpired = false;
 
-        $transient = $DB->get_field_select(
-            'config_plugins',
-            'value',
-            'name = :name',
-            ['name' => 'wdm_' . $this->pluginslug . '_license_trans'],
-            IGNORE_MISSING
-        );
+        $transient = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_trans');
 
         if ($transient) {
             $transient = json_decode($transient, true);
@@ -454,20 +365,12 @@ class eb_pro_license_controller {
                     $transexpired = true;
     
                     // Delete previous license transient.
-                    $DB->delete_records_select(
-                        'config_plugins',
-                        'name = :name',
-                        ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
-                    );
+                    unset_config('wdm_' . $this->pluginslug . '_license_trans', 'auth_edwiserbridge');
                 }
             } else {
                 $transexpired = true;
                 // Delete previous license transient.
-                $DB->delete_records_select(
-                    'config_plugins',
-                    'name = :name',
-                    ['name' => 'wdm_' . $this->pluginslug . '_license_trans']
-                );
+                unset_config('wdm_' . $this->pluginslug . '_license_trans', 'auth_edwiserbridge');
             }
 
         } else {
@@ -475,13 +378,7 @@ class eb_pro_license_controller {
         }
 
         if ($transexpired == true) {
-            $licensekey = $DB->get_field_select(
-                'config_plugins',
-                'value',
-                'name = :name',
-                ['name' => 'edd_' . $this->pluginslug . '_license_key'],
-                IGNORE_MISSING
-            );
+            $licensekey = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_key');
 
             if ($licensekey) {
                 include_once($CFG->libdir . '/filelib.php');
@@ -515,21 +412,11 @@ class eb_pro_license_controller {
 
                 if ($licensedata == null || !in_array($currentresponsecode, $validresponsecode)) {
                     // If server does not respond, read current license information.
-                    $licensestatus = $DB->get_field_select(
-                        'config_plugins',
-                        'value',
-                        'name = :name',
-                        ['name' => 'edd_' . $this->pluginslug . '_license_status'],
-                        IGNORE_MISSING
-                    );
+                    $licensestatus = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_status');
 
                     if (empty($licensedata)) {
                         // Insert new license transient.
-                        $dataobject = new \stdClass();
-                        $dataobject->plugin = 'auth_edwiserbridge';
-                        $dataobject->name = 'wdm_' . $this->pluginslug . '_license_trans';
-                        $dataobject->value = json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]);
-                        $DB->insert_record('config_plugins', $dataobject);
+                        set_config('wdm_' . $this->pluginslug . '_license_trans', json_encode(['server_did_not_respond', time() + (60 * 60 * 24)]), 'auth_edwiserbridge');
                     }
                 } else {
                     $licensestatus = $licensedata->license;
@@ -541,31 +428,17 @@ class eb_pro_license_controller {
 
                 if (isset($licensedata->license) && !empty($licensedata->license)) {
                     // Delete previous record.
-                    $DB->delete_records_select(
-                        'config_plugins',
-                        'name = :name',
-                        ['name' => 'edd_' . $this->pluginslug . '_license_status']
-                    );
+                    unset_config('wdm_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
 
                     // Insert new license status.
-                    $dataobject = new \stdClass();
-                    $dataobject->plugin = 'auth_edwiserbridge';
-                    $dataobject->name = 'edd_' . $this->pluginslug . '_license_status';
-                    $dataobject->value = $licensestatus;
-                    $DB->insert_record('config_plugins', $dataobject);
+                    set_config('wdm_' . $this->pluginslug . '_license_status', $licensestatus, 'auth_edwiserbridge');
                 }
 
                 $this->set_response_data($licensestatus, $this->pluginslug, true);
                 return self::$responsedata;
             }
         } else {
-            $licensestatus = $DB->get_field_select(
-                'config_plugins',
-                'value',
-                'name = :name',
-                ['name' => 'edd_' . $this->pluginslug . '_license_status'],
-                IGNORE_MISSING
-            );
+            $licensestatus = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_status');
 
             $this->set_response_data($licensestatus, $this->pluginslug);
             return self::$responsedata;
@@ -580,8 +453,6 @@ class eb_pro_license_controller {
      * @param boolean $settransient  Whether to set a transient
      */
     public function set_response_data($licensestatus, $pluginslug, $settransient = false) {
-        global $DB;
-
         if ($licensestatus == 'valid') {
             self::$responsedata = 'available';
         } else if ($licensestatus == 'expired') {
@@ -598,18 +469,10 @@ class eb_pro_license_controller {
             }
 
             // Delete previous record.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'wdm_' . $pluginslug . '_license_trans']
-            );
+            unset_config('wdm_' . $pluginslug . '_license_trans', 'auth_edwiserbridge');
 
             // Insert new license transient.
-            $dataobject = new \stdClass();
-            $dataobject->plugin         = 'auth_edwiserbridge';
-            $dataobject->name = 'wdm_' . $pluginslug . '_license_trans';
-            $dataobject->value = json_encode([$licensestatus, time() + (60 * 60 * 24)]);
-            $DB->insert_record('config_plugins', $dataobject);
+            set_config('wdm_' . $pluginslug . '_license_trans', json_encode([$licensestatus, time() + (60 * 60 * 24)]), 'auth_edwiserbridge');
         }
     }
 
@@ -619,39 +482,19 @@ class eb_pro_license_controller {
      * @return string A list of sites where the license key is activated, or an empty string if the number of activated sites is less than the maximum allowed.
      */
     public function get_site_data() {
+        global $CFG;
 
-        global $DB, $CFG;
+        $sites = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_key_sites');
 
-        $sites = $DB->get_field_select(
-            'config_plugins',
-            'value', 'name = :name',
-            ['name' => 'wdm_' . $this->pluginslug. '_license_key_sites'],
-            IGNORE_MISSING
-        );
-
-        $max = $DB->get_field_select(
-            'config_plugins',
-            'value',
-            'name = :name',
-            ['name' => 'wdm_' . $this->pluginslug. '_license_max_site'],
-            IGNORE_MISSING
-        );
+        $max = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_max_sites');
 
         $sites2 = json_decode($sites, true);
         if ( JSON_ERROR_NONE !== json_last_error() ) {
             $sites = unserialize($sites2);// For legacy data or data received from licensing server.
             // Delete previous record.
-            $DB->delete_records_select(
-                'config_plugins',
-                'name = :name',
-                ['name' => 'wdm_' . $this->pluginslug . '_license_key_sites']
-            );
+            unset_config('wdm_' . $this->pluginslug . '_license_key_sites', 'auth_edwiserbridge');
             // Add Json encoded data instead of serialized data.
-            $dataobject = new \stdClass();
-            $dataobject->plugin         = 'auth_edwiserbridge';
-            $dataobject->name = 'wdm_' . $this->pluginslug . '_license_key_sites';
-            $dataobject->value = json_encode($sites);
-            $DB->insert_record('config_plugins', $dataobject);
+            set_config('wdm_' . $this->pluginslug . '_license_key_sites', json_encode($sites), 'auth_edwiserbridge');
         } else {
             $sites = $sites2;
         }

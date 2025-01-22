@@ -390,29 +390,17 @@ class summary_form extends moodleform {
      * @return string The rendered license form template.
      */
     private function get_license_data() {
-        global $DB, $PAGE;
+        global $PAGE;
 
         $renderer = $PAGE->get_renderer('core');
 
         $pluginslug = 'moodle_edwiser_bridge';
 
         // Get License Key.
-        $licensekey = $DB->get_field_select(
-            'config_plugins',
-            'value',
-            'name = :name',
-            ['name' => 'edd_' . $pluginslug . '_license_key'],
-            IGNORE_MISSING
-        );
+        $licensekey = get_config('auth_edwiserbridge', 'edd_' . $pluginslug . '_license_key');
 
         // Get License Status.
-        $licensestatus = $DB->get_field_select(
-            'config_plugins',
-            'value',
-            'name = :name',
-            ['name' => 'edd_' . $pluginslug . '_license_status'],
-            IGNORE_MISSING
-        );
+        $licensestatus = get_config('auth_edwiserbridge', 'edd_' . $pluginslug . '_license_status');
 
         // Prepare data for Mustache template.
         $templatecontext = [

@@ -200,7 +200,7 @@ function auth_edwiserbridge_get_required_settings() {
  * Returns connection settings saved in the settings form.
  *
  * This function retrieves the connection settings for the Edwiser Bridge plugin that have been saved in the Moodle configuration.
- * The settings are stored in the $CFG->eb_connection_settings variable, which is unserialized and returned as an associative array.
+ * The settings are stored in the $CFG->eb_connection_settings variable, which is decodes and returned as an associative array.
  *
  * @return array An associative array containing the connection settings, or false if the settings are not found.
  */
@@ -214,7 +214,7 @@ function auth_edwiserbridge_get_connection_settings() {
  * Returns the synchronization settings for the given index.
  *
  * This function retrieves the synchronization settings for the Edwiser Bridge plugin based on the provided index.
- * The settings are stored in the $CFG->eb_synch_settings variable, which is unserialized and returned as an associative array.
+ * The settings are stored in the $CFG->eb_synch_settings variable, which is decoded and returned as an associative array.
  * If the settings are not found, a default array is returned.
  *
  * @param int $index The index of the synchronization settings to retrieve.
@@ -244,7 +244,7 @@ function auth_edwiserbridge_get_synch_settings($index) {
  * Returns a list of all the sites created in the Edwiser settings.
  *
  * This function retrieves the list of sites that have been configured in the Edwiser Bridge plugin settings. It checks if the
- * $CFG->eb_connection_settings variable is set and unserializes it to get the site information. If the variable is not set or
+ * $CFG->eb_connection_settings variable is set and decodes it to get the site information. If the variable is not set or
  * empty, it returns a single-element array with a default message.
  *
  * @return array An associative array of site keys and names, or a single-element array with a default message if no sites are found.

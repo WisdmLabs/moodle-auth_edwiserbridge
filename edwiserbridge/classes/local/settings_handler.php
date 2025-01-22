@@ -157,7 +157,7 @@ class settings_handler {
     public function eb_check_if_service_name_available($servicename) {
         global $DB;
 
-        // No method to get service by name only by shortname. To be replaced in the future when method becomes available.
+        // No method to get service by name only by name. To be replaced in the future when method becomes available.
         $service = $DB->get_record('external_services',
                         array('name' => $servicename), 'id', IGNORE_MISSING);
         return $service;
