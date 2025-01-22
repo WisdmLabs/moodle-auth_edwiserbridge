@@ -926,8 +926,7 @@ function auth_edwiserbridge_get_key_value($string, $key) {
  */
 function auth_edwiserbridge_get_user_session($userid, $sessionkey) {
     global $DB;
-    $table = 'user_preferences';
-    $record = $DB->get_record($table, ['userid' => $userid, 'name' => $sessionkey]);
+    $record = $DB->get_record('user_preferences', ['userid' => $userid, 'name' => $sessionkey]);
 
     $record = get_user_preferences($sessionkey, '', $userid);
 
