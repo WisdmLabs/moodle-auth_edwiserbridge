@@ -286,8 +286,7 @@ class eb_pro_license_controller {
     public function deactivate_license() {
         global $CFG;
     
-        $licensekey = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_key');
-    
+        $licensekey = get_config('auth_edwiserbridge', 'edd_' . $this->pluginslug . '_license_key');
         if (!empty($licensekey)) {
             include_once($CFG->libdir . '/filelib.php');
             $curl = new \curl();
@@ -326,10 +325,10 @@ class eb_pro_license_controller {
     
             if ($licensedata->license == 'deactivated' || $licensedata->license == 'failed') {
                 // Delete previous license status record.
-                unset_config('wdm_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
+                unset_config('edd_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
     
                 // Insert deactivated license status.
-                set_config('wdm_' . $this->pluginslug . '_license_status', 'deactivated', 'auth_edwiserbridge');
+                set_config('edd_' . $this->pluginslug . '_license_status', 'deactivated', 'auth_edwiserbridge');
             }
     
             // Delete previous license transaction record.
@@ -378,7 +377,7 @@ class eb_pro_license_controller {
         }
 
         if ($transexpired == true) {
-            $licensekey = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_key');
+            $licensekey = get_config('auth_edwiserbridge', 'edd_' . $this->pluginslug . '_license_key');
 
             if ($licensekey) {
                 include_once($CFG->libdir . '/filelib.php');
@@ -412,7 +411,7 @@ class eb_pro_license_controller {
 
                 if ($licensedata == null || !in_array($currentresponsecode, $validresponsecode)) {
                     // If server does not respond, read current license information.
-                    $licensestatus = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_status');
+                    $licensestatus = get_config('auth_edwiserbridge', 'edd_' . $this->pluginslug . '_license_status');
 
                     if (empty($licensedata)) {
                         // Insert new license transient.
@@ -428,17 +427,17 @@ class eb_pro_license_controller {
 
                 if (isset($licensedata->license) && !empty($licensedata->license)) {
                     // Delete previous record.
-                    unset_config('wdm_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
+                    unset_config('edd_' . $this->pluginslug . '_license_status', 'auth_edwiserbridge');
 
                     // Insert new license status.
-                    set_config('wdm_' . $this->pluginslug . '_license_status', $licensestatus, 'auth_edwiserbridge');
+                    set_config('edd_' . $this->pluginslug . '_license_status', $licensestatus, 'auth_edwiserbridge');
                 }
 
                 $this->set_response_data($licensestatus, $this->pluginslug, true);
                 return self::$responsedata;
             }
         } else {
-            $licensestatus = get_config('auth_edwiserbridge', 'wdm_' . $this->pluginslug . '_license_status');
+            $licensestatus = get_config('auth_edwiserbridge', 'edd_' . $this->pluginslug . '_license_status');
 
             $this->set_response_data($licensestatus, $this->pluginslug);
             return self::$responsedata;
