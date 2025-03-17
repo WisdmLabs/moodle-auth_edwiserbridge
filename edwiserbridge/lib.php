@@ -618,34 +618,35 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
     $webservicemanager = new \webservice();
     $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
     $connections = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : [];
-
-    foreach ($connections as $connection) {
-        $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
-        $serviceid = $token ? $token->externalserviceid : '';
-
-        if (empty($serviceid)) {
-            continue;
-        }
-
-        // Define required functions
-        $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
-        $bulkpurchasefunctions = [
-            'core_cohort_add_cohort_members',
-            'core_cohort_create_cohorts',
-            'core_role_assign_roles',
-            'core_role_unassign_roles',
-            'core_cohort_delete_cohort_members',
-            'core_cohort_get_cohorts',
-            'auth_edwiserbridge_manage_cohort_enrollment',
-            'auth_edwiserbridge_delete_cohort',
-            'auth_edwiserbridge_manage_user_cohort_enrollment'
-        ];
-
-        $webservicefunctions = array_merge($ssofunctions, $bulkpurchasefunctions);
-
-        foreach ($webservicefunctions as $functionname) {
-            if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
-                $webservicemanager->add_external_function_to_service($functionname, $serviceid);
+    if (!empty($connections)) {
+        foreach ($connections as $connection) {
+            $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
+            $serviceid = $token ? $token->externalserviceid : '';
+    
+            if (empty($serviceid)) {
+                continue;
+            }
+    
+            // Define required functions
+            $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
+            $bulkpurchasefunctions = [
+                'core_cohort_add_cohort_members',
+                'core_cohort_create_cohorts',
+                'core_role_assign_roles',
+                'core_role_unassign_roles',
+                'core_cohort_delete_cohort_members',
+                'core_cohort_get_cohorts',
+                'auth_edwiserbridge_manage_cohort_enrollment',
+                'auth_edwiserbridge_delete_cohort',
+                'auth_edwiserbridge_manage_user_cohort_enrollment'
+            ];
+    
+            $webservicefunctions = array_merge($ssofunctions, $bulkpurchasefunctions);
+    
+            foreach ($webservicefunctions as $functionname) {
+                if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
+                    $webservicemanager->add_external_function_to_service($functionname, $serviceid);
+                }
             }
         }
     }
