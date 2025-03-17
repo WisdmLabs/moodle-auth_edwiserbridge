@@ -361,52 +361,29 @@ define("auth_edwiserbridge/eb_settings", [
             $(document).on("click", ".eb_copy_text_wrap", function(event) {
                 event.preventDefault();
 
-                var copyText = $(this).find(".eb_copy_text").html();
-                var temp = document.createElement("textarea");
-                temp.textContent = copyText;
-
-                document.body.appendChild(temp);
-                var selection = document.getSelection();
-                var range = document.createRange();
-                range.selectNode(temp);
-                selection.removeAllRanges();
-                selection.addRange(range);
-
-                document.execCommand("copy");
-
-                temp.remove();
-                toaster("Title", 400);
+                var copyText = $(this).find(".eb_copy_text").html().trim();
+                navigator.clipboard.writeText(copyText).then(() => {
+                    toaster(M.util.get_string('copied', 'auth_edwiserbridge'), 400);
+                });
             });
 
             $(document).on("click", ".eb_primary_copy_btn", function(event) {
                 event.preventDefault();
-
-                // var copyText     = $(this).html();
 
                 var parent = $(this).parent().parent();
 
                 parent = parent.find(".eb_copy");
 
                 if (parent.attr("id") == "id_eb_token") {
-                    var copyText = parent.val();
+                    var copyText = parent.val().trim();
                 } else {
-                    var copyText = parent.text();
+                    var copyText = parent.text().trim();
                 }
 
-                var temp = document.createElement("textarea");
-                temp.textContent = copyText;
-
-                document.body.appendChild(temp);
-                var selection = document.getSelection();
-                var range = document.createRange();
-                range.selectNode(temp);
-                selection.removeAllRanges();
-                selection.addRange(range);
-
-                document.execCommand("copy");
-
-                temp.remove();
-                toaster("Title", 200);
+                navigator.clipboard.writeText(copyText)
+                .then(() => {
+                    toaster(M.util.get_string('copied', 'auth_edwiserbridge'), 200);
+                })
             });
 
             /*************   Copy to clipboard functionality handler  **************/
@@ -1127,24 +1104,20 @@ define("auth_edwiserbridge/eb_settings", [
 
                 var copyText = $(this).data('copy');
 
-                // Create a temporary textarea element
-                var temp = document.createElement("textarea");
-                temp.style.position = 'fixed'; // Prevent scrolling to the bottom when appending to the body
-                temp.value = copyText;
-
-                // Append the textarea to the body
-                document.body.appendChild(temp);
-
-                temp.select();
-                temp.setSelectionRange(0, copyText.length);
-
-                document.execCommand("copy");
-                temp.remove();
-                var copy_success = '<p class="eb_setup_copy_success"><i class="fa fa-check" aria-hidden="true"></i>' + M.util.get_string('copied', 'auth_edwiserbridge') + '</p>';
-                $(this).append(copy_success);
-                setTimeout(function(){
-                    $('.eb_setup_copy_success').remove();
-                }, 2000);
+                navigator.clipboard.writeText(copyText)
+                .then(() => {
+                    var copy_success = '<p class="eb_setup_copy_success"><i class="fa fa-check" aria-hidden="true"></i> ' 
+                        + M.util.get_string("copied", "auth_edwiserbridge") + '</p>';
+                    
+                    $(this).append(copy_success);
+        
+                    // Remove success message after 2 seconds
+                    setTimeout(() => {
+                        $(".eb_setup_copy_success").fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                    }, 2000);
+                });
             });
 
 

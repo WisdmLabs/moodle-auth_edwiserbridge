@@ -90,7 +90,6 @@ trait get_mandatory_settings {
             $studentroleid = null;
             debugging('Student role archetype not found in the system.', DEBUG_DEVELOPER);
         }
-        // $studentroleid = $DB->get_record('role', ['shortname' => 'student'])->id;
         $settings['student_role_id'] = $studentroleid;
 
 

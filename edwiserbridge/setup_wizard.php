@@ -79,8 +79,6 @@ $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
 // 
 $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
-// $PAGE->requires->js('/auth/edwiserbridge/amd/src/setup_wizard.js');
-// $PAGE->requires->js('/auth/edwiserbridge/amd/src/sso_settings.js');
 
 // Actual page template output starts here.
 
