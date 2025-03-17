@@ -26,7 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir.'/authlib.php');
-
+use moodle_url;
+use core\context\system as context_system;
 /**
  * Plugin for no authentication.
  */

@@ -26,12 +26,11 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_single_structure;
+use core_external\external_value;
 use auth_edwiserbridge;
+use core\context\system as context_system;
+use core_external\external_function_parameters;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_create_service
@@ -48,7 +47,7 @@ trait create_service {
     public static function auth_edwiserbridge_create_service($webservicename, $userid) {
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/webservice:createtoken', $systemcontext);
         
@@ -69,11 +68,11 @@ trait create_service {
     public static function auth_edwiserbridge_create_service_parameters() {
         return new external_function_parameters(
             [
-                'web_service_name' => new external_value(
+                'webservicename' => new external_value(
                     PARAM_TEXT,
                     get_string('web_service_name', 'auth_edwiserbridge')
                 ),
-                'user_id' => new external_value(
+                'userid' => new external_value(
                     PARAM_TEXT,
                     get_string('web_service_auth_user', 'auth_edwiserbridge')
                 ),

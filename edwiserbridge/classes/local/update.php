@@ -33,16 +33,16 @@ require_once($CFG->libdir . '/markdown/Markdown.php');
 define('EB_PLUGINS_LIST', "https://edwiser.org/edwiserupdates.json");
 define('EB_PLUGIN_UPDATE', "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json");
 
-use core_plugin_manager;
-use moodle_exception;
+use core\plugin_manager as core_plugin_manager;
+use core\exception\moodle_exception as moodle_exception;
 use Michelf\MarkDown;
-use core_component;
-use html_writer;
+use core\component as core_component;
 use ZipArchive;
 use moodle_url;
 use Exception;
 use stdClass;
 use curl;
+use core\output\html_writer as html_writer;
 
 /**
  * Class update
@@ -72,6 +72,8 @@ class update {
      * @var null
      */
     public static $cache = null;
+
+    public $page = null;
 
     /**
      * Cache file url
@@ -365,7 +367,7 @@ class update {
 
         if (!$silent) {
             foreach ($validator->get_messages() as $message) {
-                if ($message->level === $validator::WARNING || $message->level === $validator::ERROR && !CLI_SCRIPT) {
+                if ($message->level === $validator::WARNING || $message->level === $validator::ERROR && PHP_SAPI !== 'cli') {
                     mtrace('  <strong>['.$validator->message_level_name($message->level).']</strong>', ' ');
                 } else {
                     mtrace('  ['.$validator->message_level_name($message->level).']', ' ');
@@ -383,7 +385,7 @@ class update {
                 }
 
                 if ($icon = $validator->message_help_icon($message->msgcode)) {
-                    if (CLI_SCRIPT) {
+                    if (PHP_SAPI === 'cli') {
                         mtrace(
                             PHP_EOL.'  ^^^ '.get_string('help').': '. get_string(
                                 $icon->identifier.'_help',
@@ -478,7 +480,7 @@ class update {
             $silent || mtrace(get_string('unabletounzip', 'auth_edwiserbridge', $zipfile), PHP_EOL);
             return false;
         }
-        if (count($zips) == 1) {
+        if (is_array($zips) && count($zips) == 1) {
             $zips[$zipfile] = $zips[0];
             unset($zips[0]);
         } else {
@@ -486,14 +488,15 @@ class update {
         }
 
         $checks = true;
-        // Validate all downloaded packages.
-        foreach ($zips as $zipfile => $plugindetails) {
-            if ($plugindetails->component != $plugin->component) {
-                unset($zips[$zipfile]);
-                unlink($zipfile);
-                continue;
+        if (is_iterable($zips)) {
+            foreach ($zips as $zipfile => $plugindetails) {
+                if ($plugindetails->component != $plugin->component) {
+                    unset($zips[$zipfile]);
+                    unlink($zipfile);
+                    continue;
+                }
+                $checks &= $this->validate_plugin_zip($pluginman, $plugindetails, $zipfile, $silent);
             }
-            $checks &= $this->validate_plugin_zip($pluginman, $plugindetails, $zipfile, $silent);
         }
         if (!$checks) {
             return;
@@ -544,9 +547,9 @@ class update {
      * @return string HTML containing the buttons
      */
     public function plugins_management_confirm_buttons(
-        moodle_url $continue = null,
-        moodle_url $download = null,
-        moodle_url $cancel = null
+        ?moodle_url $continue = null,
+        ?moodle_url $download = null,
+        ?moodle_url $cancel = null
     ) {
         global $OUTPUT;
 
@@ -607,7 +610,7 @@ class update {
         if ($confirmed) {
             // Installation confirmed at the validation results page.
             if (!$this->install_plugin($installable, true, true)) {
-                throw new moodle_exception('install_plugins_failed', 'core_plugin', $return);
+                throw new moodle_exception('install_plugins_failed', 'auth_edwiserbridge', $return);
             }
 
             // Always redirect to admin/index.php to perform the database upgrade.
@@ -676,7 +679,7 @@ class update {
 
         $temp = make_request_directory();
         $zips = $this->verify_zip($pluginman, $zip, $temp, $plugin->component);
-        if (count($zips) == 1) {
+        if (is_array($zips) && count($zips) == 1) {
             $zips[$zip] = $zips[0];
             unset($zips[0]);
         } else {
@@ -691,14 +694,16 @@ class update {
         }
         $checks = true;
         // Validate all downloaded packages.
-        foreach ($zips as $zipfile => $plugindetails) {
-            if ($plugindetails->component != $plugin->component) {
-                unset($zips[$zipfile]);
-                unlink($zipfile);
-                continue;
+        if (is_iterable($zips)) {
+            foreach ($zips as $zipfile => $plugindetails) {
+                if ($plugindetails->component != $plugin->component) {
+                    unset($zips[$zipfile]);
+                    unlink($zipfile);
+                    continue;
+                }
+                // Force download.
+                send_file($zipfile, $plugin->component . '.zip', null , 0, false, true);
             }
-            // Force download.
-            send_file($zipfile, $plugin->component . '.zip', null , 0, false, true);
         }
     }
 

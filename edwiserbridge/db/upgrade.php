@@ -37,10 +37,6 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
  * @return bool True to continue the upgrade process.
  */
 function xmldb_auth_edwiserbridge_upgrade($oldversion) {
-
-    if ( ! auth_edwiserbridge_check_pro_dependancy() ) {
-        edwiser_bridge_pro_dependancy_notice();
-    }
     // Enable plugin in the default authentication method.
     auth_edwiserbridge_enable_plugin();
 

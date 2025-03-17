@@ -26,12 +26,12 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
 use completion_info;
-use core_completion\progress;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core_external\external_function_parameters;
+use core\context\course as context_course;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_course_progress
@@ -73,7 +73,7 @@ trait get_course_progress {
             foreach ($result as $key => $value) {
                 
                 // Validation for context is needed.
-                $coursecontext = \context_course::instance($value->course);
+                $coursecontext = context_course::instance($value->course);
                 self::validate_context($coursecontext);
                 require_capability('report/progress:view', $coursecontext);
                 
@@ -116,7 +116,7 @@ trait get_course_progress {
         return new external_function_parameters([
             'user_id' => new external_value(
                 PARAM_TEXT,
-                'User ID to get progress for',
+                get_string('web_service_user_id', 'auth_edwiserbridge'),
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
@@ -138,8 +138,8 @@ trait get_course_progress {
         return new external_multiple_structure(
             new external_single_structure(
                 [
-                    'course_id'  => new external_value( PARAM_TEXT, 'Course ID', VALUE_REQUIRED ),
-                    'completion' => new external_value( PARAM_INT, 'Completion percentage', VALUE_REQUIRED ),
+                    'course_id'  => new external_value( PARAM_TEXT, get_string('web_service_courseid', 'auth_edwiserbridge'), VALUE_REQUIRED ),
+                    'completion' => new external_value( PARAM_INT, get_string('web_service_completion_percentage', 'auth_edwiserbridge'), VALUE_REQUIRED ),
                 ]
             )
         );

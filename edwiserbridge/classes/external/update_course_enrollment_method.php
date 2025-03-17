@@ -26,11 +26,11 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\course as context_course;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_update_course_enrollment_method
@@ -64,7 +64,7 @@ trait update_course_enrollment_method {
             if (isset($enrollplugins['manual'])) {
                 foreach ($params['courseid'] as $singlecourseid) {
                 // Validation for context is needed.
-                $coursecontext = \context_course::instance( $singlecourseid );
+                $coursecontext = context_course::instance( $singlecourseid );
                 self::validate_context($coursecontext);
         
                 require_capability('moodle/course:enrolconfig', $coursecontext);
@@ -113,10 +113,12 @@ trait update_course_enrollment_method {
             [
                 'courseid'   => new external_multiple_structure(
                     new external_value(
-                        PARAM_TEXT,
-                        'Course id'
+                        PARAM_INT,
+                        get_string('web_service_courseid', 'auth_edwiserbridge'),
                     ),
-                    'List of course id.'
+                    VALUE_OPTIONAL,
+                    [],
+                    get_string('web_service_courselist', 'auth_edwiserbridge')
                 ),
             ]
         );
@@ -139,15 +141,15 @@ trait update_course_enrollment_method {
                 [
                     'courseid' => new external_value(
                         PARAM_INT,
-                        'id of course'
+                        get_string('web_service_courseid', 'auth_edwiserbridge')
                     ),
                     'status' => new external_value(
                         PARAM_INT,
-                        'Returns 1 if manual enrolment is enabled and 0 if disabled.'
+                        get_string('web_service_manual_enrolment', 'auth_edwiserbridge'),
                     ),
                     'message' => new external_value(
                         PARAM_TEXT,
-                        'message',
+                        get_string('web_service_api_msg', 'auth_edwiserbridge'),
                         VALUE_OPTIONAL
                     ),
                 ]

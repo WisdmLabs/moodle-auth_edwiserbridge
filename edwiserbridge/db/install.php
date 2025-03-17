@@ -36,10 +36,6 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
  */
 function xmldb_auth_edwiserbridge_install() {
 
-    if ( ! auth_edwiserbridge_check_pro_dependancy() ) {
-        edwiser_bridge_pro_dependancy_notice();
-    }
-
     // Enable plugin in the default authentication method.
     auth_edwiserbridge_enable_plugin();
 

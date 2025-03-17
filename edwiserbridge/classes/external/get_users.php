@@ -26,11 +26,11 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_users
@@ -50,7 +50,7 @@ trait get_users {
         global $DB;
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/user:viewalldetails', $systemcontext);
         
@@ -66,9 +66,9 @@ trait get_users {
         $paramsql    = [];
 
         if (!empty($params['search_string'])) {
-            $query .= " AND (firstname LIKE :searchstring OR lastname LIKE :searchstring OR username LIKE :searchstring)";
+            $query .= " AND (firstname LIKE :searchstring1 OR lastname LIKE :searchstring2 OR username LIKE :searchstring3)";
             $searchstring = "%" . $params['search_string'] . "%";
-            $paramsql['searchstring'] = $searchstring;
+            $paramsql['searchstring1'] = $paramsql['searchstring2'] = $paramsql['searchstring3'] = $searchstring;
         }
 
         $users = $DB->get_records_sql($query, $paramsql, $offset, $limit);

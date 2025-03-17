@@ -45,7 +45,7 @@ if (auth_edwiserbridge_check_pro_dependancy()) {
         'modules',
         new admin_category(
             'edwisersettings',
-            new lang_string(
+            new \lang_string(
                 'edwiserbridge',
                 'auth_edwiserbridge'
             )
@@ -56,7 +56,7 @@ if (auth_edwiserbridge_check_pro_dependancy()) {
         'edwisersettings',
         new admin_externalpage(
             'edwiserbridge_conn_synch_settings',
-            new lang_string(
+            new \lang_string(
                 'nav_name',
                 'auth_edwiserbridge'
             ),
@@ -72,7 +72,7 @@ if (auth_edwiserbridge_check_pro_dependancy()) {
         'edwisersettings',
         new admin_externalpage(
             'edwiserbridge_setup',
-            new lang_string(
+            new \lang_string(
                 'run_setup',
                 'auth_edwiserbridge'
             ),
@@ -85,8 +85,8 @@ if (auth_edwiserbridge_check_pro_dependancy()) {
     );
 
     if ($ADMIN->fulltree) {
-        $settingslink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', ['tab' => 'sso']);
-        $heading = new lang_string('settings_migration', 'auth_edwiserbridge')
+        $settingslink = new \moodle_url('/auth/edwiserbridge/edwiserbridge.php', ['tab' => 'sso']);
+        $heading = new \lang_string('settings_migration', 'auth_edwiserbridge')
             . ' <a href="' . $settingslink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }

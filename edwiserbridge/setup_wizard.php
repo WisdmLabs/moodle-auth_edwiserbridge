@@ -24,6 +24,7 @@
  */
 require('../../config.php');
 global $CFG, $PAGE;
+use core\context\system as context_system;
 
 require_once($CFG->libdir . '/adminlib.php');
 require_once(dirname(__FILE__) . '/lib.php');

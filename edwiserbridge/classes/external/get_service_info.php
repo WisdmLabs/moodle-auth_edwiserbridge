@@ -26,11 +26,10 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
@@ -49,7 +48,7 @@ trait get_service_info {
     public static function auth_edwiserbridge_get_service_info($serviceid) {
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         
         require_capability('moodle/webservice:managealltokens', $systemcontext);

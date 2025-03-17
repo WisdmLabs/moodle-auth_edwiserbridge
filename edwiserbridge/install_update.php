@@ -24,6 +24,9 @@
  */
 
 use core\update\remote_info;
+use moodle_url;
+use core\context\system as context_system;
+use core\exception\moodle_exception as moodle_exception;
 
 require_once(__DIR__ . '/../../config.php');
 global $CFG, $PAGE;
@@ -89,6 +92,6 @@ $edwiserpluginupdate->upgrade_install_plugin(
             'sesskey' => $sesskey,
         ]
     ),
-    $plugin->url,
+    $plugin['url'],
     new moodle_url('/my')
 );

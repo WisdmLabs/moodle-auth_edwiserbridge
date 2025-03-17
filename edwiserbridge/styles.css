@@ -2,11 +2,6 @@
     display: none;
 }
 
-
-/*#admin-ebnewserviceinp, #admin-ebnewserviceuserselect, #eb_service_form .eb_service_field{
-	display: none;
-}*/
-
 .eb_toke_detail_tbl {
     margin: 15px 10px 15px 30px;
     line-height: 35px;
@@ -16,7 +11,6 @@
 /*************************************/
 
 #auth_edwiserbridge_copy {
-    /*visibility: hidden;*/
     min-width: 250px;
     background-color: #333;
     color: #fff;
@@ -67,7 +61,6 @@
 #eb_common_success {
     color: green;
     display: none;
-    /*padding: 5px;*/
     border: 1px solid #b3ffb3;
     padding: 12px;
     background-color: #f1f6f1;

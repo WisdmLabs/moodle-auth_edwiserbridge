@@ -23,7 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use auth_edwiserbridge\settings\navigation_form;
+use auth_edwiserbridge\settings\navigation_form as navigation_form;
+use core\context\system as context_system;
 
 require('../../config.php');
 global $CFG, $PAGE;
@@ -71,7 +72,7 @@ $mform = [
     ],
 ];
 
-$mformnavigation = new \auth_edwiserbridge\settings\navigation_form();
+$mformnavigation = new navigation_form();
 
 /*
  * Necessary page requirements.

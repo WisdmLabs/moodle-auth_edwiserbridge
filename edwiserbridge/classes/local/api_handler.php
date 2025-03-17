@@ -93,16 +93,16 @@ class api_handler {
                 $msg = get_string("default_error", "auth_edwiserbridge");
                 // Check if response is html.
                 if ($response != strip_tags($response)) {
-                    $msg = "Html response received from WordPress. Please make sure the WordPress site is up and running.";
+                    $msg = get_string('wp_site_error', 'auth_edwiserbridge');
                 }
                 if (strpos($response, "BitNinja") !== false || strpos($response, "Security check by BitNinja.IO") !== false) {
-                    $msg = "Request blocked by BitNinja. Please whitelist the IP address of your Moodle server.";
+                    $msg = get_string('bitninja_error', 'auth_edwiserbridge');
                 }
                 if (strpos($response, "Cloudflare Ray ID") !== false) {
-                    $msg = "Request blocked by Cloudflare. Please whitelist the IP address of your Moodle server.";
+                    $msg = get_string('cloudflare_error', 'auth_edwiserbridge');
                 }
                 if (strpos($response, "Mod_Security") !== false) {
-                    $msg = "Request blocked by Mod Security. Please whitelist the IP address of your Moodle server.";
+                    $msg = get_string('modsecurity_error', 'auth_edwiserbridge');
                 }
                 return ["error" => 1, "msg" => $msg];
             }

@@ -166,7 +166,7 @@ $functions = [
         'methodname'  => 'auth_edwiserbridge_delete_cohort',
         'description' => 'Delete cohort',
         'type'        => 'write',
-        'capabilities'  => 'moodle/cohort:delete'
+        'capabilities'  => 'moodle/cohort:manage'
     ],
     'auth_edwiserbridge_manage_user_cohort_enrollment' => [
         'classname'   => 'auth_edwiserbridge\external\api',

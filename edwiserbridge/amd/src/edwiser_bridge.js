@@ -20,6 +20,7 @@
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
+ * @module      auth_edwiserbridge/edwiser_bridge
  */
 define(['jquery', 'core/ajax', 'core/url', 'core/str'], function($, ajax, url) {
     return {

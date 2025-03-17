@@ -25,12 +25,11 @@
  */
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
 use auth_edwiserbridge;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_setup_wizard_save_and_continue
@@ -64,12 +63,12 @@ trait setup_wizard_save_and_continue {
         global $CFG;
 
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
         
         global $PAGE;
-        $PAGE->set_context(\context_system::instance());
+        $PAGE->set_context(context_system::instance());
 
         $response = [
             'html_data' => '',
@@ -191,8 +190,8 @@ trait setup_wizard_save_and_continue {
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_returns() {
         new external_single_structure(
             [
-                'html_data' => new external_value(PARAM_RAW, 'Setup wizards next step html content'),
-                'title'     => new external_value(PARAM_RAW, 'Setup wizards next step title'),
+                'html_data' => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_html_data', 'auth_edwiserbridge')),
+                'title'     => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_title', 'auth_edwiserbridge')),
             ]
         );
     }

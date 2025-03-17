@@ -26,11 +26,6 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
@@ -39,6 +34,15 @@ require_once($CFG->dirroot . '/cohort/externallib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
 require_once($CFG->dirroot. '/user/lib.php');
 require_once($CFG->dirroot. '/cohort/lib.php');
+
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
+use core\context\user as context_user;
+use core\exception\moodle_exception as moodle_exception;
+use core_completion\progress;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_manage_cohort_enrollment
@@ -57,17 +61,17 @@ trait manage_cohort_enrollment {
                         [
                             'courseid' => new external_value(
                                 PARAM_INT,
-                                'Course Id in which cohort wil be enrolled.',
+                                get_string('web_service_cohort_courseid', 'auth_edwiserbridge'),
                                 VALUE_REQUIRED
                             ),
                             'cohortid' => new external_value(
                                 PARAM_INT,
-                                'Cohort Id which will be enrolled in the course.',
+                                get_string('web_service_course_cohortid', 'auth_edwiserbridge'),
                                 VALUE_REQUIRED
                             ),
                             'unenroll' => new external_value(
                                 PARAM_INT,
-                                'If true, cohort will be unenrolled from the course.',
+                                get_string('web_service_course_unenroll', 'auth_edwiserbridge'),
                                 VALUE_OPTIONAL
                             ),
                         ]
@@ -88,7 +92,7 @@ trait manage_cohort_enrollment {
 
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
 
         require_capability('moodle/cohort:assign', $systemcontext );
@@ -100,7 +104,7 @@ trait manage_cohort_enrollment {
         );
 
         // Context validation.
-        $context = get_context_instance(CONTEXT_USER, $USER->id);
+        $context = context_user::instance($USER->id);
         self::validate_context($context);
 
         // Capability checking.
@@ -164,6 +168,6 @@ trait manage_cohort_enrollment {
      * @return external_value The ID of the instance as an integer.
      */
     public static function auth_edwiserbridge_manage_cohort_enrollment_returns() {
-        return new external_value(PARAM_INT, 'Id of the instance');
+        return new external_value(PARAM_INT, get_string('web_service_instance_id', 'auth_edwiserbridge'));
     }
 }

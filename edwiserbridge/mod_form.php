@@ -26,12 +26,12 @@
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-connection-settings.php');
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-navigation.php');
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-service-settings.php');
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-summary.php');
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-synchronization-settings.php');
-require_once(dirname(__FILE__) . '/classes/settings/class-eb-sso-settings.php');
+require_once(__DIR__ . '/classes/settings/settings_form.php');
+require_once(__DIR__ . '/classes/settings/navigation_form.php');
+require_once(__DIR__ . '/classes/settings/service_form.php');
+require_once(__DIR__ . '/classes/settings/summary_form.php');
+require_once(__DIR__ . '/classes/settings/synchronization_form.php');
+require_once(__DIR__ . '/classes/settings/sso_form.php');
 
 /**
  * Defines the settings form for the Edwiser Bridge plugin.

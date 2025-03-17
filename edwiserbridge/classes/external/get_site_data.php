@@ -26,11 +26,10 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_site_data
@@ -44,10 +43,9 @@ trait get_site_data {
      * @return array An array of site-specific synchronization settings.
      */
     public static function auth_edwiserbridge_get_site_data($siteindex) {
-
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
         

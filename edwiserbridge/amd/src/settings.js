@@ -20,6 +20,7 @@
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
+ * @module      auth_edwiserbridge/settings
  */
 "use strict";
 define("auth_edwiserbridge/eb_settings", [
@@ -47,12 +48,7 @@ define("auth_edwiserbridge/eb_settings", [
             { key: "pop_up_info", component: "auth_edwiserbridge" },
             { key: "eb_settings_msg", component: "auth_edwiserbridge" },
             { key: "click_here", component: "auth_edwiserbridge" },
-            // {key: 'manualsuccessuser', component: 'local_notifications'}
         ]);
-
-        /*translation.then(function (results) {
-                console.log(results);
-            });*/
 
         $(document).ready(function () {
 
@@ -372,7 +368,6 @@ define("auth_edwiserbridge/eb_settings", [
                 document.body.appendChild(temp);
                 var selection = document.getSelection();
                 var range = document.createRange();
-                //  range.selectNodeContents(textarea);
                 range.selectNode(temp);
                 selection.removeAllRanges();
                 selection.addRange(range);
@@ -404,7 +399,6 @@ define("auth_edwiserbridge/eb_settings", [
                 document.body.appendChild(temp);
                 var selection = document.getSelection();
                 var range = document.createRange();
-                //  range.selectNodeContents(textarea);
                 range.selectNode(temp);
                 selection.removeAllRanges();
                 selection.addRange(range);
@@ -788,7 +782,6 @@ define("auth_edwiserbridge/eb_settings", [
                                 is_next_sub_step : is_next_sub_step,
                                 service_name : service_name,
                                 existing_service : existing_service
-                                /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/
                             };
                         }
                         break;
@@ -831,7 +824,7 @@ define("auth_edwiserbridge/eb_settings", [
                                 next_step : next_step,
                                 is_next_sub_step : is_next_sub_step,
                                 site_name : site_name,
-                                url : url /*mdl_url : mdl_url, mdl_token : mdl_token, mdl_lng_code : mdl_lng_code*/
+                                url : url
                             };
                         }
 
@@ -1147,9 +1140,7 @@ define("auth_edwiserbridge/eb_settings", [
 
                 document.execCommand("copy");
                 temp.remove();
-                // toaster("Title", 400);
-                // var parent = $(this).parent();
-                var copy_success = '<p class="eb_setup_copy_success"><i class="fa fa-check" aria-hidden="true"></i>Copied !!</p>';
+                var copy_success = '<p class="eb_setup_copy_success"><i class="fa fa-check" aria-hidden="true"></i>' + M.util.get_string('copied', 'auth_edwiserbridge') + '</p>';
                 $(this).append(copy_success);
                 setTimeout(function(){
                     $('.eb_setup_copy_success').remove();
@@ -1159,7 +1150,6 @@ define("auth_edwiserbridge/eb_settings", [
 
 
             // Code to create json file and download it.
-            // $(".").click(function() {
             $(document).on("click", ".eb_setup_download_creds", function(event) {
 
                 var obj = {

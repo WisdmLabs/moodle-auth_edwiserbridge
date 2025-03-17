@@ -20,10 +20,6 @@
       width: 15%;
       font-weight: 700;
    }
-/*#admin-ebnewserviceinp, #admin-ebnewserviceuserselect, #eb_service_form .eb_service_field{
-    display: none;
-}
-*/
 
 .eb_service_field {
     display: none;
@@ -115,25 +111,15 @@
 }
 
 .eb-error-msg {
-    /*box-shadow: 1px 0px 2px #ff000021;
-    border-radius: 0px;
-    border: 1px solid #ff000036;
-    border-left: 3px solid red;
-    margin-bottom: 0px;
-    margin-left: 10px;
-    margin: 5px;
-    color: grey;*/
     padding: 5px 5px 5px 10px;
 }
 
 .eb-success-msg {
     margin: 5px;
-    /*background: #00800030;*/
     box-shadow: 1px 0px 2px #00800052;
     border-radius: 0px;
     border: 1px solid #0080003d;
     border-left: 3px solid green;
-    /* display: none; */
     margin-bottom: 0px;
     margin-left: 10px;
     padding: 5px 5px 5px 10px;

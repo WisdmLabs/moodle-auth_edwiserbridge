@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
 
-use external_api;
+use core_external\external_api;
 
 /**
  * Provides an external API for the Edwiser Bridge plugin.

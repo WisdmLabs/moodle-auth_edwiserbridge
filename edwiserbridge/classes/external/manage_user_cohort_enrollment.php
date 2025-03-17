@@ -26,10 +26,11 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
@@ -110,7 +111,7 @@ trait manage_user_cohort_enrollment {
         
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         // Check if the user has the capability to assign users to a cohort.
         require_capability( 'moodle/cohort:assign', $systemcontext );
@@ -127,7 +128,7 @@ trait manage_user_cohort_enrollment {
         // Check if cohort exists.
         if (!$DB->record_exists('cohort', ['id' => $params['cohort_id']])) {
             $error      = 1;
-            $errormsg  = 'Cohort does not exist.';
+            $errormsg  = get_string('api_cohort_not_found', 'auth_edwiserbridge');
         } else {
             foreach ($params['users'] as $user) {
                 // Create user if the new user does not exist.

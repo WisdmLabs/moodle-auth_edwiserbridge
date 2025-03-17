@@ -20,6 +20,7 @@
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Wisdmlabs
+ * @module      auth_edwiserbridge/sso_settings
  */
 "use strict";
 define("auth_edwiserbridge/eb_sso_settings", [

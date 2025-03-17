@@ -26,11 +26,11 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_test_connection
@@ -50,7 +50,7 @@ trait test_connection {
 
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
         
@@ -64,7 +64,7 @@ trait test_connection {
         );
 
         if ($params["test_connection"] == "wordpress") {
-            $msg = "Connection Successful";
+            $msg = get_string('wp_test_connection_success', 'auth_edwiserbridge');
             $warnings = [];
 
             $defaultvalues = auth_edwiserbridge_get_connection_settings();
@@ -210,9 +210,10 @@ trait test_connection {
                 'warnings' => new external_multiple_structure(
                     new external_value(
                         PARAM_TEXT,
-                        'warning'
+                        get_string('web_service_test_conn_warning', 'auth_edwiserbridge'),
                     ),
-                    'warnings', VALUE_OPTIONAL
+                    VALUE_OPTIONAL,
+                    get_string('web_service_test_conn_warnings', 'auth_edwiserbridge')
                 ),
             ]
         );

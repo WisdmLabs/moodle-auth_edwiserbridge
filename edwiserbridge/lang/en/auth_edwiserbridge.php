@@ -197,10 +197,30 @@ $string['web_service_fullname'] = 'Course Name.';
 $string['web_service_categoryid'] = 'Category Id of the course.';
 $string['web_service_total_courses'] = 'Total number of courses present in Moodle.';
 
+$string['web_service_cohort_id'] = 'Cohort id which will be deleted in Moodle';
+$string['web_service_operation_status'] = 'Operation status (1 for success, 0 for failure)';
+$string['web_service_manual_enrolment'] = 'Returns 1 if manual enrolment is enabled and 0 if disabled.';
+$string['web_service_user_id'] = 'User ID to get progress for';
+$string['web_service_completion_percentage'] = 'Completion percentage of the user.';
+$string['web_service_cohort_courseid']= 'Course Id in which cohort wil be enrolled.';
+$string['web_service_course_cohortid'] = 'Cohort Id which will be enrolled in the course.';
+$string['web_service_course_unenroll'] = 'If true, cohort will be unenrolled from the course.';
+$string['web_service_instance_id'] = 'Id of the instance';
+$string['api_cohort_not_found'] = 'Cohort does not exist.';
+$string['setup_wizard_next_step_html_data'] = 'Setup wizards next step html content';
+$string['setup_wizard_next_step_title'] = 'Setup wizards next step title';
+$string['wp_test_connection_success'] = 'Connection Successful';
+$string['web_service_test_conn_warnings'] = 'Warnings';
+$string['web_service_test_conn_warning'] = 'warning';
+
 /******/
 
 /****  error handling  ***/
 $string['default_error'] = 'Please check the URL or wordpress site permalink: to know more about this error <a href=\'https://edwiser.helpscoutdocs.com/collection/85-edwiser-bridge-plugin\'  target=\'_blank\'> click here </a>';
+$string['wp_site_error'] = 'HTML response received from WordPress. Please make sure the WordPress site is up and running.';
+$string['bitninja_error'] = 'Request blocked by BitNinja. Please whitelist the IP address of your Moodle server.';
+$string['cloudflare_error'] = 'Request blocked by Cloudflare. Please whitelist the IP address of your Moodle server.';
+$string['modsecurity_error'] = 'Request blocked by Mod Security. Please whitelist the IP address of your Moodle server.';
 
 $string['eb_empty_name_err'] = 'Please enter valid service name.';
 $string['eb_empty_user_err'] = 'Please select user.';
@@ -264,6 +284,7 @@ $string['token_empty'] = 'Please select Token';
 
 $string['web_service_creation_status'] = 'Web service creation status';
 $string['web_service_creation_msg'] = 'Web service creation message';
+$string['web_service_api_msg'] = 'message';
 
 /*
  * GDPR compatibility strings.
@@ -318,7 +339,8 @@ $string['setup_mdl_plugin'] = 'Moodle Plugin';
 $string['setup_free'] = 'Free';
 $string['setup_continue_btn'] = 'Continue the setup';
 $string['continue_wp_wizard_btn'] = 'Continue Setup on WordPress';
-
+$string['install_plugins_failed'] = 'Plugin installation failed.';
+$string['plugininactive'] = 'The plugin is inactive.';
 
 $string['setup_installation_faq'] = 'What to do if I have not installed Wordpress Plugin ';
 
@@ -387,6 +409,7 @@ $string['user_deletion'] = 'User Deletion';
 $string['user_update'] = 'User Update';
 $string['course_creation'] = 'Course Creation';
 $string['course_deletion'] = 'Course Deletion';
+$string['web_service_courselist'] = 'List of course IDs';  
 
 
 $string['what_next'] = 'What Next?';
@@ -455,7 +478,7 @@ $string['auth_edwiserbridge_war_desc'] = 'PHP extension is missing! Enable this 
 $string['WordPress'] = 'WordPress';
 $string['auth_edwiserbridge_logoutredirecturl'] = 'Logout Redirect URL';
 $string['auth_edwiserbridge_logoutredirecturl_help'] = 'Users will be redirected to this URL after logout. Keep it blank for default redirection. Do not forget to add http or https before the URL.';
-$string['privacy:metadata'] = 'The Edwiser Bridge SSO authentication plugin does not store any personal data.';
+$string['privacy:metadata'] = 'The Edwiser Bridge plugin does not store any personal data.';
 $string['auth_edwiserbridge_wploginenablebtn'] = 'Enable WordPress Login';
 $string['auth_edwiserbridge_wploginenablebtn_help'] = 'This will enable login with WordPress button on Moodle login page.';
 $string['auth_edwiserbridge_wploginenablebtn_default'] = 'Default: No';
@@ -467,7 +490,6 @@ $string['auth_edwiserbridge_wploginlogo_desc'] = 'This logo will be shown as Wor
 
 /* Bulk Purchase */
 $string['menuoption'] = 'auth_edwiserbridge';
-$string['privacy:metadata'] = 'The wdm Group Registration local plugin does not store any personal data.';
 $string['edwiserbridge:add'] = 'Add Edwiser Bridge';
 
 
@@ -524,6 +546,9 @@ $string['uptodate'] = 'Up to date';
 $string['updatedown'] = 'Update service is down temporarily. <br>Error - {$a}.';
 $string['dismiss'] = 'Dismiss';
 
+$string['wp_test_connection_token'] = 'Token to verify';
+$string['success'] = 'true if the token matches otherwise false';
+$string['success_error_msg'] = 'Success/Failure message';
 $string['wp_test_connection_token_mismatch'] = 'Token does not match with the existing moodle connection settings. it may cause test connection issue on moodle end.';
 $string['wp_test_connection_function_missing'] = 'Web service function is missing.';
 $string['wp_test_connection_functions_missing'] = 'Web service functions are missing.';

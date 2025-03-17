@@ -28,11 +28,6 @@ namespace auth_edwiserbridge\external;
 
 defined('MOODLE_INTERNAL') || die();
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
@@ -40,6 +35,16 @@ require_once($CFG->dirroot . '/cohort/externallib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
 require_once($CFG->dirroot. '/user/lib.php');
 require_once($CFG->dirroot. '/cohort/lib.php');
+
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use Exception;
+use core\context\system as context_system;
+use core\context\user as context_user;
+use core\exception\moodle_exception as moodle_exception;
+use core\context as context;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_delete_cohort
@@ -58,7 +63,7 @@ trait delete_cohort {
                         [
                             'cohortid' => new external_value(
                                 PARAM_INT,
-                                'Cohort id which will be deleted in Moodle',
+                                get_string('web_service_cohort_id', 'auth_edwiserbridge'),
                                 VALUE_REQUIRED
                             ),
                         ]
@@ -78,13 +83,12 @@ trait delete_cohort {
      */
     public static function auth_edwiserbridge_delete_cohort($cohort) {
         global $USER, $DB;
-
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
 
-        require_capability('moodle/cohort:delete', $systemcontext);
+        require_capability('moodle/cohort:manage', $systemcontext);
         
         // Parameter validation.
         $params = self::validate_parameters(
@@ -93,7 +97,7 @@ trait delete_cohort {
         );
 
         // Context validation.
-        $context = get_context_instance(CONTEXT_USER, $USER->id);
+        $context = context_user::instance($USER->id);
         self::validate_context($context);
 
         // Capability checking.
@@ -130,9 +134,9 @@ trait delete_cohort {
         return new external_single_structure([
             'status' => new external_value(
                 PARAM_INT,
-                'Operation status (1 for success, 0 for failure)',
+                get_string('web_service_operation_status', 'auth_edwiserbridge'),
                 VALUE_REQUIRED
-            )
+            ),
         ]);
     }
 }

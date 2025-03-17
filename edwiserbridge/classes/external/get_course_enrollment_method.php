@@ -26,11 +26,12 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use core_completion\progress;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core_external\external_function_parameters;
+use core\context\system as context_system;
+use core\exception\moodle_exception as moodle_exception;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_course_enrollment_method
@@ -60,14 +61,14 @@ trait get_course_enrollment_method {
 
         
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
         
         // Check if Moodle manual enrollment plugin is disabled.
         $enrolplugins = explode(',', $CFG->enrol_plugins_enabled);
         if (! in_array('manual', $enrolplugins)) {
-            throw new \moodle_exception('plugininactive');
+            throw new moodle_exception('plugininactive', 'auth_edwiserbridge');
         }
 
         $response = [];
@@ -97,11 +98,11 @@ trait get_course_enrollment_method {
                 [
                     'courseid' => new external_value(
                         PARAM_INT,
-                        'id of course'
+                        get_string('web_service_courseid', 'auth_edwiserbridge'),
                     ),
                     'enabled'  => new external_value(
                         PARAM_INT,
-                        'Returns 1 if manual enrolment is enabled and 0 if disabled.'
+                        get_string('web_service_manual_enrolment', 'auth_edwiserbridge'),
                     ),
                 ]
             )

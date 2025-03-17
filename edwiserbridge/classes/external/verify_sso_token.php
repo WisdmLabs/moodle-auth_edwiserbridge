@@ -26,10 +26,10 @@
 
 namespace auth_edwiserbridge\external;
 
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
+use core_external\external_function_parameters;
+use core_external\external_single_structure;
+use core_external\external_value;
+use core\context\system as context_system;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_verify_sso_token
@@ -46,7 +46,7 @@ trait verify_sso_token {
         return new external_function_parameters([
             'token' => new external_value(
                 PARAM_TEXT,
-                'Token to verify',
+                get_string('wp_test_connection_token', 'auth_edwiserbridge'),
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
@@ -62,7 +62,7 @@ trait verify_sso_token {
     public static function auth_edwiserbridge_verify_sso_token($token) {
 
         // Validation for context is needed.
-        $systemcontext = \context_system::instance();
+        $systemcontext = context_system::instance();
 
         self::validate_context($systemcontext);
 
@@ -91,8 +91,8 @@ trait verify_sso_token {
     public static function auth_edwiserbridge_verify_sso_token_returns() {
         return new external_single_structure(
             [
-                'success' => new external_value(PARAM_BOOL, 'true if the token matches otherwise false'),
-                'msg'     => new external_value(PARAM_RAW, 'Sucess faile message'),
+                'success' => new external_value(PARAM_BOOL, get_string('success', 'auth_edwiserbridge')),
+                'msg'     => new external_value(PARAM_RAW, get_string('success_error_msg', 'auth_edwiserbridge')),
             ]
         );
     }

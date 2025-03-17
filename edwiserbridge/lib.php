@@ -27,6 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("{$CFG->libdir}/completionlib.php");
 require_once($CFG->dirroot . '/webservice/lib.php');
+use core\plugin_manager as core_plugin_manager;
+use core\exception\moodle_exception as moodle_exception;
 
 /**
  * Checks if the older Edwiser Bridge plugin is installed.
@@ -35,7 +37,7 @@ require_once($CFG->dirroot . '/webservice/lib.php');
  */
 function auth_edwiserbridge_check_pro_dependancy() {
     $clear       = true;
-    $pluginman   = \core_plugin_manager::instance();
+    $pluginman   = core_plugin_manager::instance();
     $localplugin = $pluginman->get_plugins_of_type('local');
     if (isset($localplugin['edwiserbridge'])) {
         $clear = false;
@@ -463,7 +465,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
         return 0;
     }
 
-    $requiredFunctions = [
+    $requiredfunctions = [
         'core_user_create_users',
         'core_user_get_users_by_field',
         'core_user_update_users',
@@ -506,16 +508,16 @@ function auth_edwiserbridge_get_service_list($serviceid) {
         $ssofunctions = [];
     }
 
-    $requiredFunctions = array_merge($requiredFunctions, $bulkpurchase, $ssofunctions);
+    $requiredfunctions = array_merge($requiredfunctions, $bulkpurchase, $ssofunctions);
 
-    $missingCount = 0;
-    foreach ($requiredFunctions as $function) {
+    $missingcount = 0;
+    foreach ($requiredfunctions as $function) {
         if (!$webservicemanager->service_function_exists($function, $serviceid)) {
-            $missingCount++;
+            $missingcount++;
         }
     }
 
-    return $missingCount;
+    return $missingcount;
 }
 
 /**
@@ -721,7 +723,7 @@ function auth_edwiserbridge_check_plugin_update() {
     $output = json_decode($output);
 
     $pluginsdata = [];
-    $pluginman   = \core_plugin_manager::instance();
+    $pluginman   = core_plugin_manager::instance();
 
     $authplugin                   = $pluginman->get_plugins_of_type('auth');
     $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
@@ -798,7 +800,7 @@ function auth_edwiserbridge_show_plugin_update_notification() {
         }
         $ebnotice = true;
 
-        if (isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false && strpos($ME, 'setup_wizard.php') == false ){
+        if (isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false && strpos($ME, 'setup_wizard.php') == false ) {
             $updateavailable = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
             $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
             if ($updateavailable && ! $dismiss) {
@@ -822,9 +824,9 @@ function auth_edwiserbridge_show_plugin_update_notification() {
                     ]
                 );
 
-                $updatemsg = str_replace('UPDATE_URL', $updateurl, $updatemsg);
+                $updatemsg = str_replace('UPDATE_URL', $updateurl->out(), $updatemsg);
 
-                $updatemsg = str_replace('DISMISS_URL', $dismissurl, $updatemsg);
+                $updatemsg = str_replace('DISMISS_URL', $dismissurl->out(), $updatemsg);
 
                 // Add notification.
                 \core\notification::add($updatemsg, \core\output\notification::NOTIFY_INFO);
