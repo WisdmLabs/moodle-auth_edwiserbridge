@@ -91,9 +91,13 @@ define("auth_edwiserbridge/eb_settings", [
                                     window.location.pathname +
                                     "?tab=service";
                                 var fix_link =
-                                    " Check more detials <a href='" +
+                                    M.util.get_string(
+                                        "more_details",
+                                        "auth_edwiserbridge"
+                                    )
+                                    + " <a href='" +
                                     link +
-                                    "'  target='_blank'>here</a>.";
+                                    "'  target='_blank'>" + M.util.get_string("here", "auth_edwiserbridge") + "</a>.";
                                 message =
                                     "<span class='summ_error'>" +
                                     response.msg +

@@ -167,7 +167,7 @@ class sso_form extends moodleform {
             $settingurl = $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=summary';
             $mform->addElement(
                 'html',
-                '<p>Please activate licence from <a href="' . $settingurl . ' ">here</a> to access this setting.</p>'
+                get_string('eb_pro_license_msg', 'auth_edwiserbridge', $settingurl)
             );
         }
     }

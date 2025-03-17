@@ -38,7 +38,7 @@ if (!empty($wdmdata)) {
     $secretkey = auth_edwiserbridge_get_sso_secret_key();
 
     if ($secretkey == '') {
-        echo "Sorry, this plugin has not yet been configured. Please contact the Moodle administrator for details";
+        echo get_string('plugin_not_configured', 'auth_edwiserbridge');
         die();
     }
 

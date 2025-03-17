@@ -530,6 +530,7 @@ $string['plugin_update_notification'] = 'Show plugin update notification';
 
 $string['errors'] = 'Errors';
 $string['invalidzip'] = 'Invalid zip file. <b>{$a}</b>';
+$string['eb_pro_license_msg'] = '<p>Please activate licence from <a href="{$a}">here</a> to access this setting.</p>';
 $string['errorfetching'] = 'Error fetching plugin ZIP. <b>{$a}</b>';
 $string['errorfetchingexist'] = 'Error fetching plugin ZIP: target location exists. <b>{$a}</b>';
 $string['unabletounzip'] = 'Unable to unzip <b>{$a}</b>';
@@ -547,7 +548,12 @@ $string['updatedown'] = 'Update service is down temporarily. <br>Error - {$a}.';
 $string['dismiss'] = 'Dismiss';
 
 $string['wp_test_connection_token'] = 'Token to verify';
+$string['settingdisabled'] = 'Disabled';
+$string['settingenabled'] = 'Enabled';
+$string['plugin_not_configured'] = 'Sorry, this plugin has not yet been configured. Please contact the Moodle administrator for details';
+$string['redirecting_to_wp_setup_wizard'] = 'Redirecting to WordPress Setup wizard...';
 $string['success'] = 'true if the token matches otherwise false';
+$string['more_details'] = 'Check more details';
 $string['success_error_msg'] = 'Success/Failure message';
 $string['wp_test_connection_token_mismatch'] = 'Token does not match with the existing moodle connection settings. it may cause test connection issue on moodle end.';
 $string['wp_test_connection_function_missing'] = 'Web service function is missing.';

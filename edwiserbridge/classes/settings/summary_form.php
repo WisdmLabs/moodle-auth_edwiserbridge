@@ -209,9 +209,9 @@ class summary_form extends moodleform {
 							</td>';
                             $error = 1;
                         } else {
-                            $successmsg = 'Disabled';
+                            $successmsg = get_string('settingdisabled', 'auth_edwiserbridge');
                             if ($value['expected_value']) {
-                                $successmsg = 'Enabled';
+                                $successmsg = get_string('settingenabled', 'auth_edwiserbridge');
                             }
 
                             $html .= '<td class="sum_status">
@@ -223,9 +223,9 @@ class summary_form extends moodleform {
                     }
                 } else if (isset($CFG->$key) && $value['expected_value'] == $CFG->$key) {
 
-                    $successmsg = 'Disabled';
+                    $successmsg = get_string('settingdisabled', 'auth_edwiserbridge');
                     if ($value['expected_value']) {
-                        $successmsg = 'Enabled';
+                        $successmsg = get_string('settingenabled', 'auth_edwiserbridge');
                     }
 
                     $html .= '<td class="sum_status">
