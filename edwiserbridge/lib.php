@@ -627,6 +627,18 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
                 continue;
             }
     
+            $basefunctions = [
+                'auth_edwiserbridge_test_connection',
+                'auth_edwiserbridge_get_site_data',
+                'auth_edwiserbridge_get_course_progress',
+                'auth_edwiserbridge_get_edwiser_plugins_info',
+                'auth_edwiserbridge_get_course_enrollment_method',
+                'auth_edwiserbridge_update_course_enrollment_method',
+                'auth_edwiserbridge_get_mandatory_settings',
+                'auth_edwiserbridge_enable_plugin_settings',
+                'auth_edwiserbridge_get_users',
+                'auth_edwiserbridge_get_courses'
+            ];
             // Define required functions
             $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
             $bulkpurchasefunctions = [
@@ -641,7 +653,7 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
                 'auth_edwiserbridge_manage_user_cohort_enrollment'
             ];
     
-            $webservicefunctions = array_merge($ssofunctions, $bulkpurchasefunctions);
+            $webservicefunctions = array_merge($ssofunctions, $basefunctions, $bulkpurchasefunctions);
     
             foreach ($webservicefunctions as $functionname) {
                 if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
