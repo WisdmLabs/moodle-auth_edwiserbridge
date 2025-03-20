@@ -306,17 +306,21 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         $query = http_build_query( $args, 'flags_' );
         $token = $query;
 
-        $encmethod = 'AES-128-CTR';
+        $encmethod = 'AES-256-ECB'; // Changed to AES-256-ECB
 
+        // Ensure the key is hashed to 256 bits (32 bytes) using SHA-256
         $enckey = openssl_digest( $key, 'SHA256', true );
 
-        $enciv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($encmethod));
-        $crypttext = openssl_encrypt($token, $encmethod, $enckey, 0, $enciv) . "::" . bin2hex($enciv);
+        $crypttext = openssl_encrypt($token, $encmethod, $enckey, 0); // No IV needed for ECB mode
 
+        // Base64 encode the encrypted token
         $data = base64_encode($crypttext);
+        // Convert to URL-safe Base64 (replace + with -, / with _, and remove = padding)
         $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
+        // Trim any unwanted spaces or characters
         $encryptedargs = trim($data);
+        
         return $encryptedargs;
     }
 

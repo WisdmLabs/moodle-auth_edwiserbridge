@@ -133,6 +133,7 @@ trait test_connection {
                                         <div>' . get_string('test_connection_fail_err_3', 'auth_edwiserbridge') . '</div>
                                         <div>' . get_string('test_connection_fail_url', 'auth_edwiserbridge') . $params['wp_url'] .'/wp-json/edwiser-bridge/wisdmlabs/</div>
                                         <div>' . get_string('test_connection_fail_response', 'auth_edwiserbridge') . $servermsg .'</div>
+                                        <div>' . get_string('test_connection_fail_next', 'auth_edwiserbridge', $params['wp_url'] . "/wp-admin/admin.php?page=eb-settings&tab=connection") . '</div>
                                     </div>
                                     <div class="eb_admin_templ_dismiss_notice_message">
                                         <span class="eb_test_connection_log_close " style="color:red;"> X </span>

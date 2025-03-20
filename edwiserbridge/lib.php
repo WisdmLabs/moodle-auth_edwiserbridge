@@ -326,6 +326,11 @@ function auth_edwiserbridge_check_if_request_is_from_wp() {
         $required = 1;
     }
 
+    // check the wsfunction param to check if the request is from WordPress (for user deletion). as there are no other unique params to check.
+    if ( isset( $_GET['wsfunction'] ) && 'core_user_delete_users' === $_GET['wsfunction'] ) {
+        $required = 1;
+    }
+
     return $required;
 }
 
@@ -467,6 +472,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
 
     $requiredfunctions = [
         'core_user_create_users',
+        'core_user_delete_users',
         'core_user_get_users_by_field',
         'core_user_update_users',
         'core_course_get_courses',
@@ -475,6 +481,7 @@ function auth_edwiserbridge_get_service_list($serviceid) {
         'enrol_manual_unenrol_users',
         'core_enrol_get_users_courses',
         'auth_edwiserbridge_test_connection',
+        'auth_edwiserbridge_validate_token',
         'auth_edwiserbridge_get_site_data',
         'auth_edwiserbridge_get_course_progress',
         'auth_edwiserbridge_get_edwiser_plugins_info',
@@ -628,7 +635,17 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
             }
     
             $basefunctions = [
+                'core_user_create_users',
+                'core_user_delete_users',
+                'core_user_get_users_by_field',
+                'core_user_update_users',
+                'core_course_get_courses',
+                'core_course_get_categories',
+                'enrol_manual_enrol_users',
+                'enrol_manual_unenrol_users',
+                'core_enrol_get_users_courses',
                 'auth_edwiserbridge_test_connection',
+                'auth_edwiserbridge_validate_token',
                 'auth_edwiserbridge_get_site_data',
                 'auth_edwiserbridge_get_course_progress',
                 'auth_edwiserbridge_get_edwiser_plugins_info',
@@ -893,19 +910,23 @@ function auth_edwiserbridge_decrypt_string($base64, $key) {
     if (!$base64) {
         return '';
     }
-    $data = str_replace(['-', '_'], ['+', '/'], $base64); // Manual de-hack url formatting.
-    $mod4 = strlen($data) % 4; // Base64 length must be evenly divisible by 4.
+    $data = str_replace(['-', '_'], ['+', '/'], $base64); // Convert URL-safe Base64 back to standard Base64
+
+    // Base64 length must be evenly divisible by 4, so we pad if necessary
+    $mod4 = strlen($data) % 4;
     if ($mod4) {
         $data .= substr('====', $mod4);
     }
+    // Decode the Base64 data
     $crypttext = base64_decode($data);
 
-    if (preg_match("/^(.*)::(.*)$/", $crypttext, $regs)) {
-        list(, $crypttext, $enciv) = $regs;
-        $encmethod = 'AES-128-CTR';
-        $enckey = openssl_digest( $key, 'SHA256', true);
-        $decryptedtoken = openssl_decrypt($crypttext, $encmethod, $enckey, 0, hex2bin($enciv));
-    }
+    // AES-256-ECB does not use an IV, so we don't need to split the data
+    // Directly decrypt the data
+    $encmethod = 'AES-256-ECB'; // Use AES-256-ECB encryption method
+    $enckey = openssl_digest( $key, 'SHA256', true); // Hash the key to 256 bits using SHA-256
+    // Decrypt the token with AES-256-ECB (no IV required)
+    $decryptedtoken = openssl_decrypt($crypttext, $encmethod, $enckey, 0);
+    // Return the decrypted value, trimmed of any extra spaces or characters
     return trim($decryptedtoken);
 }
 

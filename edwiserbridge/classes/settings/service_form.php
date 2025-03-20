@@ -142,11 +142,8 @@ class service_form extends moodleform {
 
         $mform->addElement(
             'html',
-            '<div class="eb_connection_btns"><a href="'
-                . $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=connection'
-                . '" class="btn btn-primary eb_setting_btn" > '
-                . get_string("next", 'auth_edwiserbridge')
-                . '</a></div>'
+            '<div class="eb_connection_btns"><input type="submit" class="btn btn-primary eb_setting_btn" id="service_submit_continue" name="service_submit_continue"
+                value="' . get_string("next", 'auth_edwiserbridge') . '"></div>'
         );
     }
 }

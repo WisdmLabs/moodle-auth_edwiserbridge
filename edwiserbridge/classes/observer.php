@@ -323,6 +323,10 @@ class observer {
             'user_id' => $event->relateduserid,
         ];
 
+        if (auth_edwiserbridge_check_if_request_is_from_wp()) {
+            return;
+        }
+
         $apihandler = auth_edwiserbridge_api_handler_instance();
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
         $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');

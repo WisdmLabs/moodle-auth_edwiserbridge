@@ -207,6 +207,7 @@ class settings_handler {
         
         $functions = [
             'core_user_create_users',
+            'core_user_delete_users',
             'core_user_get_users_by_field',
             'core_user_update_users',
             'core_course_get_courses',
@@ -222,7 +223,8 @@ class settings_handler {
             'auth_edwiserbridge_get_course_enrollment_method',
             'auth_edwiserbridge_update_course_enrollment_method',
             'auth_edwiserbridge_get_mandatory_settings',
-            'auth_edwiserbridge_enable_plugin_settings'
+            'auth_edwiserbridge_enable_plugin_settings',
+            'auth_edwiserbridge_validate_token',
         ];
 
         foreach ($functions as $functionname) {

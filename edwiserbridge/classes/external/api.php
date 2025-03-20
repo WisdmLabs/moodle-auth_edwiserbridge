@@ -55,6 +55,7 @@ class api extends external_api {
     use enable_plugin_settings;
     use setup_test_connection;
     use get_mandatory_settings;
+    use validate_token;
 
     // SSO functions.
     use verify_sso_token;

@@ -60,21 +60,21 @@ $string['eb-setting-page-title_help'] = 'Edwiser Bridge Two Way Synchronization 
 $string['eb-setup-page-title'] = 'Edwiser Bridge Setup Wizard';
 $string['eb-setup-page-title_help'] = 'Edwiser Bridge Setup Wizard';
 
-$string['enrollment_checkbox'] = 'Enable User Enrollment.';
+$string['enrollment_checkbox'] = 'User Enrollment.';
 $string['enrollment_checkbox_desc'] = 'Enroll user from Moodle to Wordpress for linked users.';
-$string['unenrollment_checkbox'] = 'Enable User Un-enrollment.';
+$string['unenrollment_checkbox'] = 'User Unenrollment.';
 $string['unenrollment_checkbox_desc'] = 'Unenroll user from Moodle to Wordpress for linked users.';
-$string['user_creation_checkbox'] = 'Enable User Creation';
+$string['user_creation_checkbox'] = 'User Creation';
 $string['user_creation_checkbox_desc'] = 'Create user In linked Wordpress site when created in Moodle Site.';
-$string['user_deletion_checkbox'] = 'Enable User Deletion';
+$string['user_deletion_checkbox'] = 'User Deletion';
 $string['user_deletion_checkbox_desc'] = 'Delete user In linked Wordpress site when deleted in Moodle Site.';
 
-$string['course_creation_checkbox'] = 'Enable Course Creation';
+$string['course_creation_checkbox'] = 'Course Creation';
 $string['course_creation_checkbox_desc'] = 'This will create course in Wordpress site.';
-$string['course_deletion_checkbox'] = 'Enable Course Deletion';
+$string['course_deletion_checkbox'] = 'Course Deletion';
 $string['course_deletion_checkbox_desc'] = 'This won\'t delete course but it will mark course as deleted in linked Wordpress site.';
-$string['user_updation_checkbox'] = 'Enable User Update';
-$string['user_updation_checkbox_desc'] = 'This will update user first name, last name and password and won\'t update Username and Email.';
+$string['user_updation_checkbox'] = 'User Update';
+$string['user_updation_checkbox_desc'] = 'This will update user first name, last name, email and password and won\'t update username.';
 
 $string['wp_settings_section'] = 'Wordpress Connection Settings';
 $string['wordpress_url'] = 'Wordpress URL';
@@ -252,6 +252,7 @@ $string['sum_extended_char'] = 'Allow Extended Characters In Username';
 $string['sum_service_link'] = 'Service Linked';
 $string['sum_token_link'] = 'Token Linked';
 $string['web_service_status'] = 'Web Service Function';
+$string['test_connection_status'] = 'Connection Status';
 $string['web_service_cap'] = 'Capability';
 
 $string['sum_error_rest_protocol'] = 'Error: Please enable Rest Protocol';
@@ -565,6 +566,7 @@ $string['test_connection_fail_err_2'] = 'An issue was detected.';
 $string['test_connection_fail_err_3'] = 'Status : Connection  Failed ';
 $string['test_connection_fail_url'] = 'Url :';
 $string['test_connection_fail_response'] = 'Response :';
+$string['test_connection_fail_next'] = 'Next Steps: Please refresh the page and try again. If this still doesnt work. Go to <a href="{$a}" target="_blank"> Connection Settings </a> and click the <strong>Troubleshoot</strong> button .';
 $string['invalid_sso_token_err'] = 'Invalid token provided,please check token and try again';
 $string['valid_sso_token_success'] = 'Token verified successfully';
 $string['incomplete_caps_error'] = 'User don\'t have web service access capabilities, click';
@@ -577,3 +579,6 @@ $string['check_permalink'] = 'Check permalink structure';
 $string['test_connection'] = 'Test connection between Moodle and WordPress';
 $string['user_and_course_sync'] = 'Setting up User and course sync';
 $string['complete_details'] = 'Edwiser Bridge FREE Moodle plugin setup complete';
+$string['web_service_validate_token_msg'] = 'Return true if tokens match';
+$string['web_service_validate_user_msg'] = 'Return true if user is manager/site admin';
+$string['checking'] = 'Checking...';
