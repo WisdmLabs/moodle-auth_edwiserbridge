@@ -53,7 +53,6 @@ class migration_helper {
      */
     protected function migrate_connection_settings() {
         global $CFG;
-        
         if (!isset($CFG->eb_connection_settings) || empty($CFG->eb_connection_settings)) {
             return true;
         }
@@ -61,13 +60,11 @@ class migration_helper {
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
         }
-        list($success, $data) = $this->convert_serialized_to_json($settings);
-        
+        list($success, $data) = $this->convert_serialized_to_json($CFG->eb_connection_settings);
         if ($success) {
             set_config( 'eb_connection_settings', $data, 'auth_edwiserbridge' );
             return true;
         }
-
         debugging('Connection settings migration failed: ' . $data, DEBUG_DEVELOPER);
         return false;
     }
@@ -86,7 +83,7 @@ class migration_helper {
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
         }
-        list($success, $data) = $this->convert_serialized_to_json($settings);
+        list($success, $data) = $this->convert_serialized_to_json($CFG->eb_synch_settings);
         if ($success) {
             set_config( 'eb_synch_settings', $data, 'auth_edwiserbridge' );
             return true;
@@ -106,8 +103,7 @@ class migration_helper {
         if (empty($data)) {
             return [true, '{}'];
         }
-
-        $decoded = @unserialize($data);
+        $decoded = unserialize($data);        
         if ($decoded === false) {
             return [false, 'Invalid serialized data format'];
         }
@@ -132,8 +128,8 @@ class migration_helper {
     protected function migrate_global_settings() {
         global $CFG;
         $configs = [
-            'eb_connection_settings',
-            'eb_synch_settings',
+            // 'eb_connection_settings',
+            // 'eb_synch_settings',
             'wploginbtnicon',
             'edwiserbridge_dismiss_update_notification',
             'sharedsecret',

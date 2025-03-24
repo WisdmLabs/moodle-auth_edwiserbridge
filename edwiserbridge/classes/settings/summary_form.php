@@ -90,7 +90,7 @@ class summary_form extends moodleform {
             }
             $eb_connection_settings = auth_edwiserbridge_get_connection_settings();
             if(isset($eb_connection_settings['eb_connection_settings'])){
-                $sites = $eb_connection_settings;
+                $sites = $eb_connection_settings['eb_connection_settings'];
                 foreach ($sites as $value) {
                     $wp_url = $value['wp_url'];
                     $token  = $value['wp_token'];
@@ -225,9 +225,9 @@ class summary_form extends moodleform {
                         $activewebservices = empty($CFG->webserviceprotocols) ? [] : explode(',', $CFG->webserviceprotocols);
                         if (!in_array('rest', $activewebservices)) {
                             $html .= '<td class="sum_status">
-								<span class="summ_error"> ' . $value['error_msg'] . '<a href="' . $value['error_link'] . '" target="_blank" >'
+                                <span class="summ_error"> ' . $value['error_msg'] . '<a href="' . $value['error_link'] . '" target="_blank" >'
                                 . get_string('here', 'auth_edwiserbridge') . '</a> </span>
-							</td>';
+                            </td>';
                             $error = 1;
                         } else {
                             $successmsg = get_string('settingdisabled', 'auth_edwiserbridge');
@@ -239,7 +239,7 @@ class summary_form extends moodleform {
                                 <span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003;
                                 </span>
                                 <span style="color: #7ad03a;"> ' . $successmsg . ' </span>
-							</td>';
+                            </td>';
                         }
                     }
                 } else if (isset($CFG->$key) && $value['expected_value'] == $CFG->$key) {
@@ -250,18 +250,18 @@ class summary_form extends moodleform {
                     }
 
                     $html .= '<td class="sum_status">
-								<span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003; </span>
-								<span style="color: #7ad03a;"> ' . $successmsg . ' </span>
-							</td>';
+                                <span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003; </span>
+                                <span style="color: #7ad03a;"> ' . $successmsg . ' </span>
+                            </td>';
                 } else {
                     $html .= '<td class="sum_status" id="' . $key . '">
-								<span class="summ_error"> ' . $value['error_msg'] . '<a href="' . $value['error_link']
+                                <span class="summ_error"> ' . $value['error_msg'] . '<a href="' . $value['error_link']
                         . '" target="_blank" >' . get_string('here', 'auth_edwiserbridge') . '</a> </span>
-							</td>';
+                            </td>';
                     $error = 1;
                 }
                 $html .= '</td>
-						</tr>';
+                        </tr>';
             }
 
             $html .= '</table>';
