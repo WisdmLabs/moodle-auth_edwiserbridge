@@ -211,10 +211,9 @@ trait test_connection {
                 'warnings' => new external_multiple_structure(
                     new external_value(
                         PARAM_TEXT,
-                        get_string('web_service_test_conn_warning', 'auth_edwiserbridge'),
+                        get_string('web_service_test_conn_warning', 'auth_edwiserbridge')
                     ),
-                    VALUE_OPTIONAL,
-                    get_string('web_service_test_conn_warnings', 'auth_edwiserbridge')
+                    VALUE_OPTIONAL
                 ),
             ]
         );
