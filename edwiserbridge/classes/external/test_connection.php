@@ -143,7 +143,7 @@ trait test_connection {
                         </div>';
             }
 
-            return ["status" => $status, "msg" => $msg];
+            return ["status" => $status, "msg" => $msg, "warnings" => []];
         }
     }
 
