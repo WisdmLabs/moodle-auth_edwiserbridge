@@ -201,12 +201,12 @@ trait test_connection {
                 'status' => new external_value(
                     PARAM_TEXT,
                     get_string('web_service_test_conn_status', 'auth_edwiserbridge'),
-                    VALUE_REQUIRED
+                    VALUE_OPTIONAL
                 ),
                 'msg' => new external_value(
                     PARAM_RAW,
                     get_string('web_service_test_conn_msg', 'auth_edwiserbridge'),
-                    VALUE_REQUIRED
+                    VALUE_OPTIONAL
                 ),
                 'warnings' => new external_multiple_structure(
                     new external_value(
