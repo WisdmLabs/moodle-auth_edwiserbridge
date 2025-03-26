@@ -114,11 +114,9 @@ trait update_course_enrollment_method {
                 'courseid'   => new external_multiple_structure(
                     new external_value(
                         PARAM_INT,
-                        get_string('web_service_courseid', 'auth_edwiserbridge'),
+                        get_string('web_service_courseid', 'auth_edwiserbridge')
                     ),
-                    VALUE_OPTIONAL,
-                    [],
-                    get_string('web_service_courselist', 'auth_edwiserbridge')
+                    VALUE_OPTIONAL
                 ),
             ]
         );
