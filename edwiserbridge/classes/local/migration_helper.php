@@ -56,6 +56,10 @@ class migration_helper {
         if (!isset($CFG->eb_connection_settings) || empty($CFG->eb_connection_settings)) {
             return true;
         }
+        $plugin_config = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        if (!empty($plugin_config)) {
+            return true;
+        } 
         $settings = json_decode($CFG->eb_connection_settings, true);
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
@@ -79,6 +83,10 @@ class migration_helper {
         if (!isset($CFG->eb_synch_settings) || empty($CFG->eb_synch_settings)) {
             return true;
         }
+        $plugin_config = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        if (!empty($plugin_config)) {
+            return true;
+        } 
         $settings = json_decode($CFG->eb_synch_settings, true);
         if ( JSON_ERROR_NONE === json_last_error() ) {
             return true;
@@ -146,11 +154,10 @@ class migration_helper {
             'ebexistingserviceselect',
             'edwiser_bridge_last_created_token',
             'eb_setup_wp_site_name',
-            'edwiser_bridge_last_created_token',
-            'edwiser_bridge_last_created_token',
         ];
         foreach ($configs as $config) {
-            if ( isset($CFG->$config) ) {
+            $plugin_config = get_config('auth_edwiserbridge', $config);
+            if ( isset($CFG->$config) && empty($plugin_config) ) {
                 set_config($config, $CFG->$config, 'auth_edwiserbridge');
                 continue;
             }
