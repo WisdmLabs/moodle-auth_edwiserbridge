@@ -196,11 +196,6 @@ define("auth_edwiserbridge/eb_settings", [
                     var service_id = $("#web_service_status").data("serviceid");
                     checkMissingServices(service_id, "#web_service_status");
                     checkConnectionstatus("#test_connection_status");
-                } else {
-                    var service_id = $("#web_service_id").data("serviceid");
-                    if ("" != service_id) {
-                        checkMissingServices(service_id);
-                    }
                 }
             }
 
