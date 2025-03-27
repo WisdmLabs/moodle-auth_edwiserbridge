@@ -42,7 +42,7 @@ use core_external\external_value;
 use core\context\system as context_system;
 use core\context\user as context_user;
 use core\exception\moodle_exception as moodle_exception;
-use core_completion\progress;
+use core\output\progress_trace\null_progress_trace as null_progress_trace;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_manage_cohort_enrollment
