@@ -68,3 +68,7 @@ Tweak
 Version 3.1.0
 Fix
 * Fixed Security issue with SSO login key encryption.
+
+Version 4.0.0
+Feature
+* Refactored for compatibility with Moodle standards and new APIs. The plugin is now available on moodle.org.
