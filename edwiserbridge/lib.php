@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("{$CFG->libdir}/completionlib.php");
 require_once($CFG->dirroot . '/webservice/lib.php');
-use core\plugin_manager as core_plugin_manager;
+// use core\plugin_manager as core_plugin_manager;
 use core\exception\moodle_exception as moodle_exception;
 
 /**
