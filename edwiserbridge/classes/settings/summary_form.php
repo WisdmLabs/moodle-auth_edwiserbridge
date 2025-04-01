@@ -27,7 +27,7 @@ use moodleform;
 use webservice;
 use moodle_url;
 use auth_edwiserbridge\local\eb_pro_license_controller;
-use core\plugin_manager as core_plugin_manager;
+// use core\plugin_manager as core_plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -302,7 +302,7 @@ class summary_form extends moodleform {
      */
     private function get_plugin_version_data() {
         $pluginsdata = [];
-        $pluginman   = core_plugin_manager::instance();
+        $pluginman   = \core_plugin_manager::instance();
 
         $authplugin                 = $pluginman->get_plugins_of_type('auth');
         $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');

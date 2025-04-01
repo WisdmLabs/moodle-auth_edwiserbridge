@@ -31,7 +31,7 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 use core\context\system as context_system;
-use core\plugin_manager as core_plugin_manager;
+// use core\plugin_manager as core_plugin_manager;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_course_progress_data
@@ -55,7 +55,7 @@ trait get_edwiser_plugins_info {
         require_capability('moodle/site:config', $systemcontext);
         
         $response    = [];
-        $pluginman   = core_plugin_manager::instance();
+        $pluginman   = \core_plugin_manager::instance();
 
         $authplugin = $pluginman->get_plugins_of_type('auth');
         if (isset($authplugin['edwiserbridge'])) {

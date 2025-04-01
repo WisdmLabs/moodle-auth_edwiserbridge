@@ -33,7 +33,7 @@ require_once($CFG->libdir . '/markdown/Markdown.php');
 define('EB_PLUGINS_LIST', "https://edwiser.org/edwiserupdates.json");
 define('EB_PLUGIN_UPDATE', "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json");
 
-use core\plugin_manager as core_plugin_manager;
+// use core\plugin_manager as core_plugin_manager;
 use core\exception\moodle_exception as moodle_exception;
 use Michelf\MarkDown;
 use core\component as core_component;
@@ -431,7 +431,7 @@ class update {
     public function install_plugin(\core\update\remote_info $plugin, $confirmed, $silent) {
         global $CFG;
 
-        $pluginman = core_plugin_manager::instance();
+        $pluginman = \core_plugin_manager::instance();
         if (!empty($CFG->disableupdateautodeploy)) {
             return false;
         }
@@ -652,7 +652,7 @@ class update {
      * @return bool False if unable to download the plugin file.
      */
     public function download_plugin($plugin) {
-        $pluginman = core_plugin_manager::instance();
+        $pluginman = \core_plugin_manager::instance();
 
         if (!isset($plugin->package) || trim($plugin->package) == '') {
             $zip = false;
