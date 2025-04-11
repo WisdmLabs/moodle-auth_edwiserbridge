@@ -72,3 +72,7 @@ Fix
 Version 4.0.0
 Feature
 * Refactored for compatibility with Moodle standards and new APIs. The plugin is now available on moodle.org.
+
+Version 4.0.0
+Fix
+* Fixed an issue where we resolved backward compatibility in older moodle versions.
