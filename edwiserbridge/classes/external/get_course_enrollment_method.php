@@ -32,6 +32,7 @@ use core_external\external_value;
 use core_external\external_function_parameters;
 use core\context\system as context_system;
 use core\exception\moodle_exception as moodle_exception;
+use Exception;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_course_enrollment_method
@@ -80,6 +81,9 @@ trait get_course_enrollment_method {
                 'courseid' => $instance->courseid,
                 'enabled'  => 1,
             ];
+        }
+        if ( empty( $result ) ) {
+            throw new Exception('Error');
         }
 
         return $response;
