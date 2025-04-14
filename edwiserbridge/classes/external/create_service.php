@@ -68,11 +68,11 @@ trait create_service {
     public static function auth_edwiserbridge_create_service_parameters() {
         return new external_function_parameters(
             [
-                'webservicename' => new external_value(
+                'web_service_name' => new external_value(
                     PARAM_TEXT,
                     get_string('web_service_name', 'auth_edwiserbridge')
                 ),
-                'userid' => new external_value(
+                'user_id' => new external_value(
                     PARAM_TEXT,
                     get_string('web_service_auth_user', 'auth_edwiserbridge')
                 ),
