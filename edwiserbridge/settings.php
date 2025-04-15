@@ -30,7 +30,7 @@ require_once(dirname(__FILE__) . '/lib.php');
 global $CFG, $PAGE, $ADMIN;
 
 // Plugin update notification.
-auth_edwiserbridge_show_plugin_update_notification();
+auth_edwiserbridge_check_plugin_update();
 
 if (auth_edwiserbridge_check_pro_dependancy()) {
     $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
