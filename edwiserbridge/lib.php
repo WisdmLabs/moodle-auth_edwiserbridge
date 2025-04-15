@@ -720,10 +720,11 @@ function auth_edwiserbridge_enable_plugin() {
  * update the plugin.
  */
 function auth_edwiserbridge_check_plugin_update() {
-    include_once($CFG->libdir . '/filelib.php'); // Include Moodle's filelib for the `curl` class.
-    
     // Construct a user agent string.
     global $CFG;
+
+    include_once($CFG->libdir . '/filelib.php'); // Include Moodle's filelib for the `curl` class.
+    
     $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Update Checker';
 
     // Set up Moodle's curl instance.
@@ -759,7 +760,7 @@ function auth_edwiserbridge_check_plugin_update() {
     $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
     if (isset($authplugin['edwiserbridge'])) {
         $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
-        $pluginsdata['edwiserbridge'] = '3.0.0';
+        // $pluginsdata['edwiserbridge'] = '3.0.0';
     }
 
     if (
