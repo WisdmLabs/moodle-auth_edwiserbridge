@@ -768,6 +768,7 @@ function auth_edwiserbridge_check_plugin_update() {
         isset($output->moodle_edwiser_bridge->version) &&
         version_compare($pluginsdata['edwiserbridge'], $output->moodle_edwiser_bridge->version, '<')
     ) {
+        auth_edwiserbridge_show_plugin_update_notification();
         auth_edwiserbridge_prepare_plugin_update_notification($output->moodle_edwiser_bridge);
     }
 }
