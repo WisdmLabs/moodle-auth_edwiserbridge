@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+require_once(__DIR__ . '/../../compat.php');
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . "/externallib.php");

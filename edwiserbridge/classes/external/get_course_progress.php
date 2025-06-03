@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+require_once(__DIR__ . '/../../compat.php');
+
 use completion_info;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;

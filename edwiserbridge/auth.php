@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/compat.php');
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
