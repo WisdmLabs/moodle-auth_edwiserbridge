@@ -30,7 +30,9 @@ require_once(__DIR__ . '/../../compat.php');
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir . "/externallib.php");
+require_once(
+    $CFG->libdir . "/externallib.php"
+);
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
 require_once($CFG->dirroot . '/cohort/externallib.php');

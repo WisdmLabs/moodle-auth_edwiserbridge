@@ -11,6 +11,18 @@ if (!class_exists('core_external\external_api') && class_exists('external_api'))
     class_alias('external_api', 'core_external\external_api');
 }
 
+// --- External structure classes compatibility ---
+foreach ([
+    'external_function_parameters',
+    'external_value',
+    'external_single_structure',
+    'external_multiple_structure',
+] as $class) {
+    if (!class_exists('core_external\\' . $class) && class_exists($class)) {
+        class_alias($class, 'core_external\\' . $class);
+    }
+}
+
 // --- Context classes compatibility ---
 foreach ([
     'system' => 'context_system',
