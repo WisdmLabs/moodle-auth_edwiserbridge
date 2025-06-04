@@ -79,7 +79,7 @@ $PAGE->set_title(get_string('eb-setup-page-title', 'auth_edwiserbridge'));
 $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
 // 
-$PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
+// $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
 
 // Actual page template output starts here.
 
