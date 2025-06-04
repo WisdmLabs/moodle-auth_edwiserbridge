@@ -569,7 +569,7 @@ function auth_edwiserbridge_get_summary_status() {
     ];
 
     foreach ($servicearray as $value) {
-        if (empty($CFG->$value)) {
+        if (empty(get_config('auth_edwiserbridge', $value))) {
             return 'warning';
         }
     }
