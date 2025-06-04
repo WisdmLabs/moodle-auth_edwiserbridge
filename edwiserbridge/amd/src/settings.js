@@ -195,7 +195,9 @@ define("auth_edwiserbridge/eb_settings", [
                 } else if (searchParams.has("tab") && "summary" === searchParams.get("tab")) {
                     var service_id = $("#web_service_status").data("serviceid");
                     checkMissingServices(service_id, "#web_service_status");
-                    checkConnectionstatus("#test_connection_status");
+                    setTimeout(function() {
+                        checkConnectionstatus("#test_connection_status");
+                    }, 1000);
                 }
             }
 
