@@ -76,3 +76,10 @@ Feature
 Version 4.0.1
 Fix
 * Fixed an issue where we resolved backward compatibility in older moodle versions.
+
+Version 4.0.2
+Feature
+* Added compatibility for Moodle 5.0.
+* Added backward compatibility upto Moodle 3.9.
+Fix
+* Fixed issue where the plugin still showed updates available even when the latest version was installed.
