@@ -15,7 +15,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -33,7 +33,7 @@ jobs:
           phpcs --standard=Moodle edwiserbridge/ --report=full --report-file=phpcs-report.txt || true
           
       - name: Upload PHPCS Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: phpcs-report
@@ -45,7 +45,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -63,7 +63,7 @@ jobs:
           phpcbf --standard=Moodle edwiserbridge/ --report=full --report-file=phpcbf-report.txt || true
           
       - name: Upload PHPCBF Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: phpcbf-report
@@ -75,7 +75,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -87,7 +87,7 @@ jobs:
           find edwiserbridge/ -name "*.php" -exec php -l {} \; | tee syntax-check.txt
           
       - name: Upload Syntax Check Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: syntax-check
@@ -99,7 +99,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -127,7 +127,7 @@ jobs:
     
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         
       - name: Display Summary
         run: |

@@ -15,7 +15,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -33,7 +33,7 @@ jobs:
           phpcs --standard=Moodle edwiserbridge/ --report=full --report-file=phpcs-report.txt || true
           
       - name: Upload PHPCS Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: phpcs-report
@@ -41,7 +41,7 @@ jobs:
           
       - name: Comment PR with PHPCS Results
         if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
