@@ -139,7 +139,7 @@ class eb_pro_license_controller {
      * @return bool                          Boolean
      */
     public function check_if_no_data($license_data, $current_response_code, $valid_response_code) {
-    	global $DB;
+        global $DB;
 
         if ($license_data == null || ! in_array($current_response_code, $valid_response_code)) {
             $GLOBALS[ 'wdm_server_null_response' ] = true;

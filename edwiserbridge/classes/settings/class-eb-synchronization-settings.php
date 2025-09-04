@@ -133,11 +133,11 @@ class edwiserbridge_synchronization_form extends moodleform {
         $mform->addElement(
             'html',
             '<div class="eb_connection_btns">
-				<input type="submit" class="btn btn-primary eb_setting_btn" id="sync_submit" name="sync_submit" value="'
+                <input type="submit" class="btn btn-primary eb_setting_btn" id="sync_submit" name="sync_submit" value="'
                 . get_string("save", "auth_edwiserbridge")
                 . '"><input type="submit" class="btn btn-primary eb_setting_btn" id="sync_submit_continue"
                 name="sync_submit_continue" value="' . get_string("save_cont", "auth_edwiserbridge") . '">
-			</div>'
+            </div>'
         );
     }
 }

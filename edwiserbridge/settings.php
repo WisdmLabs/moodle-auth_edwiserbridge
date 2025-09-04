@@ -89,8 +89,8 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
 
     if ($ADMIN->fulltree) {
         global $CFG;
-        $settings_link = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', array('tab' => 'sso'));
-        $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settings_link . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
+        $settingsLink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', array('tab' => 'sso'));
+        $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settingsLink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }
 
@@ -104,7 +104,7 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
                 . '" >' . get_string('click_here', 'auth_edwiserbridge') . '</a></div>'
         )
     );
-    
+
     // Adding this field so that the setting page will be shown after installation.
     $settings->add(
         new admin_setting_configcheckbox(

@@ -4,12 +4,12 @@ require '../../config.php';
 // logon may somehow modify this
 $SESSION->wantsurl = $CFG->wwwroot;
 
-$temp_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+$tempUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 
 
 // Killing session.
-$wdm_data = optional_param('wdm_data', '', PARAM_RAW);
-if (!empty($wdm_data)) {
+$wdmData = optional_param('wdm_data', '', PARAM_RAW);
+if (!empty($wdmData)) {
     $PASSTHROUGH_KEY = checkPassthroughKeyIsSet();
 
     if ($PASSTHROUGH_KEY == '') {
@@ -17,12 +17,12 @@ if (!empty($wdm_data)) {
         die();
     }
 
-    $rawdata  = $wdm_data;
+    $rawdata  = $wdmData;
     $userdata = decrypt_string($rawdata, $PASSTHROUGH_KEY);
-    $user_id  = get_key_value($userdata, 'moodle_user_id');
+    $userId  = get_key_value($userdata, 'moodle_user_id');
 
     $key = 'eb_sso_user_session_id';
-    set_wdm_user_session($user_id, $key, $wdm_data);
+    set_wdm_user_session($userId, $key, $wdmData);
 
     unset( $_POST['wdm_data'] );
     die();
@@ -33,37 +33,37 @@ function checkPassthroughKeyIsSet()
 {
     $PASSTHROUGH_KEY = get_config('auth_edwiserbridge', 'sharedsecret');
     if (!isset($PASSTHROUGH_KEY)) {
-        $wordpress_url = str_replace('wp-login.php', '', $temp_url);
-        if (strpos($wordpress_url, '?') !== false) {
-            $wordpress_url .= '&wdm_moodle_error=wdm_moodle_error';
+        $wordpressUrl = str_replace('wp-login.php', '', $tempUrl);
+        if (strpos($wordpressUrl, '?') !== false) {
+            $wordpressUrl .= '&wdm_moodle_error=wdm_moodle_error';
         } else {
-            $wordpress_url .= '?wdm_moodle_error=wdm_moodle_error';
+            $wordpressUrl .= '?wdm_moodle_error=wdm_moodle_error';
         }
-        redirect($wordpress_url);
+        redirect($wordpressUrl);
         return;
     }
 
     return $PASSTHROUGH_KEY;
 }
 
-if ($temp_url == null) {
-    $temp_url = get_config('auth_edwiserbridge', 'wpsiteurl');
+if ($tempUrl == null) {
+    $tempUrl = get_config('auth_edwiserbridge', 'wpsiteurl');
 }
 
-if ($temp_url=="") {
-    $temp_url = $CFG->wwwroot;
+if ($tempUrl=="") {
+    $tempUrl = $CFG->wwwroot;
 }
 
 $PASSTHROUGH_KEY = get_config('auth_edwiserbridge', 'sharedsecret');
 
 if (!isset($PASSTHROUGH_KEY)) {
-    $wordpress_url = str_replace('wp-login.php', '', $temp_url);
-    if (strpos($wordpress_url, '?') !== false) {
-        $wordpress_url .= '&wdm_moodle_error=wdm_moodle_error';
+    $wordpressUrl = str_replace('wp-login.php', '', $tempUrl);
+    if (strpos($wordpressUrl, '?') !== false) {
+        $wordpressUrl .= '&wdm_moodle_error=wdm_moodle_error';
     } else {
-        $wordpress_url .= '?wdm_moodle_error=wdm_moodle_error';
+        $wordpressUrl .= '?wdm_moodle_error=wdm_moodle_error';
     }
-    redirect($wordpress_url);
+    redirect($wordpressUrl);
     return;
 }
 
@@ -113,22 +113,22 @@ function get_key_value($string, $key)
     return '';
 }
 
-$user_id = optional_param('logout_id', 0, PARAM_INT);
-if ( !empty( $user_id ) && $user_id !== 0 ) {
+$userId = optional_param('logout_id', 0, PARAM_INT);
+if ( !empty( $userId ) && $userId !== 0 ) {
     $sess_key = 'eb_sso_user_session_id';
 
-    $record   = get_wdm_user_session($user_id, $sess_key);
+    $record   = get_wdm_user_session($userId, $sess_key);
     $rawdata  = isset($record) ? $record : '';
     $userdata = decrypt_string($rawdata, $PASSTHROUGH_KEY);
     $hash     = get_key_value( $userdata, 'wp_one_time_hash' );
 
-    remove_wdm_user_session($user_id);
+    remove_wdm_user_session($userId);
     $veridy_code = optional_param('veridy_code', '', PARAM_RAW);
     if ( !empty( $veridy_code ) && $hash === $veridy_code ) {
 
         $logout_redirect = get_key_value( $userdata, 'logout_redirect' );
         if ($logout_redirect == '') {
-            redirect( $temp_url );
+            redirect( $tempUrl );
         }
         require_logout();
         redirect( $logout_redirect );
@@ -139,31 +139,31 @@ if ( !empty( $user_id ) && $user_id !== 0 ) {
     }
 }
 
-$user_id = optional_param('login_id', 0, PARAM_INT);
-if (!empty($user_id) && $user_id !== 0) {
-    $temp_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+$userId = optional_param('login_id', 0, PARAM_INT);
+if (!empty($userId) && $userId !== 0) {
+    $tempUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 
     $sess_key = 'eb_sso_user_session_id';
 
-    $record  = get_wdm_user_session($user_id, $sess_key);
+    $record  = get_wdm_user_session($userId, $sess_key);
     $rawdata = isset($record) ? $record : '';
     
-    remove_wdm_user_session($user_id);
+    remove_wdm_user_session($userId);
 
     $userdata = decrypt_string( $rawdata, $PASSTHROUGH_KEY );
-    $user_id  = get_key_value( $userdata, 'moodle_user_id' ); // the users id in the wordpress database, stored here for possible user-matching
+    $userId  = get_key_value( $userdata, 'moodle_user_id' ); // the users id in the wordpress database, stored here for possible user-matching
     $hash     = get_key_value( $userdata, 'wp_one_time_hash' );
 
     $veridy_code = optional_param('veridy_code', '', PARAM_RAW);
     if ( !empty( $veridy_code ) && $hash === $veridy_code ) {
-        if ($user_id == '') {
-            $wordpress_url = str_replace('wp-login.php', '', $temp_url);
-            if (strpos($wordpress_url, '?') !== false) {
-                $wordpress_url .= '&wdm_moodle_error=wdm_moodle_error';
+        if ($userId == '') {
+            $wordpressUrl = str_replace('wp-login.php', '', $tempUrl);
+            if (strpos($wordpressUrl, '?') !== false) {
+                $wordpressUrl .= '&wdm_moodle_error=wdm_moodle_error';
             } else {
-                $wordpress_url .= '?wdm_moodle_error=wdm_moodle_error';
+                $wordpressUrl .= '?wdm_moodle_error=wdm_moodle_error';
             }
-            redirect($wordpress_url);
+            redirect($wordpressUrl);
             return;
         }
         $login_redirect = get_key_value($userdata, 'login_redirect');
@@ -181,18 +181,18 @@ if (!empty($user_id) && $user_id !== 0) {
                 $login_redirect = $CFG->wwwroot;
             }
         }
-        if ($DB->record_exists('user', array('id' => $user_id))) {
+        if ($DB->record_exists('user', array('id' => $userId))) {
             // update manually created user that has the same username but doesn't yet have the right idnumber
             // ensure we have the latest data
-            $user = get_complete_user_data('id', $user_id);
+            $user = get_complete_user_data('id', $userId);
         } else {
-            $wordpress_url = str_replace('wp-login.php', '', $temp_url);
-            if (strpos($wordpress_url, '?') !== false) {
-                $wordpress_url .= '&wdm_moodle_error=wdm_moodle_error';
+            $wordpressUrl = str_replace('wp-login.php', '', $tempUrl);
+            if (strpos($wordpressUrl, '?') !== false) {
+                $wordpressUrl .= '&wdm_moodle_error=wdm_moodle_error';
             } else {
-                $wordpress_url .= '?wdm_moodle_error=wdm_moodle_error';
+                $wordpressUrl .= '?wdm_moodle_error=wdm_moodle_error';
             }
-            redirect($wordpress_url);
+            redirect($wordpressUrl);
             return;
         }
 
@@ -222,29 +222,29 @@ redirect($SESSION->wantsurl);
 
 // user_session_wdmwpmoodle
 // Set wdm_user session
-function get_wdm_user_session($user_id, $sess_key)
+function get_wdm_user_session($userId, $sess_key)
 {
     global $DB, $CFG;
     $table = 'user_preferences';
-    $record = $DB->get_record($table, array('userid'=>$user_id, 'name'=>$sess_key));
+    $record = $DB->get_record($table, array('userid'=>$userId, 'name'=>$sess_key));
 
-    $record = get_user_preferences($sess_key, '', $user_id);
+    $record = get_user_preferences($sess_key, '', $userId);
 
     return $record;
 }
 
 // Get wdm_user session
-function set_wdm_user_session($user_id, $sess_key, $wdm_data)
+function set_wdm_user_session($userId, $sess_key, $wdmData)
 {
-    set_user_preference($sess_key, $wdm_data, $user_id);
+    set_user_preference($sess_key, $wdmData, $userId);
 }
 
 // Remove wdm_user session
-function remove_wdm_user_session($user_id)
+function remove_wdm_user_session($userId)
 {
     global $DB, $CFG;
 
-    unset_user_preference('eb_sso_user_session_id', $user_id);
+    unset_user_preference('eb_sso_user_session_id', $userId);
 }
 
 function unsetPostMethod()

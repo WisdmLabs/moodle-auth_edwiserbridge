@@ -59,12 +59,12 @@ trait eb_get_course_progress {
         $result = $DB->get_records_sql(
             'SELECT ctx.instanceid course, count(cmc.completionstate) as completed, count(cm.id)
             as  outoff FROM {user} u
-			LEFT JOIN {role_assignments} ra ON u.id = ra.userid and u.id = ?
-			JOIN {context} ctx ON ra.contextid = ctx.id
-			JOIN {course_modules} cm ON ctx.instanceid = cm.course AND cm.completion > 0
-			LEFT JOIN {course_modules_completion} cmc ON cm.id = cmc.coursemoduleid AND u.id = cmc.userid AND cmc.completionstate > 0
-			GROUP BY ctx.instanceid, u.id
-			ORDER BY u.id',
+            LEFT JOIN {role_assignments} ra ON u.id = ra.userid and u.id = ?
+            JOIN {context} ctx ON ra.contextid = ctx.id
+            JOIN {course_modules} cm ON ctx.instanceid = cm.course AND cm.completion > 0
+            LEFT JOIN {course_modules_completion} cmc ON cm.id = cmc.coursemoduleid AND u.id = cmc.userid AND cmc.completionstate > 0
+            GROUP BY ctx.instanceid, u.id
+            ORDER BY u.id',
             array($params['user_id'])
         );
 

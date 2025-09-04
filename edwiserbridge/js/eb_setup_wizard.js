@@ -27,10 +27,10 @@ define("auth_edwiserbridge/eb_setup_wizard", [
     "core/url",
     "core/str",
 ], function($, ajax, url, str) {
-	return {
+    return {
         init: function($params) {
-	// function load_settings() {
-        // var translation = str.get_strings([
+    // Function load_settings() {
+        // Var translation = str.get_strings([
         //     { key: "dialog_title", component: "auth_edwiserbridge" },
         //     { key: "site_url", component: "auth_edwiserbridge" },
         //     { key: "token", component: "auth_edwiserbridge" },
@@ -56,28 +56,28 @@ define("auth_edwiserbridge/eb_setup_wizard", [
 
 
     // ----    ------
-		var acc = document.getElementsByClassName("accordion");
-		var i;
+        var acc = document.getElementsByClassName("accordion");
+        var i;
 
-		for (i = 0; i < acc.length; i++) {
-		  acc[i].addEventListener("click", function() {
-		    /* Toggle between adding and removing the "active" class,
-		    to highlight the button that controls the panel */
-		    this.classList.toggle("active");
+        for (i = 0; i < acc.length; i++) {
+          acc[i].addEventListener("click", function() {
+            /* Toggle between adding and removing the "active" class,
+            to highlight the button that controls the panel */
+            this.classList.toggle("active");
 
-		    /* Toggle between hiding and showing the active panel */
-		    var panel = this.nextElementSibling;
-		    if (panel.style.display === "block") {
-		      panel.style.display = "none";
-		    } else {
-		      panel.style.display = "block";
-		    }
-		  });
-		}
+            /* Toggle between hiding and showing the active panel */
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+              panel.style.display = "none";
+            } else {
+              panel.style.display = "block";
+            }
+          });
+        }
 
     // ----   ------
 
-    // ajax call to change the tab.
+    // Ajax call to change the tab.
         /**
          * Reload the Moodle course enrollment.
          */
@@ -87,7 +87,7 @@ define("auth_edwiserbridge/eb_setup_wizard", [
         var current = $(this);
         var step = $(this).data('step');
 
-        // current.append(loader_html);
+        // Current.append(loader_html);
 
 
         $.ajax({
@@ -124,9 +124,9 @@ define("auth_edwiserbridge/eb_setup_wizard", [
             var current = $(this);
             var step = $(this).data('step');
             
-            // get current step.
-            // get next step.
-            // get data which will be saved.
+            // Get current step.
+            // Get next step.
+            // Get data which will be saved.
 
             // Creating swicth case.
             
@@ -162,7 +162,7 @@ define("auth_edwiserbridge/eb_setup_wizard", [
 
 
 
-        // ajax xall to save data and get new tab at the same time.
+        // Ajax call to save data and get new tab at the same time.
         // Clicking save continue
         $('.eb_setup_save_and_continue').click(function(){
 
@@ -170,9 +170,9 @@ define("auth_edwiserbridge/eb_setup_wizard", [
             var current = $(this);
             var step = $(this).data('step');
 
-            // get current step.
-            // get next step.
-            // get data which will be saved.
+            // Get current step.
+            // Get next step.
+            // Get data which will be saved.
 
             // Creating swicth case.
             
@@ -248,7 +248,7 @@ define("auth_edwiserbridge/eb_setup_wizard", [
 
 
 
-    // ajax xall to save data and get new tab at the same time.
+    // Ajax call to save data and get new tab at the same time.
         
             // Clicking save continue
         // 
@@ -259,9 +259,9 @@ define("auth_edwiserbridge/eb_setup_wizard", [
             var current = $(this);
             var step = $(this).data('step');
 
-            // get current step.
-            // get next step.
-            // get data which will be saved.
+            // Get current step.
+            // Get next step.
+            // Get data which will be saved.
 
             // Creating swicth case.
             
@@ -394,7 +394,7 @@ console.log( data );
     });
     
 
-	// }
+    // }
  //    return { init: load_settings };
 
         }

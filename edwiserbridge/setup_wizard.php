@@ -82,7 +82,7 @@ $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
 $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
 
-// Actual page template output starts here. 
+// Actual page template output starts here.
 
 // Output page header.
 echo $OUTPUT->header();
