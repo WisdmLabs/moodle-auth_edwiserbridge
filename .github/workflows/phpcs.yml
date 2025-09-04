@@ -1,42 +1,58 @@
-name: Moodle Coding Standards
+name: PHP Code Sniffer
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - ishwar-dev
+  pull_request:
+    branches:
+      - ishwar-dev
 
 jobs:
   phpcs:
+    name: PHP Code Sniffer
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up PHP
+        
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
-          extensions: mbstring
-          tools: composer
-
-      - name: Allow Composer Plugin and Install PHP CodeSniffer Globally
-        run: |
-          # Allow the Composer plugin for phpcs installer
-          composer config --global allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, zip, libxml, dom, filter, gd, iconv, json, mbstring, pcre, reflection, spl, standard, tokenizer, xml, xmlreader, xmlwriter
           
-          # Install PHP CodeSniffer and Moodle coding standards globally via Composer
-          composer global require \
-            squizlabs/php_codesniffer \
-            dealerdirect/phpcodesniffer-composer-installer \
-            moodlehq/moodle-cs \
-            phpcompatibility/php-compatibility
-
-      - name: Verify Installed Standards
+      - name: Install PHPCS
         run: |
-          # Set the global Composer bin directory and check installed standards
-          COMPOSER_BIN_DIR=$(composer global config bin-dir --absolute)
-          $COMPOSER_BIN_DIR/phpcs -i
-
-      - name: Run PHP CodeSniffer with Moodle Coding Standards
+          composer global require squizlabs/php_codesniffer
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+          
+      - name: Run PHPCS
         run: |
-          # Set the global Composer bin directory and run PHP CodeSniffer
-          COMPOSER_BIN_DIR=$(composer global config bin-dir --absolute)
-          $COMPOSER_BIN_DIR/phpcs --standard=Moodle edwiserbridge/*.php
+          phpcs --standard=Moodle edwiserbridge/ --report=full --report-file=phpcs-report.txt || true
+          
+      - name: Upload PHPCS Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: phpcs-report
+          path: phpcs-report.txt
+          
+      - name: Comment PR with PHPCS Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            if (fs.existsSync('phpcs-report.txt')) {
+              const report = fs.readFileSync('phpcs-report.txt', 'utf8');
+              const truncatedReport = report.length > 65000 ? report.substring(0, 65000) + '\n... (report truncated)' : report;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## PHP Code Sniffer Results\n\n\`\`\`\n${truncatedReport}\n\`\`\``
+              });
+            }

@@ -27,7 +27,7 @@
 
 require('../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-// require_once('mod_form.php');
+// Require_once('mod_form.php');
 require_once('classes/class-setup-wizard.php');
 require_once(dirname(__FILE__) . '/lib.php');
 
@@ -42,7 +42,7 @@ if ( ! empty( $progress ) ) {
 
     $nextstep = $setupwizard->get_next_step( $progress );
 
-    if ( ! isset( $_GET['current_step'] ) /*|| ( isset( $_GET['current_step'] ) && $_GET['current_step'] != $nextstep )*/ ) {
+    if (!isset($_GET['current_step']) /*|| ( isset( $_GET['current_step'] ) && $_GET['current_step'] != $nextstep )*/) {
         $redirecturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
         redirect ($redirecturl);
     }
@@ -87,14 +87,14 @@ $PAGE->requires->js(new moodle_url('/auth/edwiserbridge/js/eb_settings.js'));
 // Output page header.
 echo $OUTPUT->header();
 
-// Start page container
+// Start page container.
 echo $OUTPUT->container_start();
 
 // This outputs setup wizard template.
 // This will use classes/class-setup-wizard.php file.
 $setupwizard->eb_setup_wizard_template();
 
-// End page container
+// End page container.
 echo $OUTPUT->container_end();
 
 // Output footer.

@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require '../../config.php';
+require('../../config.php');
 
 global $CFG, $USER, $SESSION, $DB;
 
@@ -46,16 +46,16 @@ if ( !empty( $wdmaction ) && $wdmaction === 'login' ) {
         wdmredirecttoroot();
     }
 
-    $mdlUid = optional_param('mdl_uid', '', PARAM_RAW);
-    if (empty($mdlUid)) {
+    $mdluid = optional_param('mdl_uid', '', PARAM_RAW);
+    if (empty($mdluid)) {
         wdmredirecttoroot();
     }
 
     // All checks are passed. Redirect to wp site for login.
-    $verifyCode = optional_param('verify_code', '', PARAM_RAW);
-    $redirectTo = strtok($wpsiteurl, '?') . '?wdmaction=login&mdl_uid=' . $mdlUid . '&verify_code=' . $verifyCode;
+    $verifycode = optional_param('verify_code', '', PARAM_RAW);
+    $redirectto = strtok($wpsiteurl, '?') . '?wdmaction=login&mdl_uid=' . $mdluid . '&verify_code=' . $verifycode;
 
-    redirect($redirectTo);
+    redirect($redirectto);
 }
 
 wdmredirecttoroot();

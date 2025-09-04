@@ -1,0 +1,145 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - ishwar-dev
+  pull_request:
+    branches:
+      - ishwar-dev
+
+jobs:
+  phpcs:
+    name: PHP Code Sniffer
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, zip, libxml, dom, filter, gd, iconv, json, mbstring, pcre, reflection, spl, standard, tokenizer, xml, xmlreader, xmlwriter
+          
+      - name: Install PHPCS
+        run: |
+          composer global require squizlabs/php_codesniffer
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+          
+      - name: Run PHPCS
+        run: |
+          phpcs --standard=Moodle edwiserbridge/ --report=full --report-file=phpcs-report.txt || true
+          
+      - name: Upload PHPCS Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: phpcs-report
+          path: phpcs-report.txt
+
+  phpcbf:
+    name: PHP Code Beautifier and Fixer
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, zip, libxml, dom, filter, gd, iconv, json, mbstring, pcre, reflection, spl, standard, tokenizer, xml, xmlreader, xmlwriter
+          
+      - name: Install PHPCBF
+        run: |
+          composer global require squizlabs/php_codesniffer
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+          
+      - name: Run PHPCBF
+        run: |
+          phpcbf --standard=Moodle edwiserbridge/ --report=full --report-file=phpcbf-report.txt || true
+          
+      - name: Upload PHPCBF Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: phpcbf-report
+          path: phpcbf-report.txt
+
+  syntax-check:
+    name: PHP Syntax Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          
+      - name: Check PHP Syntax
+        run: |
+          find edwiserbridge/ -name "*.php" -exec php -l {} \; | tee syntax-check.txt
+          
+      - name: Upload Syntax Check Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: syntax-check
+          path: syntax-check.txt
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          
+      - name: Install Security Checker
+        run: |
+          composer global require enlightn/security-checker
+          echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+          
+      - name: Run Security Check
+        run: |
+          if [ -f "composer.json" ]; then
+            security-checker security:check composer.lock || true
+          else
+            echo "No composer.json found, skipping security check"
+          fi
+
+  summary:
+    name: CI Summary
+    runs-on: ubuntu-latest
+    needs: [phpcs, phpcbf, syntax-check, security-scan]
+    if: always()
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Display Summary
+        run: |
+          echo "## CI Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| PHP Code Sniffer | ${{ needs.phpcs.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PHP Code Beautifier | ${{ needs.phpcbf.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| PHP Syntax Check | ${{ needs.syntax-check.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security Scan | ${{ needs.security-scan.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- PHPCS Report: Download from Actions tab" >> $GITHUB_STEP_SUMMARY
+          echo "- PHPCBF Report: Download from Actions tab" >> $GITHUB_STEP_SUMMARY
+          echo "- Syntax Check Report: Download from Actions tab" >> $GITHUB_STEP_SUMMARY

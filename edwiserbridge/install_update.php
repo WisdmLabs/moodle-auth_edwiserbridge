@@ -35,7 +35,7 @@ $dismiss = optional_param('dismiss', 0, PARAM_INT);
 $download = optional_param('download', 0, PARAM_INT);
 $sesskey = optional_param('sesskey', 0, PARAM_RAW);
 
-if($dismiss) {
+if ($dismiss) {
     set_config('edwiserbridge_dismiss_update_notification', 1, 'auth_edwiserbridge');
     redirect(new moodle_url('/my'));
 }

@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 global $CFG, $PAGE;
 
-// plugin update notification.
+// Plugin update notification.
 auth_edwiserbridge_show_plugin_update_notification();
 
 if ( auth_edwiserbridge_check_pro_dependancy() ) {
@@ -42,7 +42,7 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
     $strings = $stringmanager->load_component_strings('auth_edwiserbridge', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'auth_edwiserbridge');
 
-    // add new cateogry in admin settings.
+    // Add new category in admin settings.
 
     $ADMIN->add(
         'modules',
@@ -89,8 +89,8 @@ if ( auth_edwiserbridge_check_pro_dependancy() ) {
 
     if ($ADMIN->fulltree) {
         global $CFG;
-        $settingsLink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', array('tab' => 'sso'));
-        $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settingsLink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
+        $settingslink = new moodle_url('/auth/edwiserbridge/edwiserbridge.php', array('tab' => 'sso'));
+        $heading = new lang_string('settings_migration', 'auth_edwiserbridge') . ' <a href="' . $settingslink . '">' . get_string('click_here', 'auth_edwiserbridge') . '</a>';
         $settings->add(new admin_setting_heading('auth_edwiserbridge_settings', '', $heading));
     }
 
