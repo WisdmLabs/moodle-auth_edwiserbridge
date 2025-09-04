@@ -100,34 +100,44 @@ class eb_pro_license_controller {
      * @param object $licensedata License data
      * @return string License status
      */
-    public function update_status($licensedata) {
+    public function update_status($license_data) {
+
+        global $DB;
+
         $status = "";
-        if ((empty($licensedata->success)) && isset($licensedata->error) && ($licensedata->error == "expired")) {
+        if ((empty($license_data->success)) && isset($license_data->error) && ($license_data->error == "expired")) {
             $status = 'expired';
             $this->add_notice(get_string('license_expired', 'auth_edwiserbridge'));
-        } else if ($licensedata->license == 'invalid' && isset($licensedata->error) && $licensedata->error == "revoked") {
+        } elseif ($license_data->license == 'invalid' && isset($license_data->error) && $license_data->error == "revoked") {
             $status = 'disabled';
             $this->add_notice(get_string('license_revoked', 'auth_edwiserbridge'));
-        } else if ($licensedata->license == 'invalid' ||
-                (isset($licensedata->activations_left) && $licensedata->activations_left == "0")) {
+        } elseif (isset($license_data->activations_left) && $license_data->activations_left == "0") {
+            $status = 'no_activations';
+            $this->add_notice(get_string('license_no_activation_left', 'auth_edwiserbridge'));
+        } elseif ($license_data->license == 'invalid') {
             $status = 'invalid';
-            if (isset($licensedata->activations_left) && $licensedata->activations_left == "0") {
-                $this->add_notice(get_string('license_no_activation_left', 'auth_edwiserbridge'));
-            } else {
-                $this->add_notice(get_string('license_invalid', 'auth_edwiserbridge'));
-            }
-        } else if ($licensedata->license == 'failed') {
+            $this->add_notice(get_string('license_invalid', 'auth_edwiserbridge'));
+        } elseif ($license_data->license == 'failed') {
             $status = 'failed';
+            $GLOBALS[ 'wdm_license_activation_failed' ] = true;
             $this->add_notice(get_string('license_failed', 'auth_edwiserbridge'));
         } else {
-            $status = $licensedata->license;
+            $status = $license_data->license;
         }
 
-        // Delete previous license status.
-        unset_config('edd_' . $this->pluginslug. '_license_status', 'auth_edwiserbridge');
+        // delete previous license status
+        try {
+            $DB->delete_records_select('config_plugins', 'name = :name', array('name' => 'edd_' . $this->plugin_slug . '_license_status'));
+        } catch (dml_exception $e) {
+            // keep catch empty if no record found
+        }
 
-        // Update license status.
-        set_config('edd_' . $this->pluginslug. '_license_status', $status, 'auth_edwiserbridge');
+        $dataobject = new stdClass();
+        $dataobject->plugin         = 'auth_edwiserbridge';
+        $dataobject->name = 'edd_' . $this->plugin_slug . '_license_status';
+        $dataobject->value = $status;
+
+        $DB->insert_record('config_plugins', $dataobject);
 
         return $status;
     }
