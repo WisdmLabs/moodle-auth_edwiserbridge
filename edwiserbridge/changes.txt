@@ -83,3 +83,10 @@ Feature
 * Added backward compatibility upto Moodle 3.9.
 Fix
 * Fixed issue where the plugin still showed updates available even when the latest version was installed.
+
+Version 4.3.0
+Fix
+* Fixed undefined variable warning for $wp_url in summary form when service is empty.
+* Improved license handling and error management in the plugin.
+* Enhanced code stability and reduced PHP warnings.
+
