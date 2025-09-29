@@ -152,6 +152,9 @@ if (!empty($userid) && $userid !== 0) {
             $user->loggedin = true;
             $user->site = $CFG->wwwroot;
             complete_user_login($user); // Now performs \core\event\user_loggedin event.
+            if (class_exists('\tool_mfa\manager')) {
+                \tool_mfa\manager::set_pass_state();
+           }
         }
 
         if ($loginredirect != '') {
