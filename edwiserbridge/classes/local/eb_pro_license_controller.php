@@ -108,7 +108,7 @@ class eb_pro_license_controller {
         } else if ($licensedata->license == 'invalid' && isset($licensedata->error) && $licensedata->error == "revoked") {
             $status = 'disabled';
             $this->add_notice(get_string('license_revoked', 'auth_edwiserbridge'));
-        } else if ($licensedata->license == 'invalid' ||
+        } else if ($licensedata->license == 'invalid' &&
                 (isset($licensedata->activations_left) && $licensedata->activations_left == "0")) {
             $status = 'invalid';
             if (isset($licensedata->activations_left) && $licensedata->activations_left == "0") {

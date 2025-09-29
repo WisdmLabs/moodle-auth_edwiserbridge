@@ -49,6 +49,7 @@ class summary_form extends moodleform {
     public function definition() {
         global $CFG;
         $servicename   = '';
+        $wp_url        = '';
         $pluginsvdata  = $this->get_plugin_version_data();
         $mform         = $this->_form;
 
