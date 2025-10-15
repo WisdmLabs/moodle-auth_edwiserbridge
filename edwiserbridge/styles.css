@@ -132,3 +132,9 @@
 .alert-dismissible:has(.eb-plugin-update-notice) .close{
     display: none !important;
 }
+
+form#eb_summary_form table.summary_section_tbl td,
+form#eb_summary_form table.summary_section_tbl tr,
+form#eb_summary_form table.summary_section_tbl tbody{
+    border-width: 0 !important;
+}
