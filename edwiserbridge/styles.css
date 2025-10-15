@@ -136,5 +136,5 @@
 form#eb_summary_form table.summary_section_tbl td,
 form#eb_summary_form table.summary_section_tbl tr,
 form#eb_summary_form table.summary_section_tbl tbody{
-    border-width: 0 !important;
+    border-width: 0;
 }
