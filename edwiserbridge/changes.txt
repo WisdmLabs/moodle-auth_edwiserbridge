@@ -89,3 +89,10 @@ Tweak
 * Fixed undefined variable warning for $wp_url in summary form when service is empty.
 * Updated license code for activation limit reached error.
 * Enhanced code stability and reduced PHP warnings.
+
+Version 4.3.1
+Features:
+* Compatible with Moodle 5.1
+* Compatible with Moodle Multi-Factor Authentication (Authenticator App).
+Tweak
+* Removed border from summary page via CSS.
