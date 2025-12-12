@@ -147,28 +147,25 @@ if (!empty($userid) && $userid !== 0) {
         }
 
         // All that's left to do is to authenticate this user and set up their active session.
-        $authplugin = get_auth_plugin('edwiserbridge');
-        if ($authplugin->user_login($user->username, $user->password)) {
-            $user->loggedin = true;
-            $user->site = $CFG->wwwroot;
-            complete_user_login($user); // Now performs \core\event\user_loggedin event.
-            if (class_exists('\tool_mfa\manager')) {
-                \tool_mfa\manager::set_pass_state();
-           }
+        // Check if user data was successfully retrieved before proceeding
+        if ($user && is_object($user) && isset($user->username) && isset($user->password)) {
+            $authplugin = get_auth_plugin('edwiserbridge');
+            if ($authplugin->user_login($user->username, $user->password)) {
+                $user->loggedin = true;
+                $user->site = $CFG->wwwroot;
+                complete_user_login($user); // Now performs \core\event\user_loggedin event.
+            }
+        } else {
+            // If user data is invalid, redirect to WordPress with error
+            $wordpressurl = str_replace('wp-login.php', '', $tempurl);
+            if (strpos($wordpressurl, '?') !== false) {
+                $wordpressurl .= '&wdm_moodle_error=wdm_moodle_error';
+            } else {
+                $wordpressurl .= '?wdm_moodle_error=wdm_moodle_error';
+            }
+            redirect($wordpressurl);
+            return;
         }
-
-        if ($loginredirect != '') {
-            redirect($loginredirect);
-        }
-        $courseid = auth_edwiserbridge_get_key_value($userdata, 'moodle_course_id');
-        if ($courseid != '') {
-            $SESSION->wantsurl = $CFG->wwwroot.'/course/view.php?id='.$courseid;
-        }
-    } else {
-        $wpurl = get_config('auth_edwiserbridge', 'wpsiteurl');
-        $wpurl = empty( $wpurl ) ? $CFG->wwwroot : $wpurl;
-        redirect( $wpurl );
     }
-
 }
 redirect($SESSION->wantsurl);
