@@ -96,3 +96,7 @@ Features:
 * Compatible with Moodle Multi-Factor Authentication (Authenticator App).
 Tweak
 * Removed border from summary page via CSS.
+
+Version 4.3.2
+Tweak
+* Updated "Purchase for someone else" custom field names from recipient_* to eb_recipient_* format for better consistency and to avoid conflicts with other plugins.
