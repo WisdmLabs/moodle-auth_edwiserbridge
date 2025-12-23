@@ -98,5 +98,5 @@ Tweak
 * Removed border from summary page via CSS.
 
 Version 4.3.2
-Tweak
-* Updated "Purchase for someone else" custom field names from recipient_* to eb_recipient_* format for better consistency and to avoid conflicts with other plugins.
+Fix
+* Fixed SSO login authentication by adding user data validation checks before login process to prevent errors with invalid user objects.
