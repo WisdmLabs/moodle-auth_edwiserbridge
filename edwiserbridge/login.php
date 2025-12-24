@@ -24,8 +24,18 @@
  */
 
 require_once('../../config.php'); // @codingStandardsIgnoreLine
-global $CFG, $SESSION, $DB;
+global $CFG, $SESSION, $DB, $USER;
 require_once($CFG->dirroot.'/auth/edwiserbridge/lib.php');
+
+// If user is already logged in and not in SSO flow, redirect to home
+$loginid = optional_param('login_id', 0, PARAM_INT);
+$logoutid = optional_param('logout_id', 0, PARAM_INT);
+$wdmdata = optional_param('wdm_data', '', PARAM_RAW);
+if (isloggedin() && !isguestuser() && empty($loginid) && empty($logoutid) && empty($wdmdata)) {
+    // User is already logged in and not in SSO flow, redirect to home
+    redirect($CFG->wwwroot);
+    return;
+}
 
 // Login may somehow modify this.
 $SESSION->wantsurl = $CFG->wwwroot;
@@ -148,12 +158,69 @@ if (!empty($userid) && $userid !== 0) {
 
         // All that's left to do is to authenticate this user and set up their active session.
         // Check if user data was successfully retrieved before proceeding
-        if ($user && is_object($user) && isset($user->username) && isset($user->password)) {
+        if ($user && is_object($user) && isset($user->username) && isset($user->password)) {  
             $authplugin = get_auth_plugin('edwiserbridge');
             if ($authplugin->user_login($user->username, $user->password)) {
                 $user->loggedin = true;
                 $user->site = $CFG->wwwroot;
                 complete_user_login($user); // Now performs \core\event\user_loggedin event.
+
+                // Ensure session is written and cookie is set before redirect.
+                // This is critical for the session to persist after redirect.
+                if (class_exists('\core\session\manager')) {
+                    \core\session\manager::write_close();
+                } else {
+                    // Fallback for older Moodle versions.
+                    if (function_exists('session_write_close')) {
+                        session_write_close();
+                    }
+                }
+                
+                // Use login_redirect if available, otherwise use wantsurl
+                $redirecturl = !empty($loginredirect) ? $loginredirect : $SESSION->wantsurl;
+                
+                // Ensure redirect URL is set, default to home page
+                if (empty($redirecturl)) {
+                    $redirecturl = $CFG->wwwroot;
+                }
+                
+                // If redirect URL is relative, make it absolute
+                if (strpos($redirecturl, 'http') !== 0) {
+                    $redirecturl = $CFG->wwwroot . '/' . ltrim($redirecturl, '/');
+                }
+                
+                // Prevent redirecting to login pages when user is already logged in
+                $loginpages = ['login/index.php', 'login.php', 'auth/edwiserbridge/login.php', 'auth/edwiserbridge/wdmwplogin.php'];
+                foreach ($loginpages as $loginpage) {
+                    if (strpos($redirecturl, $loginpage) !== false) {
+                        // If redirecting to login page, redirect to dashboard instead
+                        $redirecturl = $CFG->wwwroot . '/my/';
+                        break;
+                    }
+                }
+                
+                // Remove loginredirect parameter from URL if present
+                if (strpos($redirecturl, 'loginredirect=') !== false) {
+                    $redirecturl = preg_replace('/[?&]loginredirect=[^&]*/', '', $redirecturl);
+                    $redirecturl = rtrim($redirecturl, '?&');
+                    // If URL becomes empty or just base URL, redirect to dashboard
+                    if (empty($redirecturl) || $redirecturl == $CFG->wwwroot || $redirecturl == $CFG->wwwroot . '/') {
+                        $redirecturl = $CFG->wwwroot . '/my/';
+                    }
+                }
+                
+                // Add cache-busting parameter to force fresh page load and ensure session is recognized.
+                // This prevents browser from serving cached page that doesn't show logged-in state.
+                $separator = (strpos($redirecturl, '?') !== false) ? '&' : '?';
+                $redirecturl .= $separator . 'eb_sso=' . time();
+                
+                // Ensure session is written before redirect
+                if (isset($SESSION)) {
+                    $SESSION->wantsurl = $redirecturl;
+                }
+                
+                redirect($redirecturl);
+                return;
             }
         } else {
             // If user data is invalid, redirect to WordPress with error
