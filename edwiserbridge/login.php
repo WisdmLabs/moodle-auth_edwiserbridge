@@ -146,15 +146,11 @@ if (!empty($userid) && $userid !== 0) {
             return;
         }
 
-        // All that's left to do is to authenticate this user and set up their active session.
-        // Check if user data was successfully retrieved before proceeding
-        if ($user && is_object($user) && isset($user->username) && isset($user->password)) {
-            $authplugin = get_auth_plugin('edwiserbridge');
-            if ($authplugin->user_login($user->username, $user->password)) {
-                $user->loggedin = true;
-                $user->site = $CFG->wwwroot;
-                complete_user_login($user); // Now performs \core\event\user_loggedin event.
-            }
+        // SSO token already validated above - complete login directly without re-checking password.
+        if ($user && is_object($user) && isset($user->username)) {
+            $user->loggedin = true;
+            $user->site = $CFG->wwwroot;
+            complete_user_login($user);
         } else {
             // If user data is invalid, redirect to WordPress with error
             $wordpressurl = str_replace('wp-login.php', '', $tempurl);

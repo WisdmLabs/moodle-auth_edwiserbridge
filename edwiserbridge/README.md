@@ -73,7 +73,39 @@ Refer to this documentation for setup: https://edwiser.org/documentation/edwiser
 
 # Plugin Version
 
-v3.0.0 - Plugin Released
+v4.3.3 - Latest
+
+[(Back to top)](#table-of-contents)
+
+# Recent Fixes
+
+## v4.3.3 — Async WordPress Sync (Cron Stability Fix)
+
+### Problem
+When a user was created in Moodle, the `observer.php` file made a **direct synchronous HTTP call** to WordPress during the Moodle event. This caused:
+- The Moodle **cron lock to be held** for the entire duration of the HTTP call (up to 30+ seconds on slow networks or timeouts)
+- Moodle's cron scheduler detecting the previous cron as "still running" and **launching additional cron instances**
+- Multiple simultaneous cron jobs **conflicting with each other**, causing user creation to fail
+- Client impact: ~500 users could not be added reliably
+
+### Fix
+All WordPress sync calls in `observer.php` are now **queued as Moodle ad-hoc tasks** using the new `classes/task/sync_to_wordpress.php` class.
+
+| Before (sync) | After (async) |
+|---|---|
+| Event fires → HTTP call to WordPress (blocks 30s+) | Event fires → Task queued instantly (<1ms) |
+| Cron lock held during HTTP call | Cron lock released immediately |
+| Multiple cron instances overlap → user creation fails | Single cron runs cleanly → user creation succeeds |
+| No retry on failure | Exponential backoff retry: 60s → 300s → 900s (max 3) |
+
+### Files Changed
+- `classes/observer.php` — replaced `connect_to_wp_with_args()` with `queue_wp_sync()` in all events
+- `classes/task/sync_to_wordpress.php` — new ad-hoc task class with retry logic
+- `version.php` — updated version to `2026010600`
+
+### Additional Fixes
+- **Infinite loop prevention** in `user_updated` event: added check via `auth_edwiserbridge_check_if_request_is_from_wp()` to stop WordPress → Moodle → WordPress sync loops
+- **Password capture timing fix** in `user_created` event: `$newpassword` and `$createpassword` are now captured before the loop (they are not available when the async task runs)
 
 [(Back to top)](#table-of-contents)
 

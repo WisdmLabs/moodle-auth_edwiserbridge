@@ -73,23 +73,17 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
     public function user_login($username, $password = null) {
         global $CFG, $DB;
 
-        if ($password == null || $password == '') {
-            return false;
-        }
-        $user = $DB->get_record(
-            'user',
-            ['username' => $username, 'password' => $password, 'mnethostid' => $CFG->mnet_localhost_id]
-        );
-
-        if (!empty($user->suspended)) {
+        if (empty($password)) {
             return false;
         }
 
-        if ($user) {
-            return true;
+        $user = $DB->get_record('user', ['username' => $username, 'mnethostid' => $CFG->mnet_localhost_id]);
+
+        if (empty($user) || !empty($user->suspended)) {
+            return false;
         }
 
-        return false;
+        return validate_internal_user_password($user, $password);
     }
 
     /**
@@ -113,50 +107,45 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      * system. This is likely an implementation detail of the plugin, rather than
      * an exported API.
      *
-     * @return bool Always returns false, indicating this plugin is not internal.
+     * @return bool Always returns true, so Moodle stores and validates passwords internally.
      */
     public function is_internal() {
-        return false;
+        return true;
     }
 
     /**
      * Returns true if this authentication plugin can change the user's password.
      *
-     * This method indicates whether the authentication plugin supports changing the
-     * user's password. In this case, it returns false, indicating that the plugin
-     * does not support changing the user's password.
+     * Returning true allows Moodle's built-in password change flow to work,
+     * which is required when admin creates a user with "Generate password and notify user".
      *
-     * @return bool Always returns false.
+     * @return bool Always returns true.
      */
     public function can_change_password() {
-        return false;
+        return true;
     }
 
     /**
-     * Returns the URL for changing the user's password, or an empty string if the default
-     * password change mechanism can be used.
+     * Returns the URL for changing the user's password.
      *
-     * This method is an implementation detail of the authentication plugin, rather than
-     * an exported API. It indicates whether the plugin provides a custom password change
-     * mechanism, or if the default Moodle password change functionality can be used.
+     * Returns null so Moodle uses its default internal password change page
+     * (/login/change_password.php), which works correctly with internal auth.
      *
-     * @return void
+     * @return moodle_url|null
      */
     public function change_password_url() {
-        return;
+        return null;
     }
 
     /**
      * Returns true if plugin allows resetting of internal password.
      *
-     * This method indicates whether the authentication plugin supports resetting the
-     * user's password. In this case, it returns false, indicating that the plugin
-     * does not support resetting the user's password.
+     * Returning true allows the standard Moodle "Forgot password" flow to work.
      *
-     * @return bool Always returns false.
+     * @return bool Always returns true.
      */
     public function can_reset_password() {
-        return false;
+        return true;
     }
 
     /**
@@ -192,8 +181,10 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
 
         // Execute POST request
         $response = $curl->post($requesturl, $requestdata, $options);
+        $info = $curl->get_info();
+        $httpcode = isset($info['http_code']) ? (int) $info['http_code'] : 0;
 
-        return $response;
+        return ['response' => $response, 'http_code' => $httpcode];
     }
 
     /**
@@ -245,12 +236,16 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
 
         $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
 
-        // Send curl to wp site with data.
-        $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
+        // Send curl to wp site with data; only redirect to WP for SSO if the
+        // endpoint responded with HTTP 200 (SSO module active on WordPress).
+        $curlresult = $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
+        $httpcode = isset($curlresult['http_code']) ? $curlresult['http_code'] : 0;
 
-        $SESSION->wantsurl = $CFG->wwwroot.'/auth/edwiserbridge/wdmwplogin.php?'
-                            .'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash
-                            . '&wpsiteurl='.urlencode( $wpsiteurl );
+        if ($httpcode !== 404) {
+            $SESSION->wantsurl = $CFG->wwwroot.'/auth/edwiserbridge/wdmwplogin.php?'
+                                .'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash
+                                . '&wpsiteurl='.urlencode( $wpsiteurl );
+        }
 
         return true;
     }
@@ -290,9 +285,12 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         ];
 
         $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
-        $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
+        $curlresult = $this->eb_send_curl_request(['wdmargs' => $encryptedargs]);
+        $httpcode = isset($curlresult['http_code']) ? $curlresult['http_code'] : 0;
 
-        $redirect = strtok($this->config->wpsiteurl, '?') .'?wdmaction=logout&mdl_uid=' . $USER->id . '&verify_code=' . $hash;
+        if ($httpcode !== 404) {
+            $redirect = strtok($this->config->wpsiteurl, '?') .'?wdmaction=logout&mdl_uid=' . $USER->id . '&verify_code=' . $hash;
+        }
 
     }
 

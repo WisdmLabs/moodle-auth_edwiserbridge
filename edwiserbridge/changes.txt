@@ -100,3 +100,9 @@ Tweak
 Version 4.3.2
 Fix
 * Fixed SSO login authentication by adding user data validation checks before login process to prevent errors with invalid user objects.
+
+Version 4.3.3
+Fix - Optimized user synchronization by enabling background processing and resolving race conditions caused by multiple simultaneous cron jobs.
+Fix - Resolved critical sync and login loops between Moodle and WordPress, ensuring user updates don't trigger infinite redirects.
+Fix - Improved SSO authentication by removing redundant password re-validation and ensuring redirect logic is skipped if the SSO module is inactive.
+Fix - Fixed an issue where passwords were not being sent correctly during user creation from Moodle.
