@@ -18,10 +18,6 @@
  * Event observer.
  * Observer file used as the callback for all the events.
  *
- * All WordPress sync calls are now queued as ad-hoc tasks instead of
- * making synchronous HTTP calls, preventing blocking delays during
- * user/course operations.
- *
  * @package    auth_edwiserbridge
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -46,25 +42,7 @@ require_once($CFG->dirroot . '/user/lib.php');
 class observer {
 
     /**
-     * Queue a sync task to send data to WordPress asynchronously.
-     *
-     * @param string $url The WordPress site URL.
-     * @param array $requestdata The data to send.
-     */
-    private static function queue_wp_sync($url, $requestdata) {
-        $task = new \auth_edwiserbridge\task\sync_to_wordpress();
-        $task->set_custom_data([
-            'url' => $url,
-            'requestdata' => $requestdata,
-            'retries' => 0,
-        ]);
-        \core\task\manager::queue_adhoc_task($task);
-    }
-
-    /**
      * Functionality to handle user enrollment event.
-     *
-     * This method is called when a user is enrolled in a course. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the enrollment.
      *
      * @param core\event\user_enrolment_created $event The event object containing information about the user enrollment.
      */
@@ -90,12 +68,11 @@ class observer {
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
-                if ($synchconditions[$value['wp_name']]['course_enrollment'] && $value['wp_token']) {
-                    // Adding Token for verification in WP from Moodle.
+                if (isset($synchconditions[$value['wp_name']]['course_enrollment']) && $synchconditions[$value['wp_name']]['course_enrollment'] && $value['wp_token']) {
                     $requestdata['secret_key'] = $value['wp_token'];
-
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -103,8 +80,6 @@ class observer {
 
     /**
      * Functionality to handle user un enrollment event.
-     *
-     * This method is called when a user is unenrolled from a course. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the unenrollment.
      *
      * @param core\event\user_enrolment_deleted $event The event object containing information about the user unenrollment.
      */
@@ -120,7 +95,6 @@ class observer {
             'email'      => $userdata[$event->relateduserid]->email,
         ];
 
-        // Checks if the request is from the wordpress site or from te Moodle site itself.
         if (auth_edwiserbridge_check_if_request_is_from_wp()) {
             return;
         }
@@ -131,12 +105,11 @@ class observer {
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
-
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
-                if ($synchconditions[$value['wp_name']]['course_un_enrollment'] && $value['wp_token']) {
-                    // Adding Token for verification in WP from Moodle.
+                if (isset($synchconditions[$value['wp_name']]['course_un_enrollment']) && $synchconditions[$value['wp_name']]['course_un_enrollment'] && $value['wp_token']) {
                     $requestdata['secret_key'] = $value['wp_token'];
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -145,21 +118,14 @@ class observer {
     /**
      * Functionality to handle user creation event.
      *
-     * This method is called when a new user is created in the Moodle system. It collects the relevant user data and sends it to the connected WordPress site using the Edwiser Bridge plugin to synchronize the user creation.
-     *
      * @param core\event\user_created $event The event object containing information about the newly created user.
      */
     public static function user_created(\core\event\user_created $event) {
         global $CFG;
         $userdata = user_get_users_by_id([$event->relateduserid]);
 
-        // User password should be encrypted. Using Openssl for it.
-        // We will use token as the key as it is present on both sites.
-        // Open SSL encryption initialization.
-        $encmethod = 'AES-128-CTR';
-
-        // Capture the raw password now - it won't be available when the task runs.
-        $newpassword = optional_param('newpassword', '', PARAM_TEXT);
+        $encmethod      = 'AES-128-CTR';
+        $newpassword    = optional_param('newpassword', '', PARAM_TEXT);
         $createpassword = optional_param('createpassword', '', PARAM_TEXT);
 
         require_once("$CFG->dirroot/user/profile/lib.php");
@@ -173,11 +139,10 @@ class observer {
             $synchconditions = json_decode($eb_sync_settings, true);
 
             foreach ($sites as $value) {
-                if ($synchconditions[$value["wp_name"]]["user_creation"] && $value['wp_token']) {
-                    $password    = '';
-                    $enciv       = '';
+                if (isset($synchconditions[$value["wp_name"]]["user_creation"]) && $synchconditions[$value["wp_name"]]["user_creation"] && $value['wp_token']) {
+                    $password = '';
+                    $enciv    = '';
 
-                    // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
                         $enciv    = substr(hash('sha256', $value["wp_token"]), 0, 16);
@@ -185,20 +150,21 @@ class observer {
                     }
 
                     $requestdata = [
-                        'action' => 'user_creation',
-                        'user_id'     => $event->relateduserid,
-                        'user_name'   => $userdata[$event->relateduserid]->username,
-                        'first_name'  => $userdata[$event->relateduserid]->firstname,
-                        'last_name'   => $userdata[$event->relateduserid]->lastname,
-                        'email'       => $userdata[$event->relateduserid]->email,
-                        'password'    => $password,
-                        'enc_iv'      => $enciv,
-                        'secret_key' => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                        'custom_fields' => $customfields, // Custom fields data.
+                        'action'                    => 'user_creation',
+                        'user_id'                   => $event->relateduserid,
+                        'user_name'                 => $userdata[$event->relateduserid]->username,
+                        'first_name'                => $userdata[$event->relateduserid]->firstname,
+                        'last_name'                 => $userdata[$event->relateduserid]->lastname,
+                        'email'                     => $userdata[$event->relateduserid]->email,
+                        'password'                  => $password,
+                        'enc_iv'                    => $enciv,
+                        'secret_key'                => $value['wp_token'],
+                        'custom_fields'             => $customfields,
                         'moodle_generated_password' => !empty($createpassword) ? 1 : 0,
                     ];
 
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler = \auth_edwiserbridge\local\api_handler::instance();
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -212,20 +178,13 @@ class observer {
     public static function user_updated(\core\event\user_updated $event) {
         global $CFG;
 
-        // CRITICAL: Prevent infinite loops - don't send updates if request is from WordPress.
-        // This prevents WordPress -> Moodle -> WordPress sync loops.
+        // Prevent WordPress->Moodle->WordPress infinite sync loops.
         if (auth_edwiserbridge_check_if_request_is_from_wp()) {
             return;
         }
 
-        $userdata = user_get_users_by_id([$event->relateduserid]);
-
-        // User password should be encrypted. Using Openssl for it.
-        // We will use token as the key as it is present on both sites.
-        // Open SSL encryption initialization.
+        $userdata  = user_get_users_by_id([$event->relateduserid]);
         $encmethod = 'AES-128-CTR';
-
-        // Capture the raw password now - it won't be available when the task runs.
         $newpassword = optional_param('newpassword', '', PARAM_TEXT);
 
         require_once("$CFG->dirroot/user/profile/lib.php");
@@ -235,7 +194,6 @@ class observer {
         $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
         if (!empty($eb_connection_settings)) {
-
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
 
@@ -245,13 +203,12 @@ class observer {
                     $synchconditions[$value["wp_name"]]["user_updation"] &&
                     $value['wp_token']
                 ) {
-                    $password    = '';
-                    $enciv       = '';
+                    $password = '';
+                    $enciv    = '';
 
-                    // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
-                        $enciv = substr(hash('sha256', $value["wp_token"]), 0, 16);
+                        $enciv    = substr(hash('sha256', $value["wp_token"]), 0, 16);
                         $password = openssl_encrypt($newpassword, $encmethod, $enckey, 0, $enciv);
                     }
 
@@ -266,11 +223,12 @@ class observer {
                         'phone'         => $userdata[$event->relateduserid]->phone1,
                         'password'      => $password,
                         'enc_iv'        => $enciv,
-                        'secret_key'    => $value['wp_token'], // Adding Token for verification in WP from Moodle.
-                        'custom_fields' => $customfields, // Custom fields data.
+                        'secret_key'    => $value['wp_token'],
+                        'custom_fields' => $customfields,
                     ];
 
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler = \auth_edwiserbridge\local\api_handler::instance();
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -278,9 +236,6 @@ class observer {
 
     /**
      * Functionality to handle user password update event.
-     *
-     * This method is called when a user's password is updated in the system.
-     * It is responsible for updating the user's password in the connected WordPress sites.
      *
      * @param core\event\user_password_updated $event The event object containing information about the password update.
      */
@@ -292,14 +247,8 @@ class observer {
             $userid = $event->relateduserid;
         }
 
-        $userdata = user_get_users_by_id([$userid]);
-
-        // User password should be encrypted. Using Openssl for it.
-        // We will use token as the key as it is present on both sites.
-        // Open SSL encryption initialization.
-        $encmethod = 'AES-128-CTR';
-
-        // Capture the raw password now - it won't be available when the task runs.
+        $userdata    = user_get_users_by_id([$userid]);
+        $encmethod   = 'AES-128-CTR';
         $newpassword = optional_param('newpassword1', '', PARAM_TEXT);
         if (empty($newpassword)) {
             $newpassword = optional_param('password', '', PARAM_TEXT);
@@ -309,21 +258,18 @@ class observer {
         $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
         if (!empty($eb_connection_settings)) {
-
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
-
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
                     isset($synchconditions[$value["wp_name"]]["user_updation"]) &&
                     $synchconditions[$value["wp_name"]]["user_updation"] &&
                     $value['wp_token']
                 ) {
+                    $password = '';
+                    $enciv    = '';
 
-                    $password    = '';
-                    $enciv       = '';
-
-                    // If new password in not empty.
                     if ($newpassword && !empty($newpassword)) {
                         $enckey   = openssl_digest($value["wp_token"], 'SHA256', true);
                         $enciv    = substr(hash('sha256', $value["wp_token"]), 0, 16);
@@ -336,10 +282,10 @@ class observer {
                         'email'      => $userdata[$userid]->email,
                         'password'   => $password,
                         'enc_iv'     => $enciv,
-                        'secret_key' => $value['wp_token'], // Adding Token for verification in WP from Moodle.
+                        'secret_key' => $value['wp_token'],
                     ];
 
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -366,15 +312,13 @@ class observer {
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
-
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
                         $synchconditions[$value["wp_name"]]["user_deletion"] && $value['wp_token']
                 ) {
-                    // Adding Token for verification in WP from Moodle.
                     $requestdata['secret_key'] = $value['wp_token'];
-
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -386,7 +330,6 @@ class observer {
      * @param core\event\course_created $event The course creation event.
      */
     public static function course_created(\core\event\course_created $event) {
-        // Get course info.
         $course = get_course($event->courseid);
 
         $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
@@ -395,7 +338,7 @@ class observer {
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
-
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
                     isset($synchconditions[$value["wp_name"]]["course_creation"]) &&
@@ -403,15 +346,15 @@ class observer {
                     $value['wp_token']
                 ) {
                     $requestdata = [
-                        'action'      => 'course_created',
-                        'course_id'   => $event->courseid,
-                        'fullname'    => $course->fullname,
-                        'summary'     => $course->summary,
-                        'cat'         => $course->category,
-                        'secret_key'  => $value['wp_token'], // Adding Token for verification in WP from Moodle.
+                        'action'     => 'course_created',
+                        'course_id'  => $event->courseid,
+                        'fullname'   => $course->fullname,
+                        'summary'    => $course->summary,
+                        'cat'        => $course->category,
+                        'secret_key' => $value['wp_token'],
                     ];
 
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -434,17 +377,15 @@ class observer {
         if (!empty($eb_connection_settings)) {
             $sites = json_decode($eb_connection_settings, true);
             $synchconditions = json_decode($eb_sync_settings, true);
-
+            $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
                     isset($synchconditions[$value["wp_name"]]["course_deletion"]) &&
                     $synchconditions[$value["wp_name"]]["course_deletion"] &&
                     $value['wp_token']
                 ) {
-                    // Adding Token for verification in WP from Moodle.
                     $requestdata['secret_key'] = $value['wp_token'];
-
-                    self::queue_wp_sync($value["wp_url"], $requestdata);
+                    $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
             }
         }
@@ -458,7 +399,6 @@ class observer {
     public static function dashboard_viewed(\core\event\dashboard_viewed $event) {
         global $CFG;
 
-        // Check if user is admin or not.
         if (!is_siteadmin()) {
             return;
         }
