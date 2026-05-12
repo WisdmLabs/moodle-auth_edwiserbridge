@@ -163,7 +163,9 @@ if (!empty($userid) && $userid !== 0) {
             return;
         }
 
-        if ($loginredirect != '') {
+        // Only redirect if loginredirect is an absolute URL; relative URLs would be resolved
+        // relative to auth/edwiserbridge/login.php producing a 403-triggering directory URL.
+        if ($loginredirect != '' && filter_var($loginredirect, FILTER_VALIDATE_URL)) {
             redirect($loginredirect);
         }
         $courseid = auth_edwiserbridge_get_key_value($userdata, 'moodle_course_id');
