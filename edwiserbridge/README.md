@@ -73,13 +73,13 @@ Refer to this documentation for setup: https://edwiser.org/documentation/edwiser
 
 # Plugin Version
 
-v4.3.3 - Latest
+v4.3.4 - Latest
 
 [(Back to top)](#table-of-contents)
 
 # Recent Fixes
 
-## v4.3.3 — Async WordPress Sync (Cron Stability Fix)
+## v4.3.4 — Async WordPress Sync (Cron Stability Fix)
 
 ### Problem
 When a user was created in Moodle, the `observer.php` file made a **direct synchronous HTTP call** to WordPress during the Moodle event. This caused:

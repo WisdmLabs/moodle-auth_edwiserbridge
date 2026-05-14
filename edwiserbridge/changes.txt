@@ -101,11 +101,10 @@ Version 4.3.2
 Fix
 * Fixed SSO login authentication by adding user data validation checks before login process to prevent errors with invalid user objects.
 
-Version 4.3.3
+Version 4.3.4
 Fix
-* Fixed user creation failing when multiple cron jobs ran at the same time.
-* WordPress sync now runs in the background instead of blocking Moodle operations.
-* Fixed infinite loop that could occur when syncing user updates between Moodle and WordPress.
-* Fixed password not being sent correctly when a new user is created from Moodle.
-* Reverted WordPress sync from async adhoc-task queue back to direct synchronous API calls; all 7 sync features (enrollment, unenrollment, user creation/update/deletion, course creation/deletion) now trigger immediately on event without requiring Moodle cron.
-* Cleared 9 stuck adhoc tasks that had accumulated since cron was not running.
+* Added compatibility with Moodle 5.2.
+* Fixed issues related to user creation, password synchronization, and user update loops between Moodle and WordPress.
+* Improved synchronization stability when multiple cron jobs run simultaneously.
+* Updated the sync process so WordPress sync triggers immediately, without depending on Moodle cron execution.
+* Cleared stuck adhoc sync tasks caused by Moodle cron not running properly.
