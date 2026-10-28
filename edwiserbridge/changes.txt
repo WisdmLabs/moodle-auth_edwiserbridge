@@ -108,3 +108,9 @@ Fix
 * Improved synchronization stability when multiple cron jobs run simultaneously.
 * Updated the sync process so WordPress sync triggers immediately, without depending on Moodle cron execution.
 * Cleared stuck adhoc sync tasks caused by Moodle cron not running properly.
+
+Version 4.3.5
+Fix
+* Added compatibility with Moodle 5.3.
+* Fixed setup wizard not generating a web service access token on Moodle 4.4+ - replaced the removed external_generate_token() stub (MDL-76583) with core_external\util::generate_token(), with fallback for older Moodle versions.
+* Fixed setup wizard "Web Service Function" check stuck on "Checking..." by registering the setup wizard external functions in the web service auto-update list.

@@ -655,7 +655,9 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
                 'auth_edwiserbridge_get_mandatory_settings',
                 'auth_edwiserbridge_enable_plugin_settings',
                 'auth_edwiserbridge_get_users',
-                'auth_edwiserbridge_get_courses'
+                'auth_edwiserbridge_get_courses',
+                'auth_edwiserbridge_setup_wizard_save_and_continue',
+                'auth_edwiserbridge_setup_test_connection'
             ];
             // Define required functions
             $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
