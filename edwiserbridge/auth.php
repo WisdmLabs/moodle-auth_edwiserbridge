@@ -220,7 +220,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
 
         $wpsiteurl = strtok($this->config->wpsiteurl, '?');
 
-        $hash = hash('md5', rand(10, 1000));
+        $hash = bin2hex(random_bytes(32));
 
         // All conditions are passed.
         $args = [
@@ -272,7 +272,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         if (!filter_var($this->config->wpsiteurl, FILTER_VALIDATE_URL)) {
             return true;
         }
-        $hash = hash('md5', rand(10, 1000) );
+        $hash = bin2hex(random_bytes(32));
 
         $args = [
             'action'        => 'logout',
@@ -305,21 +305,25 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         $query = http_build_query( $args, 'flags_' );
         $token = $query;
 
-        $encmethod = 'AES-256-ECB'; // Changed to AES-256-ECB
+        $enckey = openssl_digest( $key, 'SHA256', true ); // Hash the key to 256 bits using SHA-256.
+        $method = 'AES-256-GCM';
+        $nonce  = random_bytes( 12 ); // 96-bit IV for GCM.
+        $tag    = '';
 
-        // Ensure the key is hashed to 256 bits (32 bytes) using SHA-256
-        $enckey = openssl_digest( $key, 'SHA256', true );
+        $crypttext = openssl_encrypt( $token, $method, $enckey, OPENSSL_RAW_DATA, $nonce, $tag, '', 16 );
 
-        $crypttext = openssl_encrypt($token, $encmethod, $enckey, 0); // No IV needed for ECB mode
+        if ( false === $crypttext ) {
+            return '';
+        }
 
-        // Base64 encode the encrypted token
-        $data = base64_encode($crypttext);
-        // Convert to URL-safe Base64 (replace + with -, / with _, and remove = padding)
+        // Format: nonce (12 bytes) + ciphertext + tag (16 bytes).
+        $data = base64_encode( $nonce . $crypttext . $tag );
+        // Convert to URL-safe Base64 (replace + with -, / with _, and remove = padding).
         $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
-        // Trim any unwanted spaces or characters
+        // Trim any unwanted spaces or characters.
         $encryptedargs = trim($data);
-        
+
         return $encryptedargs;
     }
 

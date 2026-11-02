@@ -623,11 +623,28 @@ function auth_edwiserbridge_pluginfile(
  * external_services_functions table.
  */
 function auth_edwiserbridge_check_and_update_webservice_functions() {
+    global $DB;
+
     $webservicemanager = new \webservice();
     $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
     $connections = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : [];
     if (!empty($connections)) {
         foreach ($connections as $connection) {
+            // Skip connections with no token stored at all.
+            if (empty($connection['wp_token'])) {
+                continue;
+            }
+
+            // webservice::get_user_ws_token() runs its lookup with MUST_EXIST
+            // and throws a dml_missing_record_exception (invalidrecord) if the
+            // token row is gone - e.g. a stale/orphaned connection left behind
+            // after a site was reconnected or its token was regenerated/deleted
+            // in Manage tokens. Check the record exists first so a single bad
+            // connection can't abort the whole plugin upgrade.
+            if (!$DB->record_exists('external_tokens', ['token' => $connection['wp_token']])) {
+                continue;
+            }
+
             $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
             $serviceid = $token ? $token->externalserviceid : '';
     
@@ -924,15 +941,35 @@ function auth_edwiserbridge_decrypt_string($base64, $key) {
     }
     // Decode the Base64 data
     $crypttext = base64_decode($data);
+    if (false === $crypttext) {
+        return '';
+    }
 
-    // AES-256-ECB does not use an IV, so we don't need to split the data
-    // Directly decrypt the data
-    $encmethod = 'AES-256-ECB'; // Use AES-256-ECB encryption method
-    $enckey = openssl_digest( $key, 'SHA256', true); // Hash the key to 256 bits using SHA-256
-    // Decrypt the token with AES-256-ECB (no IV required)
-    $decryptedtoken = openssl_decrypt($crypttext, $encmethod, $enckey, 0);
-    // Return the decrypted value, trimmed of any extra spaces or characters
-    return trim($decryptedtoken);
+    $enckey = openssl_digest($key, 'SHA256', true); // Hash the key to 256 bits using SHA-256.
+    $method = 'AES-256-GCM';
+
+    // GCM payload: nonce (12 bytes) + ciphertext + tag (16 bytes).
+    $noncelen = 12;
+    $taglen   = 16;
+    $total    = strlen($crypttext);
+
+    if ($total > ($noncelen + $taglen)) {
+        $nonce      = substr($crypttext, 0, $noncelen);
+        $tag        = substr($crypttext, -$taglen);
+        $ciphertext = substr($crypttext, $noncelen, -$taglen);
+
+        $decryptedtoken = openssl_decrypt($ciphertext, $method, $enckey, OPENSSL_RAW_DATA, $nonce, $tag);
+        if (false !== $decryptedtoken) {
+            return trim($decryptedtoken);
+        }
+    }
+
+    // Legacy fallback for old AES-256-ECB tokens.
+    $legacymethod = 'AES-256-ECB';
+    $decryptedtoken = openssl_decrypt($crypttext, $legacymethod, $enckey, 0);
+
+    // Return the decrypted value, trimmed of any extra spaces or characters.
+    return is_string($decryptedtoken) ? trim($decryptedtoken) : '';
 }
 
 /**

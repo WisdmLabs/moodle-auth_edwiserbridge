@@ -582,3 +582,4 @@ $string['complete_details'] = 'Edwiser Bridge FREE Moodle plugin setup complete'
 $string['web_service_validate_token_msg'] = 'Return true if tokens match';
 $string['web_service_validate_user_msg'] = 'Return true if user is manager/site admin';
 $string['checking'] = 'Checking...';
+$string['privacy:metadata:preference:eb_sso_user_session_id'] = 'A short-lived token used while logging in or out via Edwiser Bridge single sign-on. It is normally deleted immediately after the handshake completes.';

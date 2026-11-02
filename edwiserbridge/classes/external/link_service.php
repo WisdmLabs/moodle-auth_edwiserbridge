@@ -43,19 +43,43 @@ trait link_service {
      * Functionality to link existing services.
      *
      * @param string $serviceid The ID of the service to link.
-     * @param int $token The token associated with the service.
+     * @param string $token The token associated with the service.
+     * @param int $userid Optional user ID to generate a token for if none is provided.
      * @return array An array containing the status and message of the linking operation.
      */
-    public static function auth_edwiserbridge_link_service($serviceid, $token) {
-        
+    public static function auth_edwiserbridge_link_service($serviceid, $token, $userid = 0) {
+        global $CFG;
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/webservice:managealltokens', $systemcontext);
-        
+
         $response           = [];
         $response['status'] = 0;
         $response['msg']    = get_string('eb_link_err', 'auth_edwiserbridge');
+
+        // If no token was supplied, try to generate one for the requested user.
+        if (empty($token) && !empty($userid)) {
+            require_once($CFG->dirroot . '/webservice/lib.php');
+            $webservicemanager = new \webservice();
+            $settingshandler   = new auth_edwiserbridge\local\settings_handler();
+
+            // Make sure the selected user is authorised for this service.
+            $authorised = false;
+            $users      = $webservicemanager->get_ws_authorised_users($serviceid);
+            foreach ($users as $user) {
+                if ($user->id == $userid) {
+                    $authorised = true;
+                    break;
+                }
+            }
+            if (!$authorised) {
+                $settingshandler->eb_add_auth_user($serviceid, $userid);
+            }
+
+            $token = $settingshandler->eb_create_token($serviceid, $userid);
+        }
 
         $settingshandler = new auth_edwiserbridge\local\settings_handler();
         $result           = $settingshandler->eb_link_exitsing_service($serviceid, $token);
@@ -77,6 +101,7 @@ trait link_service {
             [
                 'service_id' => new external_value(PARAM_TEXT, get_string('web_service_id', 'auth_edwiserbridge')),
                 'token'      => new external_value(PARAM_TEXT, get_string('web_service_token', 'auth_edwiserbridge')),
+                'user_id'    => new external_value(PARAM_INT, get_string('new_service_user_lbl', 'auth_edwiserbridge'), VALUE_DEFAULT, 0),
             ]
         );
     }

@@ -309,6 +309,7 @@ class settings_handler {
     public function eb_create_token($serviceid, $userid) {
         global $CFG;
 
+        require_once("$CFG->libdir/externallib.php");
         require_once($CFG->dirroot . '/webservice/lib.php');
 
         $tokendata = [
@@ -318,17 +319,20 @@ class settings_handler {
             'purpose' => 'Edwiser Bridge Service Token'
         ];
 
-        // Moodle 4.4+ (MDL-76583): external_generate_token() is a deprecated no-op stub.
-        // Use \core_external\util::generate_token() which takes the service object and a context object.
-        $webservicemanager = new \webservice();
-        $service = $webservicemanager->get_external_service_by_id($serviceid, MUST_EXIST);
-
+        // Moodle 4.4+ (MDL-76583): \external_generate_token() is a deprecated no-op stub.
+        // Use \core_external\util::generate_token() when available and fall back for older sites.
         if (class_exists('\core_external\util')) {
+            $webservicemanager = new \webservice();
+            $service           = $webservicemanager->get_external_service_by_id($serviceid, MUST_EXIST);
+            $context           = class_exists('\core\context\system')
+                ? \core\context\system::instance()
+                : \context_system::instance();
+
             $token = \core_external\util::generate_token(
                 $tokendata['tokentype'],
                 $service,
                 $userid,
-                \core\context\system::instance(),
+                $context,
                 0,
                 '',
                 $tokendata['purpose']
@@ -336,9 +340,10 @@ class settings_handler {
         } else {
             $token = \external_generate_token($tokendata['tokentype'], $serviceid, $userid, 1);
         }
+
         set_config("edwiser_bridge_last_created_token", $token, 'auth_edwiserbridge');
         set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
-        
+
         return $token;
     }
 }

@@ -366,15 +366,6 @@ define("auth_edwiserbridge/eb_settings", [
                         1
                     );
                 } else {
-                    if ($("#id_eb_token").val() == "") {
-                        $("#eb_common_err").css("display", "block");
-                        $("#eb_common_err").text(
-                            M.util.get_string("token_empty", "auth_edwiserbridge")
-                        );
-                        error = 1;
-                        return 0;
-                    }
-
                     if (error) {
                         return;
                     }
@@ -384,6 +375,7 @@ define("auth_edwiserbridge/eb_settings", [
                         link_web_service(
                             service_id,
                             token,
+                            user_id,
                             "#eb_common_err",
                             "#eb_common_success"
                         );
@@ -545,6 +537,7 @@ define("auth_edwiserbridge/eb_settings", [
             function link_web_service(
                 service_id,
                 token,
+                user_id,
                 common_errr_fld,
                 common_success_fld
             ) {
@@ -553,7 +546,7 @@ define("auth_edwiserbridge/eb_settings", [
 
                 var promises = ajax.call([{
                     methodname: "auth_edwiserbridge_link_service",
-                    args: { service_id: service_id, token: token },
+                    args: { service_id: service_id, token: token, user_id: user_id },
                 }, ]);
 
                 promises[0]

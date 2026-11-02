@@ -40,14 +40,20 @@ $dismiss = optional_param('dismiss', 0, PARAM_INT);
 $download = optional_param('download', 0, PARAM_INT);
 $sesskey = optional_param('sesskey', 0, PARAM_RAW);
 
+// SECURITY: authentication, capability and session-key checks must run before any
+// action is handled. The previous dismiss branch executed before these checks,
+// allowing unauthenticated requests to dismiss update notifications site-wide.
+require_login();
+$syscontext = context_system::instance();
+require_capability('moodle/site:config', $syscontext);
+require_sesskey();
+
+// Dismiss is now protected — only authenticated admins with a valid sesskey can
+// dismiss update notifications.
 if ($dismiss) {
     set_config('edwiserbridge_dismiss_update_notification', 1, 'auth_edwiserbridge');
     redirect(new moodle_url('/my'));
 }
-
-require_login();
-$syscontext = context_system::instance();
-require_capability('moodle/site:config', $syscontext);
 
 $params = [
     'installupdate' => $installupdate,

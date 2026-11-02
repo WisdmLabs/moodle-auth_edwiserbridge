@@ -88,6 +88,7 @@ $PAGE->set_url('/auth/edwiserbridge/edwiserbridge.php?tab=settings');
 $PAGE->set_title(get_string('eb-setting-page-title', 'auth_edwiserbridge'));
 $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->js_call_amd("auth_edwiserbridge/edwiser_bridge", "init");
+$PAGE->requires->js_call_amd("auth_edwiserbridge/eb_settings", "init");
 
 echo $OUTPUT->header();
 echo $OUTPUT->container_start();
