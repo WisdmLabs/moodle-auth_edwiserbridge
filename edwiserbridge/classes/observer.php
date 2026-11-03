@@ -47,7 +47,7 @@ class observer {
      * @param core\event\user_enrolment_created $event The event object containing information about the user enrollment.
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
-        $userdata = user_get_users_by_id([$event->relateduserid]);
+        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
 
         $requestdata = [
             'action'     => 'course_enrollment',
@@ -84,7 +84,7 @@ class observer {
      * @param core\event\user_enrolment_deleted $event The event object containing information about the user unenrollment.
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
-        $userdata = user_get_users_by_id([$event->relateduserid]);
+        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
         $requestdata = [
             'action'     => 'course_un_enrollment',
             'user_id'    => $event->relateduserid,
@@ -122,7 +122,7 @@ class observer {
      */
     public static function user_created(\core\event\user_created $event) {
         global $CFG;
-        $userdata = user_get_users_by_id([$event->relateduserid]);
+        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
 
         $encmethod      = 'AES-128-CTR';
         $newpassword    = optional_param('newpassword', '', PARAM_TEXT);
@@ -247,7 +247,7 @@ class observer {
             $userid = $event->relateduserid;
         }
 
-        $userdata    = user_get_users_by_id([$userid]);
+        $userdata    = \core\user::get_users_by_id([$userid]);
         $encmethod   = 'AES-128-CTR';
         $newpassword = optional_param('newpassword1', '', PARAM_TEXT);
         if (empty($newpassword)) {
