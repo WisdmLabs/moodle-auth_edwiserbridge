@@ -33,7 +33,7 @@ global $CFG, $PAGE, $ADMIN;
 auth_edwiserbridge_check_plugin_update();
 
 if (auth_edwiserbridge_check_pro_dependancy()) {
-    $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
+    $PAGE->requires->js_call_amd('auth_edwiserbridge/eb_settings', 'init');
     $PAGE->requires->js_call_amd('auth_edwiserbridge/sso_settings', 'init');
     $stringmanager = get_string_manager();
     $strings = $stringmanager->load_component_strings('auth_edwiserbridge', 'en');

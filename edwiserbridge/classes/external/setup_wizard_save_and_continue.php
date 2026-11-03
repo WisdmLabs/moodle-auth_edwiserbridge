@@ -188,7 +188,7 @@ trait setup_wizard_save_and_continue {
      * @return external_single_structure The structure describing the result value, which contains the HTML content for the next setup wizard step and the title of that step.
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_returns() {
-        new external_single_structure(
+        return new external_single_structure(
             [
                 'html_data' => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_html_data', 'auth_edwiserbridge')),
                 'title'     => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_title', 'auth_edwiserbridge')),
