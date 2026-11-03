@@ -183,7 +183,7 @@ class observer {
             return;
         }
 
-        $userdata  = user_get_users_by_id([$event->relateduserid]);
+        $userdata  = \core\user::get_users_by_id([$event->relateduserid]);
         $encmethod = 'AES-128-CTR';
         $newpassword = optional_param('newpassword', '', PARAM_TEXT);
 
