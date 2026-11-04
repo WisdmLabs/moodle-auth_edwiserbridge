@@ -73,11 +73,29 @@ Refer to this documentation for setup: https://edwiser.org/documentation/edwiser
 
 # Plugin Version
 
-v4.3.4 - Latest
+v4.3.5 - Latest
 
 [(Back to top)](#table-of-contents)
 
 # Recent Fixes
+
+## v4.3.5 — Moodle 5.3 Compatibility and Setup Wizard Fixes
+
+### Fixes
+- **Moodle 5.3 deprecation fix in `classes/observer.php`**: Replaced deprecated `user_get_users_by_id()` with a backward-compatible helper that uses `\core\user::get_users_by_id()` on Moodle 5.3+ and falls back to the legacy function on older versions (Moodle 5.2 and below).
+- **RequireJS error in setup wizard**: Corrected AMD module name from `auth_edwiserbridge/settings` to `auth_edwiserbridge/eb_settings` in `settings.php`.
+- **Setup wizard continue button failure**: Added missing `return` statement in `auth_edwiserbridge_setup_wizard_save_and_continue_returns()` in `classes/external/setup_wizard_save_and_continue.php`.
+- **Moodle 5.3 external API token generation**: Replaced deprecated `\external_generate_token()` with `\core_external\util::generate_token()` in `classes/local/settings_handler.php`, with fallback for older Moodle versions.
+- **PHP `use` statement warnings**: Removed invalid non-compound `use` statements across multiple PHP files to prevent PHP 8.x warnings.
+
+### Files Changed
+- `classes/observer.php`
+- `settings.php`
+- `classes/external/setup_wizard_save_and_continue.php`
+- `classes/local/settings_handler.php`
+- `version.php`
+- `README.md`
+- `changes.txt`
 
 ## v4.3.4 — Async WordPress Sync (Cron Stability Fix)
 
