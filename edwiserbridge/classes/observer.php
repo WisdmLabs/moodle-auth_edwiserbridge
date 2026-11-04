@@ -42,12 +42,28 @@ require_once($CFG->dirroot . '/user/lib.php');
 class observer {
 
     /**
+     * Get users by ID with backward compatibility for older Moodle versions.
+     *
+     * Moodle 5.3 deprecates user_get_users_by_id() in favour of self::get_user_data().
+     * This helper uses the new API when available and falls back to the legacy function.
+     *
+     * @param array $userids Array of user IDs.
+     * @return array Array of user objects keyed by user ID.
+     */
+    private static function get_user_data($userids) {
+        if (class_exists('\core\user') && method_exists('\core\user', 'get_users_by_id')) {
+            return \core\user::get_users_by_id($userids);
+        }
+        return user_get_users_by_id($userids);
+    }
+
+    /**
      * Functionality to handle user enrollment event.
      *
      * @param core\event\user_enrolment_created $event The event object containing information about the user enrollment.
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
-        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
+        $userdata = self::get_user_data([$event->relateduserid]);
 
         $requestdata = [
             'action'     => 'course_enrollment',
@@ -84,7 +100,7 @@ class observer {
      * @param core\event\user_enrolment_deleted $event The event object containing information about the user unenrollment.
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
-        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
+        $userdata = self::get_user_data([$event->relateduserid]);
         $requestdata = [
             'action'     => 'course_un_enrollment',
             'user_id'    => $event->relateduserid,
@@ -122,7 +138,7 @@ class observer {
      */
     public static function user_created(\core\event\user_created $event) {
         global $CFG;
-        $userdata = \core\user::get_users_by_id([$event->relateduserid]);
+        $userdata = self::get_user_data([$event->relateduserid]);
 
         $encmethod      = 'AES-128-CTR';
         $newpassword    = optional_param('newpassword', '', PARAM_TEXT);
@@ -183,7 +199,7 @@ class observer {
             return;
         }
 
-        $userdata  = \core\user::get_users_by_id([$event->relateduserid]);
+        $userdata  = self::get_user_data([$event->relateduserid]);
         $encmethod = 'AES-128-CTR';
         $newpassword = optional_param('newpassword', '', PARAM_TEXT);
 
@@ -247,7 +263,7 @@ class observer {
             $userid = $event->relateduserid;
         }
 
-        $userdata    = \core\user::get_users_by_id([$userid]);
+        $userdata    = self::get_user_data([$userid]);
         $encmethod   = 'AES-128-CTR';
         $newpassword = optional_param('newpassword1', '', PARAM_TEXT);
         if (empty($newpassword)) {
