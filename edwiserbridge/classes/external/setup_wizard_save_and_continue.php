@@ -35,7 +35,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_setup_wizard_save_and_continue
  */
 trait setup_wizard_save_and_continue {
-
     /**
      * Returns the parameter description for the auth_edwiserbridge_setup_wizard_save_and_continue external function.
      *
@@ -44,12 +43,12 @@ trait setup_wizard_save_and_continue {
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_parameters() {
         return new external_function_parameters([
             'data' => new external_value(
-                PARAM_RAW, 
-                get_string('web_service_name', 'auth_edwiserbridge'), 
+                PARAM_RAW,
+                get_string('web_service_name', 'auth_edwiserbridge'),
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
-            )
+            ),
         ]);
     }
 
@@ -66,7 +65,7 @@ trait setup_wizard_save_and_continue {
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
-        
+
         global $PAGE;
         $PAGE->set_context(context_system::instance());
 
@@ -75,7 +74,7 @@ trait setup_wizard_save_and_continue {
             'title'     => '',
         ];
 
-        $data = json_decode( $data );
+        $data = json_decode($data);
 
         $currentstep = $data->current_step;
         $nextstep = $data->next_step;
@@ -89,36 +88,36 @@ trait setup_wizard_save_and_continue {
         // Save progress data.
         set_config('eb_setup_progress', $currentstep, 'auth_edwiserbridge');
 
-        switch ( $currentstep ) {
+        switch ($currentstep) {
             case 'web_service':
                 // Create web service and update data in EB settings.
                 $settingshandler = new auth_edwiserbridge\local\settings_handler();
                 // Get main admin user.
                 $adminuser = get_admin();
 
-                if ( isset( $data->service_name ) && isset($data->existing_service) && ! $data->existing_service ) {
-                    $response = $settingshandler->eb_create_externle_service( $data->service_name , $adminuser->id );
-                } else if (isset($data->service_name) && isset($data->existing_service) && $data->existing_service ) {
+                if (isset($data->service_name) && isset($data->existing_service) && ! $data->existing_service) {
+                    $response = $settingshandler->eb_create_externle_service($data->service_name, $adminuser->id);
+                } else if (isset($data->service_name) && isset($data->existing_service) && $data->existing_service) {
                     // Set Service. edwiser_bridge_last_created_token.
                     set_config('ebexistingserviceselect', $data->service_name, 'auth_edwiserbridge');
 
                     // Select token update web services and set token.
                     // If token is not created dreate token.
-                    $token = $settingshandler->eb_create_token( $data->service_name, $adminuser->id );
+                    $token = $settingshandler->eb_create_token($data->service_name, $adminuser->id);
 
                     // Set last created token.
                     set_config('edwiser_bridge_last_created_token', $token, 'auth_edwiserbridge');
                 }
-               break;
+                break;
             case 'wordpress_site_details':
-                if ( isset( $data->site_name ) && ! empty( $data->site_name ) && isset( $data->url ) && ! empty( $data->url ) ) {
+                if (isset($data->site_name) && ! empty($data->site_name) && isset($data->url) && ! empty($data->url)) {
                     // Get existing data.
                     $sites = auth_edwiserbridge_get_connection_settings();
                     $connectionsettings = $sites['eb_connection_settings'];
 
-                    $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+                    $edwiserbridgelastcreatedtoken = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
 
-                    $token = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
+                    $token = !empty($edwiserbridgelastcreatedtoken) ? $edwiserbridgelastcreatedtoken : ' - ';
                     // Update Moodle Wordpress site details.
                     $connectionsettings[$data->site_name] = [
                         "wp_url"   => $data->url,
@@ -126,19 +125,19 @@ trait setup_wizard_save_and_continue {
                         "wp_name"  => $data->site_name,
                     ];
 
-                    set_config( 'eb_connection_settings', json_encode( $connectionsettings ), 'auth_edwiserbridge' );
-                    set_config( 'eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge' );
-                } else if ( isset( $data->site_name ) ) {
-                    set_config( 'eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge' );
+                    set_config('eb_connection_settings', json_encode($connectionsettings), 'auth_edwiserbridge');
+                    set_config('eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge');
+                } else if (isset($data->site_name)) {
+                    set_config('eb_setup_wp_site_name', $data->site_name, 'auth_edwiserbridge');
                 }
-               break;
+                break;
             case 'user_and_course_sync':
-                $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+                $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
                 // Update Moodle Wordpress site details.
-                $existingsynchsettings = !empty($eb_sync_settings) ? json_decode($eb_sync_settings, true) : [];
-                $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+                $existingsynchsettings = !empty($ebsyncsettings) ? json_decode($ebsyncsettings, true) : [];
+                $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
                 $synchsettings = $existingsynchsettings;
-                $sitename = $eb_setup_wp_site_name;
+                $sitename = $ebsetupwpsitename;
 
                 $synchsettings[$sitename] = [
                     "course_enrollment"    => $data->user_enrollment,
@@ -149,13 +148,13 @@ trait setup_wizard_save_and_continue {
                     "course_deletion"      => $data->course_deletion,
                     "user_updation"        => $data->user_update,
                 ];
-                set_config( 'eb_synch_settings', json_encode($synchsettings), 'auth_edwiserbridge' );
-               break;
+                set_config('eb_synch_settings', json_encode($synchsettings), 'auth_edwiserbridge');
+                break;
             case 'complete_details':
                 set_config('eb_setup_progress', '', 'auth_edwiserbridge');
-               break;
+                break;
             default:
-               break;
+                break;
         }
 
         // Get next step.
@@ -170,7 +169,7 @@ trait setup_wizard_save_and_continue {
         *    a. User and course sync
         *    b. success screens
         */
-        if ( 'complete_details' != $currentstep ) {
+        if ('complete_details' != $currentstep) {
             $nextstephtml = $setupwizardhandler->$function(1);
             $title          = $setupwizardhandler->eb_get_step_title($nextstep);
 
@@ -185,10 +184,11 @@ trait setup_wizard_save_and_continue {
     /**
      * Returns the description of the result value for the auth_edwiserbridge_setup_wizard_save_and_continue() function.
      *
-     * @return external_single_structure The structure describing the result value, which contains the HTML content for the next setup wizard step and the title of that step.
+     * @return external_single_structure The structure describing the result value, which contains
+     *         the HTML content for the next setup wizard step and the title of that step.
      */
     public static function auth_edwiserbridge_setup_wizard_save_and_continue_returns() {
-        return new external_single_structure(
+        new external_single_structure(
             [
                 'html_data' => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_html_data', 'auth_edwiserbridge')),
                 'title'     => new external_value(PARAM_RAW, get_string('setup_wizard_next_step_title', 'auth_edwiserbridge')),

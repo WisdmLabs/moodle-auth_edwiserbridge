@@ -28,7 +28,7 @@
 require('../../config.php');
 require_once(__DIR__ . '/compat.php');
 
-use auth_edwiserbridge\settings\navigation_form as navigation_form;
+use auth_edwiserbridge\settings\navigation_form;
 use core\context\system as context_system;
 global $CFG, $PAGE;
 require_once($CFG->libdir . '/adminlib.php');
@@ -88,7 +88,6 @@ $PAGE->set_url('/auth/edwiserbridge/edwiserbridge.php?tab=settings');
 $PAGE->set_title(get_string('eb-setting-page-title', 'auth_edwiserbridge'));
 $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->js_call_amd("auth_edwiserbridge/edwiser_bridge", "init");
-$PAGE->requires->js_call_amd("auth_edwiserbridge/eb_settings", "init");
 
 echo $OUTPUT->header();
 echo $OUTPUT->container_start();
@@ -105,25 +104,73 @@ $pageurl = $CFG->wwwroot . '/auth/edwiserbridge/edwiserbridge.php?tab=';
 
 
 foreach ($mform as $key => $mformdata) {
-    // initialize class based on key.
-    switch($key) {
+    // Initialize class based on key.
+    switch ($key) {
         case 'service':
-            $object = new auth_edwiserbridge\settings\service_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\service_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
         case 'connection':
-            $object = new auth_edwiserbridge\settings\connection_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\connection_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
         case 'synchronization':
-            $object = new auth_edwiserbridge\settings\synchronization_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\synchronization_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
         case 'settings':
-            $object = new auth_edwiserbridge\settings\settings_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\settings_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
         case 'summary':
-            $object = new auth_edwiserbridge\settings\summary_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\summary_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
         case 'sso':
-            $object = new auth_edwiserbridge\settings\sso_form($pageurl . $key, null, 'post', '', ["id" => $mformdata['id']], true, null);
+            $object = new auth_edwiserbridge\settings\sso_form(
+                $pageurl . $key,
+                null,
+                'post',
+                '',
+                ["id" => $mformdata['id']],
+                true,
+                null
+            );
             break;
     }
 
@@ -159,7 +206,8 @@ foreach ($mform as $key => $mformdata) {
 
         if ($key == 'sso') {
             $data = file_postupdate_standard_filemanager(
-                $data, 'wploginbtnicon',
+                $data,
+                'wploginbtnicon',
                 $fileoptions,
                 context_system::instance(),
                 'auth_edwiserbridge',
@@ -182,7 +230,7 @@ foreach ($mform as $key => $mformdata) {
                 }
             }
             if ($filename != '') {
-                $filename = '/'.$filename;
+                $filename = '/' . $filename;
             }
             set_config('wploginbtnicon', $filename, 'auth_edwiserbridge');
         }

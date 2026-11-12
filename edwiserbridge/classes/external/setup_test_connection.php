@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -37,7 +39,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_setup_test_connection
  */
 trait setup_test_connection {
-
     /**
      * Request to test connection
      *
@@ -46,9 +47,9 @@ trait setup_test_connection {
      */
     public static function auth_edwiserbridge_setup_test_connection($wpurl) {
         global $CFG;
-        
-        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.  
-        
+
+        include_once($CFG->libdir . '/filelib.php'); // Include Moodle's curl class.
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
@@ -87,7 +88,7 @@ trait setup_test_connection {
         $response = $curl->get($requesturl, [], $options);
 
         // Decode the response.
-        $response_data = json_decode($response);
+        $responsedata = json_decode($response);
 
         // Check if the response is valid JSON.
         if (json_last_error() == JSON_ERROR_NONE) {
@@ -96,7 +97,6 @@ trait setup_test_connection {
         }
 
         return ["status" => $status, "msg" => $msg];
-
     }
 
     /**
@@ -112,8 +112,10 @@ trait setup_test_connection {
             [
                 'wp_url' => new external_value(
                     PARAM_RAW,
-                    get_string('web_service_wp_url',
-                    'auth_edwiserbridge')
+                    get_string(
+                        'web_service_wp_url',
+                        'auth_edwiserbridge'
+                    )
                 ),
             ]
         );

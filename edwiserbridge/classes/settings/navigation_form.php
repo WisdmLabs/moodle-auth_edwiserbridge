@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * The navigation form includes tabs for different sections of the plugin settings.
  */
 class navigation_form extends moodleform {
-    
     /**
      * Defines the navigation form for the Edwiser Bridge plugin.
      * This method sets up the navigation tabs for the different sections of the plugin settings.

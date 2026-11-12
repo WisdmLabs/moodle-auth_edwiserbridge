@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -33,14 +35,12 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use core\context\system as context_system;
 
-defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 /**
  * Trait implementing the external function auth_edwiserbridge_get_service_info
  */
 trait get_service_info {
-
     /**
      * Functionality to link existing services.
      *
@@ -48,13 +48,13 @@ trait get_service_info {
      * @return array Response array with status and message.
      */
     public static function auth_edwiserbridge_get_service_info($serviceid) {
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
-        
+
         require_capability('moodle/webservice:managealltokens', $systemcontext);
-        
+
         $response           = [];
         $response['status'] = 1;
         $response['msg']    = '';
@@ -81,7 +81,7 @@ trait get_service_info {
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
-            )
+            ),
         ]);
     }
     /**

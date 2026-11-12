@@ -22,6 +22,7 @@
  * @copyright  2016 WisdmLabs (https://wisdmlabs.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require('../../config.php');
 require_once(__DIR__ . '/compat.php');
 global $CFG, $PAGE;
@@ -32,17 +33,16 @@ require_once(dirname(__FILE__) . '/lib.php');
 
 $setupwizard = new auth_edwiserbridge\local\setup_wizard();
 
-$eb_setup_progress = get_config('auth_edwiserbridge', 'eb_setup_progress');
+$ebsetupprogress = get_config('auth_edwiserbridge', 'eb_setup_progress');
 // Check progress and redirect accordingly.
-$progress  = !empty( $eb_setup_progress ) ? $eb_setup_progress : '';
-if ( ! empty( $progress ) ) {
-
-    $nextstep = $setupwizard->get_next_step( $progress );
+$progress  = !empty($ebsetupprogress) ? $ebsetupprogress : '';
+if (! empty($progress)) {
+    $nextstep = $setupwizard->get_next_step($progress);
 
     $currentstep = optional_param('current_step', '', PARAM_TEXT);
     if (empty($currentstep)) {
         $redirecturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
-        redirect ($redirecturl);
+        redirect($redirecturl);
     }
 }
 
@@ -78,8 +78,6 @@ $PAGE->set_title(get_string('eb-setup-page-title', 'auth_edwiserbridge'));
 
 $PAGE->requires->css('/auth/edwiserbridge/styles/style.css');
 $PAGE->requires->css('/auth/edwiserbridge/styles/setup-wizard.css');
-// 
-// $PAGE->requires->js_call_amd('auth_edwiserbridge/settings', 'init');
 
 // Actual page template output starts here.
 

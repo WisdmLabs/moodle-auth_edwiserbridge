@@ -28,8 +28,6 @@
 
 namespace auth_edwiserbridge\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Ad-hoc task that sends data to a WordPress site via the Edwiser Bridge API.
  *
@@ -41,7 +39,6 @@ defined('MOODLE_INTERNAL') || die();
  * }
  */
 class sync_to_wordpress extends \core\task\adhoc_task {
-
     /** @var int Maximum number of retry attempts. */
     const MAX_RETRIES = 3;
 

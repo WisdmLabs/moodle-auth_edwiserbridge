@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -38,7 +40,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_test_connection
  */
 trait test_connection {
-
     /**
      * Request to test connection
      *
@@ -50,12 +51,11 @@ trait test_connection {
      */
     public static function auth_edwiserbridge_test_connection($wpurl, $wptoken, $testconnection = "moodle") {
 
-        
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_test_connection_parameters(),
             [
@@ -105,7 +105,8 @@ trait test_connection {
             $status = 0;
             $msg    = isset($response["msg"]) ? $response["msg"] : get_string('check_wp_site_config', 'auth_edwiserbridge');
 
-            if (!$response["error"] && isset($response["data"]->msg) &&
+            if (
+                !$response["error"] && isset($response["data"]->msg) &&
                     isset($response["data"]->status) && $response["data"]->status
             ) {
                 $status = $response["data"]->status;
@@ -126,16 +127,28 @@ trait test_connection {
                 $msg = '<div>
                             <div class="eb_connection_short_msg">
                                 ' . get_string('test_connection_fail_err_1', 'auth_edwiserbridge') . '
-                                <span class="eb_test_connection_log_open"> ' . get_string('test_connection_fail_err_close_link', 'auth_edwiserbridge') . ' </span>.
+                                <span class="eb_test_connection_log_open"> '
+                                    . get_string('test_connection_fail_err_close_link', 'auth_edwiserbridge')
+                                    . ' </span>.
                             </div>
                             <div class="eb_test_connection_log">
                                 <div style="display:flex;">
                                     <div class="eb_connection_err_response">
                                         <h4> ' . get_string('test_connection_fail_err_2', 'auth_edwiserbridge') . ' </h4>
                                         <div>' . get_string('test_connection_fail_err_3', 'auth_edwiserbridge') . '</div>
-                                        <div>' . get_string('test_connection_fail_url', 'auth_edwiserbridge') . $params['wp_url'] .'/wp-json/edwiser-bridge/wisdmlabs/</div>
-                                        <div>' . get_string('test_connection_fail_response', 'auth_edwiserbridge') . $servermsg .'</div>
-                                        <div>' . get_string('test_connection_fail_next', 'auth_edwiserbridge', $params['wp_url'] . "/wp-admin/admin.php?page=eb-settings&tab=connection") . '</div>
+                                        <div>'
+                                            . get_string('test_connection_fail_url', 'auth_edwiserbridge')
+                                            . $params['wp_url'] . '/wp-json/edwiser-bridge/wisdmlabs/</div>
+                                        <div>'
+                                            . get_string('test_connection_fail_response', 'auth_edwiserbridge')
+                                            . $servermsg . '</div>
+                                        <div>'
+                                            . get_string(
+                                                'test_connection_fail_next',
+                                                'auth_edwiserbridge',
+                                                $params['wp_url'] . "/wp-admin/admin.php?page=eb-settings&tab=connection"
+                                            )
+                                            . '</div>
                                     </div>
                                     <div class="eb_admin_templ_dismiss_notice_message">
                                         <span class="eb_test_connection_log_close " style="color:red;"> X </span>
@@ -180,7 +193,7 @@ trait test_connection {
                 get_string('web_service_test_conn', 'auth_edwiserbridge'),
                 VALUE_DEFAULT,
                 'moodle'
-            )
+            ),
         ]);
     }
 

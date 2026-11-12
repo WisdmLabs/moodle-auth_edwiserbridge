@@ -35,7 +35,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_get_site_data
  */
 trait get_site_data {
-
     /**
      * Retrieves site-specific synchronization settings.
      *
@@ -43,12 +42,12 @@ trait get_site_data {
      * @return array An array of site-specific synchronization settings.
      */
     public static function auth_edwiserbridge_get_site_data($siteindex) {
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_site_data_parameters(),
             ['site_index' => $siteindex]

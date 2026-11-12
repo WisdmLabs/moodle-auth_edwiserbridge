@@ -43,7 +43,6 @@ require_once(__DIR__ . '/classes/settings/sso_form.php');
  * The form also includes submit buttons for saving the settings and continuing to the next step.
  */
 class edwiserbridge_settings_form extends moodleform {
-
     /**
      * Defines the form definition for the Edwiser Bridge plugin settings form.
      *

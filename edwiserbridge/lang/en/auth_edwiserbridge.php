@@ -26,17 +26,87 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**************  by default strings used by the moodle  ****************/
+$string['add_more_sites'] = 'Add New Site';
+$string['api_cohort_not_found'] = 'Cohort does not exist.';
 $string['auth_edwiserbridgedescription'] = '';
+$string['auth_user_desc'] = 'All admin users used as Authorized User while creating token.';
+$string['bitninja_error'] = 'Request blocked by BitNinja. Please whitelist the IP address of your Moodle server.';
 $string['blank'] = '';
+$string['click_here'] = ' Click Here ';
+$string['click_to_copy'] = 'Click to copy.';
+$string['cloudflare_error'] = 'Request blocked by Cloudflare. Please whitelist the IP address of your Moodle server.';
+$string['copied'] = 'Copied !!!';
+$string['copy'] = 'Copy';
+$string['course_creation_checkbox'] = 'Course Creation';
+$string['course_creation_checkbox_desc'] = 'This will create course in Wordpress site.';
+$string['course_deletion_checkbox'] = 'Course Deletion';
+$string['course_deletion_checkbox_desc'] = 'This won\'t delete course but it will mark course as deleted in linked Wordpress site.';
+$string['create'] = 'Create Web Service';
+$string['create_service_creation_err'] = 'Unable to create the web service please contact plugin owner.';
+$string['create_service_name_err'] = 'This name is already in use please use different name.';
+$string['create_service_shortname_err'] = 'Unable to create the web service please contact plugin owner.';
+$string['create_wp_site'] = '- Create -';
+$string['default_error'] = 'Please check the URL or wordpress site permalink: to know more about this error <a href=\'https://edwiser.helpscoutdocs.com/collection/85-edwiser-bridge-plugin\'  target=\'_blank\'> click here </a>';
+$string['default_settings_nav'] = 'Settings';
+$string['dialog_title'] = 'Token And Url';
+$string['eb-setting-page-title'] = 'Edwiser Bridge Two Way Synchronization Settings';
+$string['eb-setting-page-title_help'] = 'Edwiser Bridge Two Way Synchronization Settings';
+$string['eb-setup-page-title'] = 'Edwiser Bridge Setup Wizard';
+$string['eb-setup-page-title_help'] = 'Edwiser Bridge Setup Wizard';
+$string['eb_dummy_msg'] = 'Set up Wizard field';
+$string['eb_empty_name_err'] = 'Please enter valid service name.';
+$string['eb_empty_user_err'] = 'Please select user.';
+$string['eb_link_err'] = 'Unable to link the web service.';
+$string['eb_link_success'] = 'Web service successfully linked.';
+$string['eb_mform_lang_desc'] = 'Site Language Code';
+$string['eb_mform_lang_desc_help'] = 'Please copy this language code and paste it to your Wordpress site to complete the connection between Moodle and Wordpress.';
+$string['eb_mform_service_desc'] = 'Service desc';
+$string['eb_mform_service_desc_help'] = 'Edwiser web-service functions will get added into it and also be used as reference for upcoming updates.';
+$string['eb_mform_token_desc'] = 'Webservice Token';
+$string['eb_mform_token_desc_help'] = 'This is your last created token used in wp for site integration.';
+$string['eb_mform_ur_desc'] = 'Site URL';
+$string['eb_mform_ur_desc_help'] = 'Please copy this URL and paste it to your Wordpress site to complete the connection between Moodle and Wordpress.';
+$string['eb_plugin_name'] = 'Plugin Name';
+$string['eb_plugin_version'] = 'Plugin Version';
+$string['eb_service_info_error'] = ' service functions missing in your currently selected service, Please Update service to add all missing webservice functions.';
+$string['eb_service_select_err'] = 'Please select valid external web service.';
+$string['eb_settings_msg'] = 'To complete Edwiser Bridge Set up ';
+$string['edwiserbridge'] = 'Edwiser Bridge';
+$string['empty_userid_err'] = 'Please select the user.';
+$string['enrollment_checkbox'] = 'User Enrollment.';
+$string['enrollment_checkbox_desc'] = 'Enroll user from Moodle to Wordpress for linked users.';
+$string['existing_service_desc'] = 'Edwiser web-service functions will get added into it and also be used as reference for upcoming updates.';
+$string['existing_service_lbl'] = 'Select web service';
+$string['existing_web_service_desc'] = 'Select existing web service if you have created already.';
+$string['lang_label'] = 'Language Code';
+$string['link'] = 'Update Web Service';
+$string['modsecurity_error'] = 'Request blocked by Mod Security. Please whitelist the IP address of your Moodle server.';
 $string['modulename'] = 'Edwiser Bridge';
 $string['modulename_help'] = '';
 $string['modulenameplural'] = 'Edwiser Bridge';
+$string['moodle_url'] = 'Moodle site URL.';
+$string['nav_name'] = 'Settings';
+$string['new_service_inp_lbl'] = 'Name for the Web Service';
+$string['new_service_user_lbl'] = 'Select User';
+$string['new_web_new_service'] = 'Create new web service';
+$string['new_web_service_desc'] = 'Create new web service';
+$string['next'] = 'Next';
 $string['pluginadministration'] = 'Edwiser Bridge administrator';
 $string['pluginname'] = 'Edwiser Bridge';
 
 /**************  end of the strings used by default by the moodle  ****************/
 
 /*** TABS  ***/
+$string['pop_up_info'] = 'Copy Moodle site URL and the token to your Wordpress site Edwiser Bridge connection settings.';
+$string['required'] = '- You must supply a value here.';
+$string['run_setup'] = 'Run Setup Wizard';
+$string['save'] = 'Save';
+$string['save_cont'] = 'Save and Continue';
+$string['setup_wizard_next_step_html_data'] = 'Setup wizards next step html content';
+$string['setup_wizard_next_step_title'] = 'Setup wizards next step title';
+$string['site-list'] = 'Wordpress Sites';
+$string['site_url'] = 'Site Url ';
+$string['sitename-duplicate-value'] = ' - Site Name already exists, Please provide a different value.';
 $string['summary'] = 'Summary';
 $string['tab_conn'] = 'Wordpress Site';
 $string['tab_mdl_required_settings'] = 'General';
@@ -44,186 +114,116 @@ $string['tab_service'] = 'Web Service';
 $string['tab_sso'] = 'SSO';
 $string['tab_synch'] = 'Synchronization';
 /*******/
-$string['lang_label'] = 'Language Code';
 /******* navigation menu and settings page   ********/
 
-$string['wp_site_settings_title'] = 'Site Settings :';
-$string['nav_name'] = 'Settings';
-$string['default_settings_nav'] = 'Settings';
-$string['run_setup'] = 'Run Setup Wizard';
-
-
-$string['edwiserbridge'] = 'Edwiser Bridge';
-$string['eb-setting-page-title'] = 'Edwiser Bridge Two Way Synchronization Settings';
-$string['eb-setting-page-title_help'] = 'Edwiser Bridge Two Way Synchronization Settings';
-
-$string['eb-setup-page-title'] = 'Edwiser Bridge Setup Wizard';
-$string['eb-setup-page-title_help'] = 'Edwiser Bridge Setup Wizard';
-
-$string['enrollment_checkbox'] = 'User Enrollment.';
-$string['enrollment_checkbox_desc'] = 'Enroll user from Moodle to Wordpress for linked users.';
+$string['token'] = 'Token ';
+$string['token_dropdown_lbl'] = 'Select Token';
+$string['token_help'] = 'Please enter the access token generated while creating the web service.';
 $string['unenrollment_checkbox'] = 'User Unenrollment.';
 $string['unenrollment_checkbox_desc'] = 'Unenroll user from Moodle to Wordpress for linked users.';
+$string['url-duplicate-value'] = ' - Wordpress Url already exists, Please provide a different value.';
 $string['user_creation_checkbox'] = 'User Creation';
 $string['user_creation_checkbox_desc'] = 'Create user In linked Wordpress site when created in Moodle Site.';
 $string['user_deletion_checkbox'] = 'User Deletion';
 $string['user_deletion_checkbox_desc'] = 'Delete user In linked Wordpress site when deleted in Moodle Site.';
-
-$string['course_creation_checkbox'] = 'Course Creation';
-$string['course_creation_checkbox_desc'] = 'This will create course in Wordpress site.';
-$string['course_deletion_checkbox'] = 'Course Deletion';
-$string['course_deletion_checkbox_desc'] = 'This won\'t delete course but it will mark course as deleted in linked Wordpress site.';
 $string['user_updation_checkbox'] = 'User Update';
 $string['user_updation_checkbox_desc'] = 'This will update user first name, last name, email and password and won\'t update username.';
-
-$string['wp_settings_section'] = 'Wordpress Connection Settings';
-$string['wordpress_url'] = 'Wordpress URL';
-$string['wp_token'] = 'Moodle Access Token';
-$string['wp_test_conn_btn'] = 'Test Connection';
-$string['wp_test_remove_site'] = 'Remove Site';
-$string['add_more_sites'] = 'Add New Site';
-$string['wordpress_site_name'] = 'Site Name';
-$string['site-list'] = 'Wordpress Sites';
-
-$string['next'] = 'Next';
-$string['save'] = 'Save';
-$string['save_cont'] = 'Save and Continue';
-
-$string['token_help'] = 'Please enter the access token generated while creating the web service.';
-$string['wordpress_site_name_help'] = 'Please enter unique site name.';
-$string['wordpress_url_help'] = 'Please enter Wordpress site URL.';
-
-$string['existing_web_service_desc'] = 'Select existing web service if you have created already.';
-$string['new_web_service_desc'] = 'Create new web service';
-$string['new_web_new_service'] = 'Create new web service';
-
-$string['new_service_inp_lbl'] = 'Name for the Web Service';
-$string['new_service_user_lbl'] = 'Select User';
-$string['existing_service_lbl'] = 'Select web service';
-$string['token_dropdown_lbl'] = 'Select Token';
-
-$string['web_service_token'] = 'Token generated after creating service';
-$string['moodle_url'] = 'Moodle site URL.';
-$string['web_service_name'] = 'Web Service Name';
 $string['web_service_auth_user'] = 'Authorized user.';
+$string['web_service_categoryid'] = 'Category Id of the course.';
+$string['web_service_cohort_courseid'] = 'Course Id in which cohort wil be enrolled.';
+$string['web_service_cohort_id'] = 'Cohort id which will be deleted in Moodle';
+$string['web_service_completion_percentage'] = 'Completion percentage of the user.';
+$string['web_service_course_cohortid'] = 'Cohort Id which will be enrolled in the course.';
+$string['web_service_course_creation'] = 'Checks if Edwiser Bridge 2 way sync course creation is enabled.';
+$string['web_service_course_deletion'] = 'Checks if Edwiser Bridge 2 way sync course deletion is enabled.';
+$string['web_service_course_enrollment'] = 'Checks if the course enrollment is performed for the saved site';
+$string['web_service_course_un_enrollment'] = 'Checks if the course un-enrollment is performed for the saved site';
+$string['web_service_course_unenroll'] = 'If true, cohort will be unenrolled from the course.';
+$string['web_service_courseid'] = 'Course ID.';
+$string['web_service_email'] = 'Email of the user.';
+$string['web_service_extended_char'] = 'Check if extended characters are allowed in username.';
+$string['web_service_firstname'] = 'First name of the user.';
+$string['web_service_fullname'] = 'Course Name.';
+$string['web_service_id'] = 'User Id.';
+$string['web_service_instance_id'] = 'Id of the instance';
+$string['web_service_lang_code'] = 'check what is the default language code for the site.';
+$string['web_service_lastname'] = 'Last name of the user.';
+$string['web_service_limit'] = 'This limits the number of users returned.';
+$string['web_service_manual_enrolment'] = 'Returns 1 if manual enrolment is enabled and 0 if disabled.';
+$string['web_service_name'] = 'Web Service Name';
+$string['web_service_offset'] = 'This is the offset for the select query.';
+$string['web_service_operation_status'] = 'Operation status (1 for success, 0 for failure)';
+$string['web_service_password_policy'] = 'Check if password policy is enabled.';
+$string['web_service_rest_protocol'] = 'Check if rest protocol is enabled.';
+$string['web_service_search_string'] = 'This string will be searched in the select query.';
+$string['web_service_site_index'] = 'Site index is the nth no. of site saved in Edwiser Bridge settings.';
+$string['web_service_student_role_id'] = 'Default role id of student role.';
+$string['web_service_test_conn'] = 'Web service test connection type.';
+$string['web_service_test_conn_msg'] = 'Success or error message.';
+$string['web_service_test_conn_status'] = '1 if successful connection and 0 on failure.';
+$string['web_service_test_conn_warning'] = 'warning';
+$string['web_service_test_conn_warnings'] = 'Warnings';
+$string['web_service_token'] = 'Token generated after creating service';
+$string['web_service_total_courses'] = 'Total number of courses present in Moodle.';
+$string['web_service_total_users'] = 'Total number of users present in Moodle.';
+$string['web_service_user_creation'] = 'Checks if the user creation is performed for the saved site';
+$string['web_service_user_deletion'] = 'Checks if the user deletion is performed for the saved site';
+$string['web_service_user_id'] = 'User ID to get progress for';
+$string['web_service_user_update'] = 'Checks if Edwiser Bridge 2 way sync user update is enabled.';
+$string['web_service_username'] = 'Username of the user.';
+$string['web_service_web_service'] = 'Check if web services setting is enabled.';
+$string['web_service_wp_token'] = 'Web service token.';
+$string['web_service_wp_url'] = 'Wordpress site URL.';
+$string['wordpress_site_name'] = 'Site Name';
+$string['wordpress_site_name_help'] = 'Please enter unique site name.';
+$string['wordpress_url'] = 'Wordpress URL';
+$string['wordpress_url_help'] = 'Please enter Wordpress site URL.';
+$string['wp_settings_section'] = 'Wordpress Connection Settings';
+$string['wp_site_error'] = 'HTML response received from WordPress. Please make sure the WordPress site is up and running.';
+$string['wp_site_settings_title'] = 'Site Settings :';
 
-$string['auth_user_desc'] = 'All admin users used as Authorized User while creating token.';
-$string['existing_service_desc'] = 'Edwiser web-service functions will get added into it and also be used as reference for upcoming updates.';
 
-$string['eb_settings_msg'] = 'To complete Edwiser Bridge Set up ';
-$string['click_here'] = ' Click Here ';
-$string['eb_dummy_msg'] = 'Set up Wizard field';
 
-$string['eb_mform_service_desc'] = 'Service desc';
-$string['eb_mform_service_desc_help'] = 'Edwiser web-service functions will get added into it and also be used as reference for upcoming updates.';
 
-$string['eb_mform_token_desc'] = 'Webservice Token';
-$string['eb_mform_token_desc_help'] = 'This is your last created token used in wp for site integration.';
-$string['eb_mform_ur_desc_help'] = 'Please copy this URL and paste it to your Wordpress site to complete the connection between Moodle and Wordpress.';
-$string['eb_mform_ur_desc'] = 'Site URL';
 
-$string['eb_mform_lang_desc_help'] = 'Please copy this language code and paste it to your Wordpress site to complete the connection between Moodle and Wordpress.';
-$string['eb_mform_lang_desc'] = 'Site Language Code';
+
+$string['wp_test_conn_btn'] = 'Test Connection';
+$string['wp_test_connection_success'] = 'Connection Successful';
+$string['wp_test_remove_site'] = 'Remove Site';
+$string['wp_token'] = 'Moodle Access Token';
+
+
+
+
+
+
+
+
+
+
 /*********************************/
 
 /*********** Settings page validation and Modal strings************/
-$string['create_service_shortname_err'] = 'Unable to create the web service please contact plugin owner.';
-$string['create_service_name_err'] = 'This name is already in use please use different name.';
-$string['create_service_creation_err'] = 'Unable to create the web service please contact plugin owner.';
-$string['empty_userid_err'] = 'Please select the user.';
-$string['eb_link_success'] = 'Web service successfully linked.';
-$string['eb_link_err'] = 'Unable to link the web service.';
-$string['eb_service_select_err'] = 'Please select valid external web service.';
-$string['eb_service_info_error'] = ' service functions missing in your currently selected service, Please Update service to add all missing webservice functions.';
 
-$string['dialog_title'] = 'Token And Url';
-$string['site_url'] = 'Site Url ';
-$string['token'] = 'Token ';
-$string['copy'] = 'Copy';
-$string['copied'] = 'Copied !!!';
-$string['create'] = 'Create Web Service';
-$string['create_wp_site'] = '- Create -';
-$string['link'] = 'Update Web Service';
-$string['click_to_copy'] = 'Click to copy.';
-$string['pop_up_info'] = 'Copy Moodle site URL and the token to your Wordpress site Edwiser Bridge connection settings.';
 
 /**********************************/
 
 /******  Form validation.  ******/
-$string['required'] = '- You must supply a value here.';
-$string['sitename-duplicate-value'] = ' - Site Name already exists, Please provide a different value.';
-$string['url-duplicate-value'] = ' - Wordpress Url already exists, Please provide a different value.';
 /************/
 
 /*****  web service  *******/
-$string['web_service_wp_url'] = 'Wordpress site URL.';
-$string['web_service_wp_token'] = 'Web service token.';
-$string['web_service_test_conn'] = 'Web service test connection type.';
 
-$string['web_service_test_conn_status'] = '1 if successful connection and 0 on failure.';
-$string['web_service_test_conn_msg'] = 'Success or error message.';
 
-$string['web_service_site_index'] = 'Site index is the nth no. of site saved in Edwiser Bridge settings.';
 
-$string['web_service_course_enrollment'] = 'Checks if the course enrollment is performed for the saved site';
-$string['web_service_course_un_enrollment'] = 'Checks if the course un-enrollment is performed for the saved site';
-$string['web_service_user_creation'] = 'Checks if the user creation is performed for the saved site';
-$string['web_service_user_deletion'] = 'Checks if the user deletion is performed for the saved site';
-$string['web_service_course_creation'] = 'Checks if Edwiser Bridge 2 way sync course creation is enabled.';
-$string['web_service_course_deletion'] = 'Checks if Edwiser Bridge 2 way sync course deletion is enabled.';
-$string['web_service_user_update'] = 'Checks if Edwiser Bridge 2 way sync user update is enabled.';
 
-$string['web_service_offset'] = 'This is the offset for the select query.';
-$string['web_service_limit'] = 'This limits the number of users returned.';
-$string['web_service_search_string'] = 'This string will be searched in the select query.';
-$string['web_service_total_users'] = 'Total number of users present in Moodle.';
 
-$string['web_service_id'] = 'User Id.';
-$string['web_service_username'] = 'Username of the user.';
-$string['web_service_firstname'] = 'First name of the user.';
-$string['web_service_lastname'] = 'Last name of the user.';
-$string['web_service_email'] = 'Email of the user.';
-$string['eb_plugin_name'] = 'Plugin Name';
-$string['eb_plugin_version'] = 'Plugin Version';
-$string['web_service_rest_protocol'] = 'Check if rest protocol is enabled.';
-$string['web_service_web_service'] = 'Check if web services setting is enabled.';
-$string['web_service_extended_char'] = 'Check if extended characters are allowed in username.';
-$string['web_service_password_policy'] = 'Check if password policy is enabled.';
-$string['web_service_lang_code'] = 'check what is the default language code for the site.';
-$string['web_service_student_role_id'] = 'Default role id of student role.';
 
-$string['web_service_courseid'] = 'Course ID.';
-$string['web_service_fullname'] = 'Course Name.';
-$string['web_service_categoryid'] = 'Category Id of the course.';
-$string['web_service_total_courses'] = 'Total number of courses present in Moodle.';
 
-$string['web_service_cohort_id'] = 'Cohort id which will be deleted in Moodle';
-$string['web_service_operation_status'] = 'Operation status (1 for success, 0 for failure)';
-$string['web_service_manual_enrolment'] = 'Returns 1 if manual enrolment is enabled and 0 if disabled.';
-$string['web_service_user_id'] = 'User ID to get progress for';
-$string['web_service_completion_percentage'] = 'Completion percentage of the user.';
-$string['web_service_cohort_courseid']= 'Course Id in which cohort wil be enrolled.';
-$string['web_service_course_cohortid'] = 'Cohort Id which will be enrolled in the course.';
-$string['web_service_course_unenroll'] = 'If true, cohort will be unenrolled from the course.';
-$string['web_service_instance_id'] = 'Id of the instance';
-$string['api_cohort_not_found'] = 'Cohort does not exist.';
-$string['setup_wizard_next_step_html_data'] = 'Setup wizards next step html content';
-$string['setup_wizard_next_step_title'] = 'Setup wizards next step title';
-$string['wp_test_connection_success'] = 'Connection Successful';
-$string['web_service_test_conn_warnings'] = 'Warnings';
-$string['web_service_test_conn_warning'] = 'warning';
 
 /******/
 
 /****  error handling  ***/
-$string['default_error'] = 'Please check the URL or wordpress site permalink: to know more about this error <a href=\'https://edwiser.helpscoutdocs.com/collection/85-edwiser-bridge-plugin\'  target=\'_blank\'> click here </a>';
-$string['wp_site_error'] = 'HTML response received from WordPress. Please make sure the WordPress site is up and running.';
-$string['bitninja_error'] = 'Request blocked by BitNinja. Please whitelist the IP address of your Moodle server.';
-$string['cloudflare_error'] = 'Request blocked by Cloudflare. Please whitelist the IP address of your Moodle server.';
-$string['modsecurity_error'] = 'Request blocked by Mod Security. Please whitelist the IP address of your Moodle server.';
 
-$string['eb_empty_name_err'] = 'Please enter valid service name.';
-$string['eb_empty_user_err'] = 'Please select user.';
 
 /**/
 $string['please_enable'] = 'Error : Please fix this issue in settings';
@@ -410,7 +410,7 @@ $string['user_deletion'] = 'User Deletion';
 $string['user_update'] = 'User Update';
 $string['course_creation'] = 'Course Creation';
 $string['course_deletion'] = 'Course Deletion';
-$string['web_service_courselist'] = 'List of course IDs';  
+$string['web_service_courselist'] = 'List of course IDs';
 
 
 $string['what_next'] = 'What Next?';
@@ -582,4 +582,3 @@ $string['complete_details'] = 'Edwiser Bridge FREE Moodle plugin setup complete'
 $string['web_service_validate_token_msg'] = 'Return true if tokens match';
 $string['web_service_validate_user_msg'] = 'Return true if user is manager/site admin';
 $string['checking'] = 'Checking...';
-$string['privacy:metadata:preference:eb_sso_user_session_id'] = 'A short-lived token used while logging in or out via Edwiser Bridge single sign-on. It is normally deleted immediately after the handshake completes.';

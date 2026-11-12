@@ -32,13 +32,14 @@ require_once("$CFG->libdir/formslib.php");
 
 /**
  * Defines the SSO settings form for the Edwiser Bridge plugin.
- * This form allows the user to configure the SSO settings, including the shared secret key, WordPress site URL, logout redirect URL, and login button options.
+ * This form allows the user to configure the SSO settings, including the shared secret key,
+ * WordPress site URL, logout redirect URL, and login button options.
  */
 class sso_form extends moodleform {
-
     /**
      * Defines the form for configuring the SSO settings in the Edwiser Bridge plugin.
-     * This method sets up the form fields and default values for the SSO settings, including the shared secret key, WordPress site URL, logout redirect URL, and login button options.
+     * This method sets up the form fields and default values for the SSO settings, including the shared
+     * secret key, WordPress site URL, logout redirect URL, and login button options.
      */
     public function definition() {
         $mform         = $this->_form;

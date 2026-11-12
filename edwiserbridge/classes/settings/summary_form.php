@@ -27,7 +27,6 @@ use moodleform;
 use webservice;
 use moodle_url;
 use auth_edwiserbridge\local\eb_pro_license_controller;
-// use core\plugin_manager as core_plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,24 +38,24 @@ require_once("$CFG->libdir/formslib.php");
  * This form is used to display the plugin summary and license information.
  */
 class summary_form extends moodleform {
-    
     /**
-     * This method is responsible for defining the summary form for the Edwiser Bridge plugin. 
-     * It sets up the form fields and handles the display of plugin summary and license information. 
-     * The method retrieves various data points such as the plugin version, web service details, and license information, and populates the form accordingly. 
+     * This method is responsible for defining the summary form for the Edwiser Bridge plugin.
+     * It sets up the form fields and handles the display of plugin summary and license information.
+     * The method retrieves various data points such as the plugin version, web service details, and
+     * license information, and populates the form accordingly.
      * It also checks the web service user's capabilities and displays appropriate messages based on the findings.
      */
     public function definition() {
         global $CFG;
         $servicename   = '';
-        $wp_url        = '';
+        $wpurl        = '';
         $pluginsvdata  = $this->get_plugin_version_data();
         $mform         = $this->_form;
 
-        $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+        $edwiserbridgelastcreatedtoken = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
         $ebexistingserviceselect = get_config('auth_edwiserbridge', 'ebexistingserviceselect');
 
-        $token         = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
+        $token         = !empty($edwiserbridgelastcreatedtoken) ? $edwiserbridgelastcreatedtoken : ' - ';
         $service       = !empty($ebexistingserviceselect) ? $ebexistingserviceselect : '';
         $missingcapmsg = '<span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003;</span>';
         $url           = $CFG->wwwroot . "/admin/webservice/service_users.php?id=$service";
@@ -73,7 +72,11 @@ class summary_form extends moodleform {
             $webservicemanager->get_external_service_by_id($service);
             foreach ($allowedusers as &$alloweduser) {
                 if (!is_siteadmin($alloweduser->id) && array_key_exists($alloweduser->id, $usersmissingcaps)) {
-                    $missingcapmsg = "<span class='summ_error'>" . get_string('incomplete_caps_error', 'auth_edwiserbridge') . $functionspage . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge') . "</span>";
+                    $missingcapmsg = "<span class='summ_error'>"
+                        . get_string('incomplete_caps_error', 'auth_edwiserbridge')
+                        . $functionspage
+                        . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge')
+                        . "</span>";
                 }
             }
 
@@ -89,17 +92,21 @@ class summary_form extends moodleform {
                 // If the token available then show the token.
                 $tokenfield = auth_edwiserbridge_create_token_field($service, $token);
             }
-            $eb_connection_settings = auth_edwiserbridge_get_connection_settings();
-            if(isset($eb_connection_settings['eb_connection_settings'])){
-                $sites = $eb_connection_settings['eb_connection_settings'];
+            $ebconnectionsettings = auth_edwiserbridge_get_connection_settings();
+            if (isset($ebconnectionsettings['eb_connection_settings'])) {
+                $sites = $ebconnectionsettings['eb_connection_settings'];
                 foreach ($sites as $value) {
-                    $wp_url = $value['wp_url'];
+                    $wpurl = $value['wp_url'];
                     $token  = $value['wp_token'];
                     break;
                 }
             }
         } else {
-            $missingcapmsg = "<span class='summ_error'>" . get_string('incomplete_caps_error', 'auth_edwiserbridge') . $functionspage . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge') . "</span>";
+            $missingcapmsg = "<span class='summ_error'>"
+                . get_string('incomplete_caps_error', 'auth_edwiserbridge')
+                . $functionspage
+                . get_string('incomplete_caps_error_know_more', 'auth_edwiserbridge')
+                . "</span>";
         }
 
         $summaryarray = [
@@ -110,7 +117,7 @@ class summary_form extends moodleform {
                     'value'          => $this->get_plugin_fetch_link(),
                 ],
                 'mdl_edwiser_bridge' => [
-                    'label'          => '<strong>' . get_string('mdl_edwiser_bridge_lbl', 'auth_edwiserbridge'). '</strong>',
+                    'label'          => '<strong>' . get_string('mdl_edwiser_bridge_lbl', 'auth_edwiserbridge') . '</strong>',
                     'expected_value' => 'static',
                     'value'          => $pluginsvdata['edwiserbridge'],
                 ],
@@ -189,13 +196,14 @@ class summary_form extends moodleform {
                     'label'          => get_string('wordpress_url', 'auth_edwiserbridge'),
                     'expected_value' => 'static',
                     'value'          => '<div class="eb_copy_text_wrap"> <span class="eb_copy_text" id="eb_wp_url" title="'
-                        . get_string('click_to_copy', 'auth_edwiserbridge') . '">' . $wp_url . '</span>'
-                        . ' <span class="eb_copy_btn">' . get_string('copy', 'auth_edwiserbridge') . '</span></div>'
+                        . get_string('click_to_copy', 'auth_edwiserbridge') . '">' . $wpurl . '</span>'
+                        . ' <span class="eb_copy_btn">' . get_string('copy', 'auth_edwiserbridge') . '</span></div>',
                 ],
                 'testconnectionstatus' => [
                     'expected_value' => 'static',
                     'label'          => get_string('test_connection_status', 'auth_edwiserbridge'),
-                    'value'          => '<div id="test_connection_status">' . get_string('checking', 'auth_edwiserbridge') . '</div>'
+                    'value'          => '<div id="test_connection_status">'
+                        . get_string('checking', 'auth_edwiserbridge') . '</div>',
                 ],
                 'lang_code' => [
                     'label'          => get_string('lang_label', 'auth_edwiserbridge'),
@@ -226,7 +234,8 @@ class summary_form extends moodleform {
                         $activewebservices = empty($CFG->webserviceprotocols) ? [] : explode(',', $CFG->webserviceprotocols);
                         if (!in_array('rest', $activewebservices)) {
                             $html .= '<td class="sum_status">
-                                <span class="summ_error"> ' . $value['error_msg'] . '<a href="' . $value['error_link'] . '" target="_blank" >'
+                                <span class="summ_error"> ' . $value['error_msg'] . '<a href="'
+                                . $value['error_link'] . '" target="_blank" >'
                                 . get_string('here', 'auth_edwiserbridge') . '</a> </span>
                             </td>';
                             $error = 1;
@@ -244,14 +253,14 @@ class summary_form extends moodleform {
                         }
                     }
                 } else if (isset($CFG->$key) && $value['expected_value'] == $CFG->$key) {
-
                     $successmsg = get_string('settingdisabled', 'auth_edwiserbridge');
                     if ($value['expected_value']) {
                         $successmsg = get_string('settingenabled', 'auth_edwiserbridge');
                     }
 
                     $html .= '<td class="sum_status">
-                                <span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">&#10003; </span>
+                                <span class="summ_success" style="font-weight: bolder; color: #7ad03a; font-size: 22px;">'
+                        . '&#10003; </span>
                                 <span style="color: #7ad03a;"> ' . $successmsg . ' </span>
                             </td>';
                 } else {
@@ -401,7 +410,6 @@ class summary_form extends moodleform {
         }
 
         return $output;
-
     }
 
     /**

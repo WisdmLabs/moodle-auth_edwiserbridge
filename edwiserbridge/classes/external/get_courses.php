@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -37,7 +39,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_get_courses
  */
 trait get_courses {
-
     /**
      * Functionality to get courses in chunk.
      *
@@ -55,14 +56,14 @@ trait get_courses {
         self::validate_context($systemcontext);
 
         require_capability('moodle/course:view', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_courses_parameters(),
             ['offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_courses" => $totalcourses]
         );
 
         $query = "SELECT id, fullname, category as categoryid FROM {course}";
-        $count_query = "SELECT count(*) total_count FROM {course}";
+        $countquery = "SELECT count(*) total_count FROM {course}";
         $paramsql = [];
 
         if (!empty($params['search_string'])) {
@@ -73,7 +74,7 @@ trait get_courses {
         $courses = $DB->get_records_sql($query, $paramsql, $offset, $limit);
         $coursecount = 0;
         if (!empty($params['total_courses'])) {
-            $coursecount = $DB->get_record_sql($count_query);
+            $coursecount = $DB->get_record_sql($countquery);
             $coursecount = $coursecount->total_count;
         }
 

@@ -39,7 +39,6 @@ require_once("$CFG->libdir/formslib.php");
  * check. The form also includes buttons for saving the settings.
  */
 class settings_form extends moodleform {
-
     /**
      * Defines the form definition for the settings form of the Edwiser Bridge authentication plugin.
      *

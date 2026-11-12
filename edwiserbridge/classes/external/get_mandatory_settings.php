@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -54,15 +56,15 @@ trait get_mandatory_settings {
         $systemcontext = context_system::instance();
 
         self::validate_context($systemcontext);
-        
+
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $settings = [];
         // Get all settings and form array.
         $protocols = $CFG->webserviceprotocols;
 
         // Get rest_protocol settings.
-        if ( in_array( 'rest', explode(',', $protocols) ) ) {
+        if (in_array('rest', explode(',', $protocols))) {
             $settings['rest_protocol'] = 1;
         } else {
             $settings['rest_protocol'] = 0;
@@ -85,21 +87,19 @@ trait get_mandatory_settings {
         // Get roles where the archetype is defined.
         $studentroles = $DB->get_records('role', ['archetype' => 'student']);
         if ($studentroles) {
-            // Assuming the first role in the list is the one we want
+            // Assuming the first role in the list is the one we want.
             $studentroleid = current($studentroles)->id;
         } else {
-            // Handle the case where no 'student' archetype role is found
+            // Handle the case where no 'student' archetype role is found.
             $studentroleid = null;
             debugging('Student role archetype not found in the system.', DEBUG_DEVELOPER);
         }
         $settings['student_role_id'] = $studentroleid;
 
-
         // Get lang_code settings.
         $settings['lang_code'] = $CFG->lang;
 
         return $settings;
-
     }
 
     /**
@@ -127,7 +127,8 @@ trait get_mandatory_settings {
         return new external_single_structure(
             [
                 'rest_protocol' => new external_value(
-                    PARAM_TEXT, get_string('web_service_rest_protocol', 'auth_edwiserbridge')
+                    PARAM_TEXT,
+                    get_string('web_service_rest_protocol', 'auth_edwiserbridge')
                 ),
                 'web_service' => new external_value(
                     PARAM_RAW,

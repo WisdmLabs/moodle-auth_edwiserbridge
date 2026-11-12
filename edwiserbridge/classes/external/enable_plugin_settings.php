@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -44,7 +46,6 @@ trait enable_plugin_settings {
      */
     public static function auth_edwiserbridge_enable_plugin_settings_parameters() {
         return new external_function_parameters([]);
-
     }
 
     /**
@@ -66,10 +67,10 @@ trait enable_plugin_settings {
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
-        
+
         require_capability('moodle/site:config', $systemcontext);
-        
-        // Call the function to get the list of protocols
+
+        // Call the function to get the list of protocols.
         $activewebservices = explode(',', $CFG->webserviceprotocols);
 
         if (empty($activewebservices) || ! in_array('rest', $activewebservices)) {
@@ -90,9 +91,8 @@ trait enable_plugin_settings {
         ];
 
         return $response;
-
     }
-    
+
     /**
      * Returns the description of the result value for the auth_edwiserbridge_enable_plugin_settings() function.
      *

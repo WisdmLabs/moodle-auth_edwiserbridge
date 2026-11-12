@@ -42,11 +42,10 @@ use core_privacy\local\request\writer;
  */
 class provider implements
     // This plugin has data.
+    \core_privacy\local\metadata\null_provider,
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,
-    \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\user_preference_provider {
-
+    \core_privacy\local\request\plugin\provider {
     /**
      * Returns meta data about this system.
      *
@@ -67,16 +66,6 @@ class provider implements
             'custom_fields' => 'privacy:metadata:wp_site:custom_fields',
         ], 'privacy:metadata:wp_site');
 
-        // This plugin stores a short-lived SSO session token as a user preference
-        // (auth_edwiserbridge_set_user_session() in lib.php, preference key
-        // 'eb_sso_user_session_id'). It's normally deleted immediately after each
-        // login/logout completes, but the previous version of this provider never
-        // declared or handled it at all.
-        $collection->add_user_preference(
-            'eb_sso_user_session_id',
-            'privacy:metadata:preference:eb_sso_user_session_id'
-        );
-
         return $collection;
     }
 
@@ -87,17 +76,7 @@ class provider implements
      * @return contextlist The contextlist containing the list of contexts used in this plugin.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
-        $contextlist = new contextlist();
-
-        // The preference is normally short-lived (deleted right after each
-        // login/logout completes), so most of the time this will find nothing -
-        // but if a request happens mid-handshake, it should still be reported.
-        $preference = get_user_preferences('eb_sso_user_session_id', null, $userid);
-        if (null !== $preference) {
-            $contextlist->add_user_context($userid);
-        }
-
-        return $contextlist;
+        return new contextlist();
     }
 
     /**
@@ -106,16 +85,6 @@ class provider implements
      * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
      */
     public static function get_users_in_context(userlist $userlist) {
-        $context = $userlist->get_context();
-
-        if (!$context instanceof \context_user) {
-            return;
-        }
-
-        $preference = get_user_preferences('eb_sso_user_session_id', null, $context->instanceid);
-        if (null !== $preference) {
-            $userlist->add_user($context->instanceid);
-        }
     }
 
     /**
@@ -124,50 +93,6 @@ class provider implements
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
-        $user = $contextlist->get_user();
-
-        foreach ($contextlist->get_contexts() as $context) {
-            if (!$context instanceof \context_user || $context->instanceid != $user->id) {
-                continue;
-            }
-
-            $preference = get_user_preferences('eb_sso_user_session_id', null, $user->id);
-            if (null === $preference) {
-                continue;
-            }
-
-            $data = (object) [
-                // Deliberately not exporting the raw encrypted payload itself -
-                // it's an opaque, short-lived bearer token, not meaningful
-                // personal data on its own.
-                'description' => get_string('privacy:metadata:preference:eb_sso_user_session_id', 'auth_edwiserbridge'),
-                'present'     => true,
-            ];
-
-            writer::with_context($context)->export_data(
-                [get_string('pluginname', 'auth_edwiserbridge')],
-                $data
-            );
-        }
-    }
-
-    /**
-     * Export all user preferences for the specified user.
-     *
-     * @param int $userid The user to export preferences for.
-     */
-    public static function export_user_preferences(int $userid) {
-        $preference = get_user_preferences('eb_sso_user_session_id', null, $userid);
-        if (null === $preference) {
-            return;
-        }
-
-        writer::export_user_preference(
-            'auth_edwiserbridge',
-            'eb_sso_user_session_id',
-            $preference,
-            get_string('privacy:metadata:preference:eb_sso_user_session_id', 'auth_edwiserbridge')
-        );
     }
 
     /**
@@ -176,11 +101,6 @@ class provider implements
      * @param context $context The specific context to delete data for.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
-        if (!$context instanceof \context_user) {
-            return;
-        }
-
-        unset_user_preference('eb_sso_user_session_id', $context->instanceid);
     }
 
     /**
@@ -189,15 +109,6 @@ class provider implements
      * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
-        $user = $contextlist->get_user();
-
-        foreach ($contextlist->get_contexts() as $context) {
-            if (!$context instanceof \context_user || $context->instanceid != $user->id) {
-                continue;
-            }
-
-            unset_user_preference('eb_sso_user_session_id', $user->id);
-        }
     }
 
     /**
@@ -206,14 +117,14 @@ class provider implements
      * @param approved_userlist $userlist The approved context and user information to delete information for.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
-        $context = $userlist->get_context();
+    }
 
-        if (!$context instanceof \context_user) {
-            return;
-        }
-
-        foreach ($userlist->get_userids() as $userid) {
-            unset_user_preference('eb_sso_user_session_id', $userid);
-        }
+    /**
+     * Get the privacy provider component name.
+     *
+     * @return string The component name.
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
     }
 }

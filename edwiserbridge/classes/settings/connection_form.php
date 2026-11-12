@@ -34,7 +34,6 @@ require_once("$CFG->libdir/formslib.php");
  * This class extends the moodleform class and provides functionality to manage the connection settings.
  */
 class connection_form extends moodleform {
-
     /**
      * Defines the connection settings form for the Edwiser Bridge plugin.
      * This method sets up the form elements, including text fields for site name, URL, and token,

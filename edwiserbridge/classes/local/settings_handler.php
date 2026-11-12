@@ -39,7 +39,6 @@ require_once($CFG->libdir . "/externallib.php");
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class settings_handler {
-
     /**
      * Creates an external service with the provided name and user ID.
      *
@@ -50,14 +49,14 @@ class settings_handler {
     public function eb_create_externle_service($name, $userid) {
         global $CFG;
         require_once($CFG->dirroot . '/webservice/lib.php');
-        
+
         // Response initializations.
         $response = [
             'status' => 1,
             'msg' => '',
             'token' => 0,
             'site_url' => $CFG->wwwroot,
-            'service_id' => 0
+            'service_id' => 0,
         ];
 
         // User id validation.
@@ -98,12 +97,12 @@ class settings_handler {
 
         try {
             $service = $webservicemanager->add_external_service((object) $servicedata);
-            
+
             if ($service) {
                 $this->eb_add_auth_user($service, $userid);
                 $this->eb_add_default_web_service_functions($service);
                 $token = $this->eb_create_token($service, $userid);
-                
+
                 $response['service_id'] = $service;
                 $response['token'] = $token;
             } else {
@@ -161,8 +160,12 @@ class settings_handler {
         global $DB;
 
         // No method to get service by name only by name. To be replaced in the future when method becomes available.
-        $service = $DB->get_record('external_services',
-                        array('name' => $servicename), 'id', IGNORE_MISSING);
+        $service = $DB->get_record(
+            'external_services',
+            ['name' => $servicename],
+            'id',
+            IGNORE_MISSING
+        );
         return $service;
     }
 
@@ -180,7 +183,7 @@ class settings_handler {
         global $CFG;
         require_once($CFG->dirroot . '/webservice/lib.php');
         $webservicemanager = new \webservice();
-        
+
         $userdata = [
             'externalserviceid' => $serviceid,
             'userid' => $userid,
@@ -204,7 +207,7 @@ class settings_handler {
         global $CFG;
         require_once($CFG->dirroot . '/webservice/lib.php');
         $webservicemanager = new \webservice();
-        
+
         $functions = [
             'core_user_create_users',
             'core_user_delete_users',
@@ -247,12 +250,12 @@ class settings_handler {
         $webservicemanager = new \webservice();
 
         $allfunctions = array_merge(
-            ['auth_edwiserbridge_verify_sso_token'], // SSO functions
-            [ // Selective sync functions
+            ['auth_edwiserbridge_verify_sso_token'], // SSO functions.
+            [ // Selective sync functions.
                 'auth_edwiserbridge_get_users',
-                'auth_edwiserbridge_get_courses'
+                'auth_edwiserbridge_get_courses',
             ],
-            [ // Bulk purchase functions
+            [ // Bulk purchase functions.
                 'core_cohort_add_cohort_members',
                 'core_cohort_create_cohorts',
                 'core_role_assign_roles',
@@ -261,7 +264,7 @@ class settings_handler {
                 'core_cohort_get_cohorts',
                 'auth_edwiserbridge_manage_cohort_enrollment',
                 'auth_edwiserbridge_delete_cohort',
-                'auth_edwiserbridge_manage_user_cohort_enrollment'
+                'auth_edwiserbridge_manage_user_cohort_enrollment',
             ]
         );
 
@@ -290,10 +293,10 @@ class settings_handler {
         if ($webservicemanager->get_external_service_by_id($serviceid)) {
             $this->eb_add_default_web_service_functions($serviceid);
             $this->eb_extensions_web_service_function($serviceid);
-            
+
             set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
             set_config("edwiser_bridge_last_created_token", $token, 'auth_edwiserbridge');
-            
+
             return 1;
         }
         return 0;
@@ -316,31 +319,10 @@ class settings_handler {
             'tokentype' => EXTERNAL_TOKEN_PERMANENT,
             'userid' => $userid,
             'contextid' => 1,
-            'purpose' => 'Edwiser Bridge Service Token'
+            'purpose' => 'Edwiser Bridge Service Token',
         ];
 
-        // Moodle 4.4+ (MDL-76583): \external_generate_token() is a deprecated no-op stub.
-        // Use \core_external\util::generate_token() when available and fall back for older sites.
-        if (class_exists('\core_external\util')) {
-            $webservicemanager = new \webservice();
-            $service           = $webservicemanager->get_external_service_by_id($serviceid, MUST_EXIST);
-            $context           = class_exists('\core\context\system')
-                ? \core\context\system::instance()
-                : \context_system::instance();
-
-            $token = \core_external\util::generate_token(
-                $tokendata['tokentype'],
-                $service,
-                $userid,
-                $context,
-                0,
-                '',
-                $tokendata['purpose']
-            );
-        } else {
-            $token = \external_generate_token($tokendata['tokentype'], $serviceid, $userid, 1);
-        }
-
+        $token = \external_generate_token($tokendata['tokentype'], $serviceid, $userid, 1);
         set_config("edwiser_bridge_last_created_token", $token, 'auth_edwiserbridge');
         set_config('ebexistingserviceselect', $serviceid, 'auth_edwiserbridge');
 

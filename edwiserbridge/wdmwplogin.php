@@ -23,14 +23,14 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:ignore moodle.Files.RequireLogin.Missing -- WordPress-facing external SSO endpoint; require_login() must not be called here.
 require_once('../../config.php');
 global $CFG;
-require_once($CFG->dirroot.'/auth/edwiserbridge/lib.php');
+require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 // Requested to wp login.
 $wdmaction = optional_param('wdmaction', '', PARAM_ALPHA);
 if (!empty($wdmaction) && $wdmaction === 'login') {
-
     // User is not logged in or is a guest user.
     if (! isloggedin() || isguestuser()) {
         auth_edwiserbridge_redirect_to_root();
@@ -48,7 +48,7 @@ if (!empty($wdmaction) && $wdmaction === 'login') {
 
     // All checks are passed. Redirect to wp site for login.
     $verifycode = optional_param('verify_code', '', PARAM_RAW);
-    $redirectto = strtok($wpsiteurl, '?') .'?wdmaction=login&mdl_uid=' . $moodleuserid . '&verify_code=' . $verifycode;
+    $redirectto = strtok($wpsiteurl, '?') . '?wdmaction=login&mdl_uid=' . $moodleuserid . '&verify_code=' . $verifycode;
 
     redirect($redirectto);
 }

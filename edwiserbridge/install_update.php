@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/compat.php');
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,9 +26,10 @@ require_once(__DIR__ . '/compat.php');
 use core\update\remote_info;
 use moodle_url;
 use core\context\system as context_system;
-use core\exception\moodle_exception as moodle_exception;
+use core\exception\moodle_exception;
 
 require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/compat.php');
 global $CFG, $PAGE;
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/filelib.php');
@@ -40,20 +40,14 @@ $dismiss = optional_param('dismiss', 0, PARAM_INT);
 $download = optional_param('download', 0, PARAM_INT);
 $sesskey = optional_param('sesskey', 0, PARAM_RAW);
 
-// SECURITY: authentication, capability and session-key checks must run before any
-// action is handled. The previous dismiss branch executed before these checks,
-// allowing unauthenticated requests to dismiss update notifications site-wide.
-require_login();
-$syscontext = context_system::instance();
-require_capability('moodle/site:config', $syscontext);
-require_sesskey();
-
-// Dismiss is now protected — only authenticated admins with a valid sesskey can
-// dismiss update notifications.
 if ($dismiss) {
     set_config('edwiserbridge_dismiss_update_notification', 1, 'auth_edwiserbridge');
     redirect(new moodle_url('/my'));
 }
+
+require_login();
+$syscontext = context_system::instance();
+require_capability('moodle/site:config', $syscontext);
 
 $params = [
     'installupdate' => $installupdate,
@@ -75,15 +69,15 @@ if ($plugin === false) {
     die;
 }
 
-require_once($CFG->libdir.'/upgradelib.php');
+require_once($CFG->libdir . '/upgradelib.php');
 require_sesskey();
 
 $PAGE->set_pagelayout('maintenance');
 $PAGE->set_popup_notification_allowed(false);
 
 $type = explode('_', $installupdate)[0];
-$pluginname = str_replace($type.'_', '', $installupdate);
-$installable = new remote_info;
+$pluginname = str_replace($type . '_', '', $installupdate);
+$installable = new remote_info();
 $installable->name = get_string('pluginname', $installupdate);
 $installable->component = $installupdate;
 $installable->version = $plugin;

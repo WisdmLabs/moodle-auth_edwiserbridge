@@ -29,9 +29,9 @@ namespace auth_edwiserbridge\local;
  */
 class api_handler {
     /**
-     * Returns the singleton instance of the api_handler class.
+     * The singleton instance of the api_handler class.
      *
-     * @return object self object.
+     * @var api_handler|null
      */
     protected static $instance = null;
 

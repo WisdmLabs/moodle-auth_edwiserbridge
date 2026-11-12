@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use completion_info;
@@ -39,7 +41,6 @@ use core\context\course as context_course;
  * Trait implementing the external function auth_edwiserbridge_get_course_progress
  */
 trait get_course_progress {
-
     /**
      * Functionality to get course progress data for the given user.
      *
@@ -51,59 +52,59 @@ trait get_course_progress {
 
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_course_progress_parameters(),
-        ['user_id' => $userid]
+            ['user_id' => $userid]
         );
-        
+
         $result = $DB->get_records_sql(
             'SELECT ctx.instanceid course, count(cmc.completionstate) as completed, count(cm.id)
             as  outoff FROM {user} u
 			LEFT JOIN {role_assignments} ra ON u.id = ra.userid and u.id = ?
 			JOIN {context} ctx ON ra.contextid = ctx.id
 			JOIN {course_modules} cm ON ctx.instanceid = cm.course AND cm.completion > 0
-			LEFT JOIN {course_modules_completion} cmc ON cm.id = cmc.coursemoduleid AND u.id = cmc.userid AND cmc.completionstate > 0
+			LEFT JOIN {course_modules_completion} cmc ON cm.id = cmc.coursemoduleid AND u.id = cmc.userid'
+            . ' AND cmc.completionstate > 0
 			GROUP BY ctx.instanceid, u.id
 			ORDER BY u.id',
-        [$params['user_id']]
+            [$params['user_id']]
         );
 
-        $enrolledcourses  = auth_edwiserbridge_get_array_of_enrolled_courses( $params['user_id'], 1 );
+        $enrolledcourses  = auth_edwiserbridge_get_array_of_enrolled_courses($params['user_id'], 1);
         $processedcourses = $enrolledcourses;
-        
+
         $response = [];
-        
-        if ( $result && ! empty( $result ) ) {
+
+        if ($result && ! empty($result)) {
             foreach ($result as $key => $value) {
-                
                 // Validation for context is needed.
                 $coursecontext = context_course::instance($value->course);
                 self::validate_context($coursecontext);
                 require_capability('report/progress:view', $coursecontext);
-                
-                $course     = get_course( $value->course );
-                $cinfo      = new completion_info( $course );
-                $iscomplete = $cinfo->is_course_complete( $params['user_id'] );
+
+                $course     = get_course($value->course);
+                $cinfo      = new completion_info($course);
+                $iscomplete = $cinfo->is_course_complete($params['user_id']);
                 $progress   = $iscomplete ? 100 : ( $value->completed / $value->outoff ) * 100;
                 $response[] = [
                     'course_id'  => $value->course,
-                    'completion' => ceil( $progress ),
+                    'completion' => ceil($progress),
                 ];
 
-                $processedcourses = auth_edwiserbridge_remove_processed_coures( $value->course, $processedcourses );
+                $processedcourses = auth_edwiserbridge_remove_processed_coures($value->course, $processedcourses);
             }
         }
 
-        if ( ! empty( $processedcourses ) ) {
+        if (! empty($processedcourses)) {
             foreach ($processedcourses as $value) {
-                $course     = get_course( $value );
-                $cinfo      = new completion_info( $course );
-                $iscomplete = $cinfo->is_course_complete( $params['user_id'] );
+                $course     = get_course($value);
+                $cinfo      = new completion_info($course);
+                $iscomplete = $cinfo->is_course_complete($params['user_id']);
                 $progress   = $iscomplete ? 100 : 0;
                 $response[] = [
                     'course_id'  => $value,
                     'completion' => $progress,
                 ];
 
-                $processedcourses = auth_edwiserbridge_remove_processed_coures( $value, $processedcourses );
+                $processedcourses = auth_edwiserbridge_remove_processed_coures($value, $processedcourses);
             }
         }
         return $response;
@@ -122,7 +123,7 @@ trait get_course_progress {
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
-            )
+            ),
         ]);
     }
 
@@ -140,8 +141,16 @@ trait get_course_progress {
         return new external_multiple_structure(
             new external_single_structure(
                 [
-                    'course_id'  => new external_value( PARAM_TEXT, get_string('web_service_courseid', 'auth_edwiserbridge'), VALUE_REQUIRED ),
-                    'completion' => new external_value( PARAM_INT, get_string('web_service_completion_percentage', 'auth_edwiserbridge'), VALUE_REQUIRED ),
+                    'course_id'  => new external_value(
+                        PARAM_TEXT,
+                        get_string('web_service_courseid', 'auth_edwiserbridge'),
+                        VALUE_REQUIRED
+                    ),
+                    'completion' => new external_value(
+                        PARAM_INT,
+                        get_string('web_service_completion_percentage', 'auth_edwiserbridge'),
+                        VALUE_REQUIRED
+                    ),
                 ]
             )
         );

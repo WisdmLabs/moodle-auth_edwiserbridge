@@ -26,16 +26,16 @@
 
 namespace auth_edwiserbridge\external;
 
-require_once(__DIR__ . '/../../compat.php');
-
 defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../../compat.php');
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
 require_once($CFG->dirroot . '/cohort/externallib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
-require_once($CFG->dirroot. '/user/lib.php');
-require_once($CFG->dirroot. '/cohort/lib.php');
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/cohort/lib.php');
 
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
@@ -43,8 +43,8 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use core\context\system as context_system;
 use core\context\user as context_user;
-use core\exception\moodle_exception as moodle_exception;
-use core\output\progress_trace\null_progress_trace as null_progress_trace;
+use core\exception\moodle_exception;
+use core\output\progress_trace\null_progress_trace;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_manage_cohort_enrollment
@@ -85,20 +85,19 @@ trait manage_cohort_enrollment {
 
     /**
      * Manages cohort enrollment for courses.
-     * 
+     *
      * @param array $cohort Details of the cohort and course for enrollment/un-enrollment.
      * @return int|string The instance ID if successful enrollment is added, or "disabled" if cohort enrollment is disabled.
      */
     public static function auth_edwiserbridge_manage_cohort_enrollment($cohort) {
         global $USER, $DB;
 
-        
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
 
-        require_capability('moodle/cohort:assign', $systemcontext );
-        
+        require_capability('moodle/cohort:assign', $systemcontext);
+
         // Parameter validation.
         $params = self::validate_parameters(
             self::auth_edwiserbridge_manage_cohort_enrollment_parameters(),
@@ -116,8 +115,10 @@ trait manage_cohort_enrollment {
 
         foreach ($params['cohort'] as $cohortdetails) {
             $cohortdetails = (object)$cohortdetails;
-            if (isset($cohortdetails->cohortid) && !empty($cohortdetails->cohortid) &&
-                    isset($cohortdetails->courseid) && !empty($cohortdetails->courseid)) {
+            if (
+                isset($cohortdetails->cohortid) && !empty($cohortdetails->cohortid) &&
+                    isset($cohortdetails->courseid) && !empty($cohortdetails->courseid)
+            ) {
                 $courseid = $cohortdetails->courseid;
                 $cohortid = $cohortdetails->cohortid;
 

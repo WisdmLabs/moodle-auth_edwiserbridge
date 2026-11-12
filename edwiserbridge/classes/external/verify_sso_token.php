@@ -35,7 +35,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_verify_sso_token
  */
 trait verify_sso_token {
-
     /**
      * Returns the external function parameters for the auth_edwiserbridge_verify_sso_token function.
      *
@@ -50,7 +49,7 @@ trait verify_sso_token {
                 VALUE_REQUIRED,
                 null,
                 NULL_NOT_ALLOWED
-            )
+            ),
         ]);
     }
     /**
@@ -67,7 +66,7 @@ trait verify_sso_token {
         self::validate_context($systemcontext);
 
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_verify_sso_token_parameters(),
             ['token' => $token]

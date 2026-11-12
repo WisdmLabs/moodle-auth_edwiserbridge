@@ -26,9 +26,9 @@
 
 namespace auth_edwiserbridge\external;
 
-require_once(__DIR__ . '/../../compat.php');
-
 defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../../compat.php');
 
 require_once(
     $CFG->libdir . "/externallib.php"
@@ -37,8 +37,8 @@ require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
 require_once($CFG->dirroot . '/cohort/externallib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
-require_once($CFG->dirroot. '/user/lib.php');
-require_once($CFG->dirroot. '/cohort/lib.php');
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/cohort/lib.php');
 
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
@@ -47,8 +47,8 @@ use core_external\external_value;
 use Exception;
 use core\context\system as context_system;
 use core\context\user as context_user;
-use core\exception\moodle_exception as moodle_exception;
-use core\context as context;
+use core\exception\moodle_exception;
+use core\context;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_delete_cohort
@@ -87,13 +87,13 @@ trait delete_cohort {
      */
     public static function auth_edwiserbridge_delete_cohort($cohort) {
         global $USER, $DB;
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
 
         require_capability('moodle/cohort:manage', $systemcontext);
-        
+
         // Parameter validation.
         $params = self::validate_parameters(
             self::auth_edwiserbridge_delete_cohort_parameters(),

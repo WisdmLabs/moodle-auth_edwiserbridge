@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -34,15 +36,14 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use core\context\system as context_system;
 
-defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir . "/externallib.php");
 require_once($CFG->dirroot . '/enrol/cohort/locallib.php');
 require_once($CFG->dirroot . '/user/externallib.php');
 require_once($CFG->dirroot . '/cohort/externallib.php');
 require_once($CFG->dirroot . '/enrol/externallib.php');
-require_once($CFG->dirroot. '/user/lib.php');
-require_once($CFG->dirroot. '/cohort/lib.php');
+require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . '/cohort/lib.php');
 
 /**
  * Trait implementing the external function auth_edwiserbridge_manage_user_cohort_enrollment
@@ -76,7 +77,8 @@ trait manage_user_cohort_enrollment {
                             'password' => new external_value(
                                 PARAM_TEXT,
                                 get_string('api_password', 'auth_edwiserbridge'),
-                                VALUE_REQUIRED),
+                                VALUE_REQUIRED
+                            ),
                             'username' => new external_value(
                                 PARAM_TEXT,
                                 get_string('api_username', 'auth_edwiserbridge'),
@@ -106,17 +108,17 @@ trait manage_user_cohort_enrollment {
      * @return array An array containing the following keys:
      *   - error: 0 if successful, 1 if an error occurred.
      *   - error_msg: A string describing the error, if any.
-     *   - users: An array of user enrollment information, including user_id, username, password, email, enrolled, cohort_id, and creation_error.
+     *   - users: An array of user enrollment information, including user_id, username, password, email,
+     *     enrolled, cohort_id, and creation_error.
      */
     public static function auth_edwiserbridge_manage_user_cohort_enrollment($cohortid, $users) {
         global $DB, $CFG;
-        
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         // Check if the user has the capability to assign users to a cohort.
-        require_capability( 'moodle/cohort:assign', $systemcontext );
+        require_capability('moodle/cohort:assign', $systemcontext);
 
         $error          = 0;
         $errormsg      = '';
@@ -147,7 +149,7 @@ trait manage_user_cohort_enrollment {
                     $append = 1;
 
                     while ($DB->record_exists('user', ['username' => $user['username']])) {
-                        $user['username'] = $newusername.$append;
+                        $user['username'] = $newusername . $append;
                         ++$append;
                     }
 
@@ -156,7 +158,6 @@ trait manage_user_cohort_enrollment {
                     $userid = user_create_user($user, 1, false);
 
                     if (!$userid) {
-
                         array_push(
                             $usersresponse,
                             [

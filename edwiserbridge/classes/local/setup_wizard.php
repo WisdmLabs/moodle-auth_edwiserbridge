@@ -32,7 +32,6 @@ namespace auth_edwiserbridge\local;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class setup_wizard {
-
     /**
      * Get setup wizard steps.
      *
@@ -126,9 +125,9 @@ class setup_wizard {
 
         $steps = $this->eb_setup_wizard_get_steps();
 
-        $eb_setup_progress = get_config('auth_edwiserbridge', 'eb_setup_progress');
+        $ebsetupprogress = get_config('auth_edwiserbridge', 'eb_setup_progress');
 
-        $progress = !empty($eb_setup_progress) ? $eb_setup_progress : '';
+        $progress = !empty($ebsetupprogress) ? $ebsetupprogress : '';
         $completed = !empty($progress) ? 1 : 0;
 
         $templatecontext = [
@@ -196,13 +195,13 @@ class setup_wizard {
     public function eb_setup_handle_page_submission_or_refresh() {
         $steps = $this->eb_setup_wizard_get_steps();
         $step  = 'installation_guide';
-        $eb_setup_progress = get_config('auth_edwiserbridge', 'eb_setup_progress');
+        $ebsetupprogress = get_config('auth_edwiserbridge', 'eb_setup_progress');
         // Handle page refresh.
         $currentstep = optional_param('current_step', '', PARAM_TEXT);
         if (isset($currentstep) && !empty($currentstep)) {
             $step = $currentstep;
-        } else if (isset($eb_setup_progress) && !empty($eb_setup_progress) && !isset($step)) {
-            $step = $this->get_next_step($eb_setup_progress);
+        } else if (isset($ebsetupprogress) && !empty($ebsetupprogress) && !isset($step)) {
+            $step = $this->get_next_step($ebsetupprogress);
         } else {
             $step = 'installation_guide';
         }
@@ -567,9 +566,9 @@ class setup_wizard {
         $prevstep = $this->get_prev_step($step);
         $prevurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $prevstep;
 
-        $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+        $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
 
-        $sitename = !empty($eb_setup_wp_site_name) ? $eb_setup_wp_site_name : '';
+        $sitename = !empty($ebsetupwpsitename) ? $ebsetupwpsitename : '';
 
         $wpsites = auth_edwiserbridge_get_connection_settings();
         $wpsites = $wpsites['eb_connection_settings'];
@@ -643,9 +642,9 @@ class setup_wizard {
         $prevstep = $this->get_prev_step($step);
         $prevurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $prevstep;
 
-        $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+        $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
 
-        $sitename = $eb_setup_wp_site_name;
+        $sitename = $ebsetupwpsitename;
 
         $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
@@ -700,9 +699,9 @@ class setup_wizard {
         $step = 'test_connection';
         $isnextsubstep = 1;
 
-        $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+        $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
 
-        $sitename = $eb_setup_wp_site_name;
+        $sitename = $ebsetupwpsitename;
 
         $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
@@ -763,11 +762,11 @@ class setup_wizard {
         $prevurl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $prevstep;
         $nexturl = $CFG->wwwroot . '/auth/edwiserbridge/setup_wizard.php?current_step=' . $nextstep;
 
-        $eb_synch_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
-        $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+        $ebsynchsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
 
-        $synchsettings = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : [];
-        $sitename = $eb_setup_wp_site_name;
+        $synchsettings = !empty($ebsynchsettings) ? json_decode($ebsynchsettings, true) : [];
+        $sitename = $ebsetupwpsitename;
         if (isset($synchsettings[$sitename])) {
             $data = $synchsettings[$sitename];
             $oldsettings = [
@@ -877,9 +876,9 @@ class setup_wizard {
 
         $nextstep = $this->get_next_step($step);
 
-        $eb_setup_wp_site_name = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
+        $ebsetupwpsitename = get_config('auth_edwiserbridge', 'eb_setup_wp_site_name');
 
-        $sitename = $eb_setup_wp_site_name;
+        $sitename = $ebsetupwpsitename;
 
         $sites = auth_edwiserbridge_get_connection_settings();
         $sites = $sites['eb_connection_settings'];
@@ -989,5 +988,4 @@ class setup_wizard {
 
         return $renderer->render_from_template('auth_edwiserbridge/setup_completion_popup', $templatecontext);
     }
-
 }

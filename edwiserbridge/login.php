@@ -25,7 +25,7 @@
 
 require_once('../../config.php'); // @codingStandardsIgnoreLine
 global $CFG, $SESSION, $DB;
-require_once($CFG->dirroot.'/auth/edwiserbridge/lib.php');
+require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
 
 // Login may somehow modify this.
 $SESSION->wantsurl = $CFG->wwwroot;
@@ -49,7 +49,7 @@ if (!empty($wdmdata)) {
     $key = 'eb_sso_user_session_id';
     auth_edwiserbridge_set_user_session($userid, $key, $wdmdata);
 
-    unset( $_POST['wdm_data'] );
+    unset($_POST['wdm_data']);
     die();
 }
 
@@ -64,28 +64,27 @@ if ($tempurl == '') {
 $secretkey = auth_edwiserbridge_get_sso_secret_key();
 
 $userid = optional_param('logout_id', 0, PARAM_INT);
-if ( !empty( $userid ) && $userid !== 0 ) {
+if (!empty($userid) && $userid !== 0) {
     $sessionkey = 'eb_sso_user_session_id';
 
     $record   = auth_edwiserbridge_get_user_session($userid, $sessionkey);
     $rawdata  = isset($record) ? $record : '';
     $userdata = auth_edwiserbridge_decrypt_string($rawdata, $secretkey);
-    $hash     = auth_edwiserbridge_get_key_value( $userdata, 'wp_one_time_hash' );
+    $hash     = auth_edwiserbridge_get_key_value($userdata, 'wp_one_time_hash');
 
     auth_edwiserbridge_remove_user_session($userid);
     $verifycode = optional_param('veridy_code', '', PARAM_RAW);
-    if ( !empty( $verifycode ) && $hash === $verifycode ) {
-
-        $logoutredirect = auth_edwiserbridge_get_key_value( $userdata, 'logout_redirect' );
+    if (!empty($verifycode) && $hash === $verifycode) {
+        $logoutredirect = auth_edwiserbridge_get_key_value($userdata, 'logout_redirect');
         if ($logoutredirect == '') {
-            redirect( $tempurl );
+            redirect($tempurl);
         }
         require_logout();
-        redirect( $logoutredirect );
+        redirect($logoutredirect);
     } else {
         $wpurl = get_config('auth_edwiserbridge', 'wpsiteurl');
-        $wpurl = empty( $wpurl ) ? $CFG->wwwroot : $wpurl;
-        redirect( $wpurl );
+        $wpurl = empty($wpurl) ? $CFG->wwwroot : $wpurl;
+        redirect($wpurl);
     }
 }
 
@@ -100,12 +99,12 @@ if (!empty($userid) && $userid !== 0) {
 
     auth_edwiserbridge_remove_user_session($userid);
 
-    $userdata = auth_edwiserbridge_decrypt_string( $rawdata, $secretkey );
-    $userid = auth_edwiserbridge_get_key_value( $userdata, 'moodle_user_id' ); // The users id in the wordpress database.
-    $hash = auth_edwiserbridge_get_key_value( $userdata, 'wp_one_time_hash' );
+    $userdata = auth_edwiserbridge_decrypt_string($rawdata, $secretkey);
+    $userid = auth_edwiserbridge_get_key_value($userdata, 'moodle_user_id'); // The users id in the wordpress database.
+    $hash = auth_edwiserbridge_get_key_value($userdata, 'wp_one_time_hash');
 
     $verifycode = optional_param('veridy_code', '', PARAM_RAW);
-    if ( !empty( $verifycode ) && $hash === $verifycode ) {
+    if (!empty($verifycode) && $hash === $verifycode) {
         if ($userid == '') {
             $wordpressurl = str_replace('wp-login.php', '', $tempurl);
             if (strpos($wordpressurl, '?') !== false) {
@@ -152,7 +151,7 @@ if (!empty($userid) && $userid !== 0) {
             $user->site = $CFG->wwwroot;
             complete_user_login($user);
         } else {
-            // If user data is invalid, redirect to WordPress with error
+            // If user data is invalid, redirect to WordPress with error.
             $wordpressurl = str_replace('wp-login.php', '', $tempurl);
             if (strpos($wordpressurl, '?') !== false) {
                 $wordpressurl .= '&wdm_moodle_error=wdm_moodle_error';
@@ -170,13 +169,12 @@ if (!empty($userid) && $userid !== 0) {
         }
         $courseid = auth_edwiserbridge_get_key_value($userdata, 'moodle_course_id');
         if ($courseid != '') {
-            $SESSION->wantsurl = $CFG->wwwroot.'/course/view.php?id='.$courseid;
+            $SESSION->wantsurl = $CFG->wwwroot . '/course/view.php?id=' . $courseid;
         }
     } else {
         $wpurl = get_config('auth_edwiserbridge', 'wpsiteurl');
-        $wpurl = empty( $wpurl ) ? $CFG->wwwroot : $wpurl;
-        redirect( $wpurl );
+        $wpurl = empty($wpurl) ? $CFG->wwwroot : $wpurl;
+        redirect($wpurl);
     }
-
 }
 redirect($SESSION->wantsurl);

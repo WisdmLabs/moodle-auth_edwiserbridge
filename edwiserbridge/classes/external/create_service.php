@@ -36,7 +36,6 @@ use core_external\external_function_parameters;
  * Trait implementing the external function auth_edwiserbridge_create_service
  */
 trait create_service {
-
     /**
      * Functionality to create a new external service.
      *
@@ -45,12 +44,12 @@ trait create_service {
      * @return array An array containing the details of the created web service.
      */
     public static function auth_edwiserbridge_create_service($webservicename, $userid) {
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/webservice:createtoken', $systemcontext);
-        
+
         $settingshandler = new auth_edwiserbridge\local\settings_handler();
         $response = $settingshandler->eb_create_externle_service($webservicename, $userid);
         return $response;

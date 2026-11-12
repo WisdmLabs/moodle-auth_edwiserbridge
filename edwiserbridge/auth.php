@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/compat.php');
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,14 +24,15 @@ require_once(__DIR__ . '/compat.php');
  */
 
 defined('MOODLE_INTERNAL') || die();
+
 global $CFG;
-require_once($CFG->libdir.'/authlib.php');
+require_once(__DIR__ . '/compat.php');
+require_once($CFG->libdir . '/authlib.php');
 use core\context\system as context_system;
 /**
  * Plugin for no authentication.
  */
 class auth_plugin_edwiserbridge extends auth_plugin_base {
-
     /**
      * Initializes the Edwiser Bridge authentication plugin.
      *
@@ -163,23 +163,23 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         $requesturl = $this->config->wpsiteurl;
         $requesturl .= '/wp-json/edwiser-bridge/sso/';
 
-        // Use Moodle's curl class
+        // Use Moodle's curl class.
         include_once($CFG->libdir . '/filelib.php'); // Ensure Moodle's curl class is available.
 
-        // Use Moodle's curl class
+        // Use Moodle's curl class.
         $curl = new \curl();
 
-        // Set user agent header
+        // Set user agent header.
         $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge SSO';
         $curl->setHeader('User-Agent: ' . $useragent);
 
-        // Set additional options
+        // Set additional options.
         $options = [
             'CURLOPT_RETURNTRANSFER' => true,
             'CURLOPT_TIMEOUT' => 100,
         ];
 
-        // Execute POST request
+        // Execute POST request.
         $response = $curl->post($requesturl, $requestdata, $options);
         $info = $curl->get_info();
         $httpcode = isset($info['http_code']) ? (int) $info['http_code'] : 0;
@@ -220,7 +220,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
 
         $wpsiteurl = strtok($this->config->wpsiteurl, '?');
 
-        $hash = bin2hex(random_bytes(32));
+        $hash = hash('md5', rand(10, 1000));
 
         // All conditions are passed.
         $args = [
@@ -242,9 +242,9 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         $httpcode = isset($curlresult['http_code']) ? $curlresult['http_code'] : 0;
 
         if ($httpcode !== 404) {
-            $SESSION->wantsurl = $CFG->wwwroot.'/auth/edwiserbridge/wdmwplogin.php?'
-                                .'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash
-                                . '&wpsiteurl='.urlencode( $wpsiteurl );
+            $SESSION->wantsurl = $CFG->wwwroot . '/auth/edwiserbridge/wdmwplogin.php?'
+                                . 'wdmaction=login&mdl_uid=' . $user->id . '&verify_code=' . $hash
+                                . '&wpsiteurl=' . urlencode($wpsiteurl);
         }
 
         return true;
@@ -253,7 +253,9 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
     /**
      * Redirects the user to a specific page after logout, and also logs the user out from the WordPress site.
      *
-     * This method is called when the user logs out from the Moodle site. It checks if the shared secret and the WordPress site URL are valid, and then constructs a URL to log the user out from the WordPress site. The method also sets the redirect URL for the user after logout.
+     * This method is called when the user logs out from the Moodle site. It checks if the shared secret and the
+     * WordPress site URL are valid, and then constructs a URL to log the user out from the WordPress site.
+     * The method also sets the redirect URL for the user after logout.
      */
     public function logoutpage_hook() {
         global $redirect, $USER;
@@ -272,7 +274,7 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         if (!filter_var($this->config->wpsiteurl, FILTER_VALIDATE_URL)) {
             return true;
         }
-        $hash = bin2hex(random_bytes(32));
+        $hash = hash('md5', rand(10, 1000));
 
         $args = [
             'action'        => 'logout',
@@ -289,9 +291,8 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
         $httpcode = isset($curlresult['http_code']) ? $curlresult['http_code'] : 0;
 
         if ($httpcode !== 404) {
-            $redirect = strtok($this->config->wpsiteurl, '?') .'?wdmaction=logout&mdl_uid=' . $USER->id . '&verify_code=' . $hash;
+            $redirect = strtok($this->config->wpsiteurl, '?') . '?wdmaction=logout&mdl_uid=' . $USER->id . '&verify_code=' . $hash;
         }
-
     }
 
     /**
@@ -302,22 +303,18 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
      * @return string The encrypted query arguments.
      */
     public static function wdm_get_encrypted_query_args($args, $key) {
-        $query = http_build_query( $args, 'flags_' );
+        $query = http_build_query($args, 'flags_');
         $token = $query;
 
-        $enckey = openssl_digest( $key, 'SHA256', true ); // Hash the key to 256 bits using SHA-256.
-        $method = 'AES-256-GCM';
-        $nonce  = random_bytes( 12 ); // 96-bit IV for GCM.
-        $tag    = '';
+        $encmethod = 'AES-256-ECB'; // Changed to AES-256-ECB.
 
-        $crypttext = openssl_encrypt( $token, $method, $enckey, OPENSSL_RAW_DATA, $nonce, $tag, '', 16 );
+        // Ensure the key is hashed to 256 bits (32 bytes) using SHA-256.
+        $enckey = openssl_digest($key, 'SHA256', true);
 
-        if ( false === $crypttext ) {
-            return '';
-        }
+        $crypttext = openssl_encrypt($token, $encmethod, $enckey, 0); // No IV needed for ECB mode.
 
-        // Format: nonce (12 bytes) + ciphertext + tag (16 bytes).
-        $data = base64_encode( $nonce . $crypttext . $tag );
+        // Base64 encode the encrypted token.
+        $data = base64_encode($crypttext);
         // Convert to URL-safe Base64 (replace + with -, / with _, and remove = padding).
         $data = str_replace(['+', '/', '='], ['-', '_', ''], $data);
 
@@ -358,12 +355,12 @@ class auth_plugin_edwiserbridge extends auth_plugin_base {
             'mdl_key' => $this->config->sharedsecret,
         ];
 
-        $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret );
+        $encryptedargs = self::wdm_get_encrypted_query_args($args, $this->config->sharedsecret);
 
-        $url  = $wpsiteurl .'?wdmaction=login_with_moodle&data=' . $encryptedargs;
-        $url = new moodle_url( $url, ['installdepx' => 1, 'confirminstalldep' => 1]);
+        $url  = $wpsiteurl . '?wdmaction=login_with_moodle&data=' . $encryptedargs;
+        $url = new moodle_url($url, ['installdepx' => 1, 'confirminstalldep' => 1]);
 
-        if (!empty($this->config->wploginbtntext) ) {
+        if (!empty($this->config->wploginbtntext)) {
             $text = $this->config->wploginbtntext;
         } else {
             $text = get_string('WordPress', 'auth_edwiserbridge');

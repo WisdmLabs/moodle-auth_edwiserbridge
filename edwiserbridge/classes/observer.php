@@ -33,37 +33,23 @@ require_once($CFG->dirroot . '/user/lib.php');
 /**
  * Handles callbacks for all in built Moodle events.
  *
- * This class provides methods to handle various Moodle events, such as user enrollment, user creation, user update, and course creation/deletion. It communicates with a WordPress site using the Edwiser Bridge plugin to synchronize user and course data between the two platforms.
+ * This class provides methods to handle various Moodle events, such as user enrollment,
+ * user creation, user update, and course creation/deletion. It communicates with a
+ * WordPress site using the Edwiser Bridge plugin to synchronize user and course data
+ * between the two platforms.
  *
  * @package     auth_edwiserbridge
  * @copyright   2021 WisdmLabs (https://wisdmlabs.com/) <support@wisdmlabs.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-
-    /**
-     * Get users by ID with backward compatibility for older Moodle versions.
-     *
-     * Moodle 5.3 deprecates user_get_users_by_id() in favour of self::get_user_data().
-     * This helper uses the new API when available and falls back to the legacy function.
-     *
-     * @param array $userids Array of user IDs.
-     * @return array Array of user objects keyed by user ID.
-     */
-    private static function get_user_data($userids) {
-        if (class_exists('\core\user') && method_exists('\core\user', 'get_users_by_id')) {
-            return \core\user::get_users_by_id($userids);
-        }
-        return user_get_users_by_id($userids);
-    }
-
     /**
      * Functionality to handle user enrollment event.
      *
      * @param core\event\user_enrolment_created $event The event object containing information about the user enrollment.
      */
     public static function user_enrolment_created(\core\event\user_enrolment_created $event) {
-        $userdata = self::get_user_data([$event->relateduserid]);
+        $userdata = user_get_users_by_id([$event->relateduserid]);
 
         $requestdata = [
             'action'     => 'course_enrollment',
@@ -79,14 +65,18 @@ class observer {
             return;
         }
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
-                if (isset($synchconditions[$value['wp_name']]['course_enrollment']) && $synchconditions[$value['wp_name']]['course_enrollment'] && $value['wp_token']) {
+                if (
+                    isset($synchconditions[$value['wp_name']]['course_enrollment']) &&
+                    $synchconditions[$value['wp_name']]['course_enrollment'] &&
+                    $value['wp_token']
+                ) {
                     $requestdata['secret_key'] = $value['wp_token'];
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -100,7 +90,7 @@ class observer {
      * @param core\event\user_enrolment_deleted $event The event object containing information about the user unenrollment.
      */
     public static function user_enrolment_deleted(\core\event\user_enrolment_deleted $event) {
-        $userdata = self::get_user_data([$event->relateduserid]);
+        $userdata = user_get_users_by_id([$event->relateduserid]);
         $requestdata = [
             'action'     => 'course_un_enrollment',
             'user_id'    => $event->relateduserid,
@@ -115,15 +105,19 @@ class observer {
             return;
         }
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
-                if (isset($synchconditions[$value['wp_name']]['course_un_enrollment']) && $synchconditions[$value['wp_name']]['course_un_enrollment'] && $value['wp_token']) {
+                if (
+                    isset($synchconditions[$value['wp_name']]['course_un_enrollment']) &&
+                    $synchconditions[$value['wp_name']]['course_un_enrollment'] &&
+                    $value['wp_token']
+                ) {
                     $requestdata['secret_key'] = $value['wp_token'];
                     $apihandler->connect_to_wp_with_args($value["wp_url"], $requestdata);
                 }
@@ -138,7 +132,7 @@ class observer {
      */
     public static function user_created(\core\event\user_created $event) {
         global $CFG;
-        $userdata = self::get_user_data([$event->relateduserid]);
+        $userdata = user_get_users_by_id([$event->relateduserid]);
 
         $encmethod      = 'AES-128-CTR';
         $newpassword    = optional_param('newpassword', '', PARAM_TEXT);
@@ -147,15 +141,19 @@ class observer {
         require_once("$CFG->dirroot/user/profile/lib.php");
         $customfields = json_encode(profile_user_record($event->relateduserid, false));
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
 
             foreach ($sites as $value) {
-                if (isset($synchconditions[$value["wp_name"]]["user_creation"]) && $synchconditions[$value["wp_name"]]["user_creation"] && $value['wp_token']) {
+                if (
+                    isset($synchconditions[$value["wp_name"]]["user_creation"]) &&
+                    $synchconditions[$value["wp_name"]]["user_creation"] &&
+                    $value['wp_token']
+                ) {
                     $password = '';
                     $enciv    = '';
 
@@ -199,19 +197,19 @@ class observer {
             return;
         }
 
-        $userdata  = self::get_user_data([$event->relateduserid]);
+        $userdata  = user_get_users_by_id([$event->relateduserid]);
         $encmethod = 'AES-128-CTR';
         $newpassword = optional_param('newpassword', '', PARAM_TEXT);
 
         require_once("$CFG->dirroot/user/profile/lib.php");
         $customfields = json_encode(profile_user_record($event->relateduserid, false));
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
 
             foreach ($sites as $value) {
                 if (
@@ -263,19 +261,19 @@ class observer {
             $userid = $event->relateduserid;
         }
 
-        $userdata    = self::get_user_data([$userid]);
+        $userdata    = user_get_users_by_id([$userid]);
         $encmethod   = 'AES-128-CTR';
         $newpassword = optional_param('newpassword1', '', PARAM_TEXT);
         if (empty($newpassword)) {
             $newpassword = optional_param('password', '', PARAM_TEXT);
         }
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
@@ -322,15 +320,16 @@ class observer {
             return;
         }
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
-                if (isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
+                if (
+                    isset($synchconditions[$value["wp_name"]]["user_deletion"]) &&
                         $synchconditions[$value["wp_name"]]["user_deletion"] && $value['wp_token']
                 ) {
                     $requestdata['secret_key'] = $value['wp_token'];
@@ -348,12 +347,12 @@ class observer {
     public static function course_created(\core\event\course_created $event) {
         $course = get_course($event->courseid);
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
@@ -387,12 +386,12 @@ class observer {
             'course_id' => $event->objectid,
         ];
 
-        $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        $eb_sync_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        $ebsyncsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
 
-        if (!empty($eb_connection_settings)) {
-            $sites = json_decode($eb_connection_settings, true);
-            $synchconditions = json_decode($eb_sync_settings, true);
+        if (!empty($ebconnectionsettings)) {
+            $sites = json_decode($ebconnectionsettings, true);
+            $synchconditions = json_decode($ebsyncsettings, true);
             $apihandler = \auth_edwiserbridge\local\api_handler::instance();
             foreach ($sites as $value) {
                 if (
@@ -420,7 +419,7 @@ class observer {
         }
 
         $transient = get_config('auth_edwiserbridge', 'plugin_update_transient');
-        if ( $transient < time() && isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check ) {
+        if ($transient < time() && isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check) {
             auth_edwiserbridge_check_plugin_update();
             set_config('plugin_update_transient', time() + (7 * 24 * 60 * 60), 'auth_edwiserbridge');
         }

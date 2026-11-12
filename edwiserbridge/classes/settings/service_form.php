@@ -34,10 +34,11 @@ require_once("$CFG->libdir/formslib.php");
  * This class extends the moodleform class and provides the functionality to create and manage web services.
  */
 class service_form extends moodleform {
-
     /**
      * Defines the web services form for the Edwiser Bridge plugin.
-     * This method is responsible for creating and managing the web services form, including adding various form elements such as service list, service input, user list, site language, site URL, and token.
+     * This method is responsible for creating and managing the web services form, including adding
+     * various form elements such as service list, service input, user list, site language, site URL,
+     * and token.
      */
     public function definition() {
         global $CFG;
@@ -46,9 +47,9 @@ class service_form extends moodleform {
         $existingservices = auth_edwiserbridge_get_existing_services();
         $authusers        = auth_edwiserbridge_get_administrators();
 
-        $edwiser_bridge_last_created_token = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
+        $edwiserbridgelastcreatedtoken = get_config('auth_edwiserbridge', 'edwiser_bridge_last_created_token');
         $ebexistingserviceselect = get_config('auth_edwiserbridge', 'ebexistingserviceselect');
-        $token            = !empty($edwiser_bridge_last_created_token) ? $edwiser_bridge_last_created_token : ' - ';
+        $token            = !empty($edwiserbridgelastcreatedtoken) ? $edwiserbridgelastcreatedtoken : ' - ';
         $service          = !empty($ebexistingserviceselect) ? $ebexistingserviceselect : '';
         $tokenfield       = '';
 
@@ -142,7 +143,8 @@ class service_form extends moodleform {
 
         $mform->addElement(
             'html',
-            '<div class="eb_connection_btns"><input type="submit" class="btn btn-primary eb_setting_btn" id="service_submit_continue" name="service_submit_continue"
+            '<div class="eb_connection_btns"><input type="submit" class="btn btn-primary eb_setting_btn"'
+                . ' id="service_submit_continue" name="service_submit_continue"
                 value="' . get_string("next", 'auth_edwiserbridge') . '"></div>'
         );
     }

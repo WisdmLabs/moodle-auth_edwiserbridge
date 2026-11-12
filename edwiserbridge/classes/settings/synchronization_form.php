@@ -35,7 +35,6 @@ require_once("$CFG->libdir/formslib.php");
  * between Moodle and the connected WordPress site.
  */
 class synchronization_form extends moodleform {
-
     /**
      * Defines the synchronization settings form for the Edwiser Bridge plugin.
      * This method sets up the form fields and default values for configuring

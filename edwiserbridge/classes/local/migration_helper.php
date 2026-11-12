@@ -24,13 +24,10 @@
 
 namespace auth_edwiserbridge\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class migration_helper handles data migration from serialized to JSON format
  */
 class migration_helper {
-
     /**
      * Executes the migration of serialized data to JSON format
      *
@@ -56,17 +53,17 @@ class migration_helper {
         if (!isset($CFG->eb_connection_settings) || empty($CFG->eb_connection_settings)) {
             return true;
         }
-        $plugin_config = get_config('auth_edwiserbridge', 'eb_connection_settings');
-        if (!empty($plugin_config)) {
-            return true;
-        } 
-        $settings = json_decode($CFG->eb_connection_settings, true);
-        if ( JSON_ERROR_NONE === json_last_error() ) {
+        $pluginconfig = get_config('auth_edwiserbridge', 'eb_connection_settings');
+        if (!empty($pluginconfig)) {
             return true;
         }
-        list($success, $data) = $this->convert_serialized_to_json($CFG->eb_connection_settings);
+        $settings = json_decode($CFG->eb_connection_settings, true);
+        if (JSON_ERROR_NONE === json_last_error()) {
+            return true;
+        }
+        [$success, $data] = $this->convert_serialized_to_json($CFG->eb_connection_settings);
         if ($success) {
-            set_config( 'eb_connection_settings', $data, 'auth_edwiserbridge' );
+            set_config('eb_connection_settings', $data, 'auth_edwiserbridge');
             return true;
         }
         debugging('Connection settings migration failed: ' . $data, DEBUG_DEVELOPER);
@@ -83,17 +80,17 @@ class migration_helper {
         if (!isset($CFG->eb_synch_settings) || empty($CFG->eb_synch_settings)) {
             return true;
         }
-        $plugin_config = get_config('auth_edwiserbridge', 'eb_synch_settings');
-        if (!empty($plugin_config)) {
-            return true;
-        } 
-        $settings = json_decode($CFG->eb_synch_settings, true);
-        if ( JSON_ERROR_NONE === json_last_error() ) {
+        $pluginconfig = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        if (!empty($pluginconfig)) {
             return true;
         }
-        list($success, $data) = $this->convert_serialized_to_json($CFG->eb_synch_settings);
+        $settings = json_decode($CFG->eb_synch_settings, true);
+        if (JSON_ERROR_NONE === json_last_error()) {
+            return true;
+        }
+        [$success, $data] = $this->convert_serialized_to_json($CFG->eb_synch_settings);
         if ($success) {
-            set_config( 'eb_synch_settings', $data, 'auth_edwiserbridge' );
+            set_config('eb_synch_settings', $data, 'auth_edwiserbridge');
             return true;
         }
 
@@ -111,7 +108,7 @@ class migration_helper {
         if (empty($data)) {
             return [true, '{}'];
         }
-        $decoded = unserialize($data);        
+        $decoded = unserialize($data);
         if ($decoded === false) {
             return [false, 'Invalid serialized data format'];
         }
@@ -136,8 +133,6 @@ class migration_helper {
     protected function migrate_global_settings() {
         global $CFG;
         $configs = [
-            // 'eb_connection_settings',
-            // 'eb_synch_settings',
             'wploginbtnicon',
             'edwiserbridge_dismiss_update_notification',
             'sharedsecret',
@@ -156,8 +151,8 @@ class migration_helper {
             'eb_setup_wp_site_name',
         ];
         foreach ($configs as $config) {
-            $plugin_config = get_config('auth_edwiserbridge', $config);
-            if ( isset($CFG->$config) && empty($plugin_config) ) {
+            $pluginconfig = get_config('auth_edwiserbridge', $config);
+            if (isset($CFG->$config) && empty($pluginconfig)) {
                 set_config($config, $CFG->$config, 'auth_edwiserbridge');
                 continue;
             }

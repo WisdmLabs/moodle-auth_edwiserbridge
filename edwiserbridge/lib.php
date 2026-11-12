@@ -1,5 +1,4 @@
 <?php
-require_once(__DIR__ . '/compat.php');
 // This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -25,11 +24,12 @@ require_once(__DIR__ . '/compat.php');
  */
 
 defined('MOODLE_INTERNAL') || die();
+
 global $CFG;
+require_once(__DIR__ . '/compat.php');
 require_once("{$CFG->libdir}/completionlib.php");
 require_once($CFG->dirroot . '/webservice/lib.php');
-// use core\plugin_manager as core_plugin_manager;
-use core\exception\moodle_exception as moodle_exception;
+use core\exception\moodle_exception;
 
 /**
  * Checks if the older Edwiser Bridge plugin is installed.
@@ -107,13 +107,13 @@ function auth_edwiserbridge_save_connection_form_settings($formdata, $mform = fa
  */
 function auth_edwiserbridge_save_synchronization_form_settings($formdata, $mform = false) {
     $synchsettings          = [];
-    $connection_db          = get_config('auth_edwiserbridge', 'eb_connection_settings');
-    $connectionsettings     = json_decode($connection_db, true);
+    $connectiondb           = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $connectionsettings     = json_decode($connectiondb, true);
     $connectionsettingskeys = array_keys($connectionsettings);
-    
+
     if (in_array($formdata->wp_site_list, $connectionsettingskeys)) {
-        $sync_db               = get_config('auth_edwiserbridge', 'eb_synch_settings');
-        $existingsynchsettings = !empty($sync_db) ? json_decode($sync_db, true) : [];
+        $syncdb                = get_config('auth_edwiserbridge', 'eb_synch_settings');
+        $existingsynchsettings = !empty($syncdb) ? json_decode($syncdb, true) : [];
         $synchsettings         = $existingsynchsettings;
 
         $synchsettings[$formdata->wp_site_list] = [
@@ -153,7 +153,6 @@ function auth_edwiserbridge_save_settings_form_settings($formdata, $mform = fals
     global $CFG;
 
     if (isset($formdata->web_service) && isset($formdata->pass_policy) && isset($formdata->extended_username)) {
-
         $activewebservices = empty($CFG->webserviceprotocols) ? [] : explode(',', $CFG->webserviceprotocols);
 
         if ($formdata->rest_protocol) {
@@ -174,8 +173,9 @@ function auth_edwiserbridge_save_settings_form_settings($formdata, $mform = fals
 /**
  * Retrieves the required settings for the Edwiser Bridge plugin from the Moodle configuration.
  *
- * This function retrieves the values of various Moodle settings that are required for the Edwiser Bridge plugin to function properly.
- * The settings include the status of the web services, whether extended username characters are enabled, the password policy, and whether automatic update checks are enabled.
+ * This function retrieves the values of various Moodle settings that are required for the Edwiser Bridge plugin
+ * to function properly. The settings include the status of the web services, whether extended username characters
+ * are enabled, the password policy, and whether automatic update checks are enabled.
  *
  * @return array An associative array containing the required settings.
  */
@@ -208,8 +208,8 @@ function auth_edwiserbridge_get_required_settings() {
  * @return array An associative array containing the connection settings, or false if the settings are not found.
  */
 function auth_edwiserbridge_get_connection_settings() {
-    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-    $reponse['eb_connection_settings'] = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : false;
+    $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $reponse['eb_connection_settings'] = !empty($ebconnectionsettings) ? json_decode($ebconnectionsettings, true) : false;
     return $reponse;
 }
 
@@ -224,8 +224,8 @@ function auth_edwiserbridge_get_connection_settings() {
  * @return array The synchronization settings for the given index, or a default array if the settings are not found.
  */
 function auth_edwiserbridge_get_synch_settings($index) {
-    $eb_synch_settings = get_config('auth_edwiserbridge', 'eb_synch_settings');
-    $reponse = !empty($eb_synch_settings) ? json_decode($eb_synch_settings, true) : false;
+    $ebsynchsettings = get_config('auth_edwiserbridge', 'eb_synch_settings');
+    $reponse = !empty($ebsynchsettings) ? json_decode($ebsynchsettings, true) : false;
 
     $data = [
         'course_enrollment'    => 0,
@@ -250,11 +250,12 @@ function auth_edwiserbridge_get_synch_settings($index) {
  * $CFG->eb_connection_settings variable is set and decodes it to get the site information. If the variable is not set or
  * empty, it returns a single-element array with a default message.
  *
- * @return array An associative array of site keys and names, or a single-element array with a default message if no sites are found.
+ * @return array An associative array of site keys and names, or a single-element array with a default message
+ *     if no sites are found.
  */
 function auth_edwiserbridge_get_site_list() {
-    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-    $reponse = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : false;
+    $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $reponse = !empty($ebconnectionsettings) ? json_decode($ebconnectionsettings, true) : false;
 
     if ($reponse && count($reponse)) {
         foreach ($reponse as $key => $value) {
@@ -294,7 +295,7 @@ function auth_edwiserbridge_get_array_of_enrolled_courses($userid) {
 }
 
 /**
- * Removes a specific course ID from the provided array of course IDs. 
+ * Removes a specific course ID from the provided array of course IDs.
  * Removes processed coureses from the course whose progress is already provided.
  *
  * @param int   $courseid The ID of the course to remove from the array.
@@ -327,8 +328,9 @@ function auth_edwiserbridge_check_if_request_is_from_wp() {
         $required = 1;
     }
 
-    // check the wsfunction param to check if the request is from WordPress (for user deletion). as there are no other unique params to check.
-    if ( isset( $_GET['wsfunction'] ) && 'core_user_delete_users' === $_GET['wsfunction'] ) {
+    // Check the wsfunction param to check if the request is from WordPress (for user deletion),
+    // as there are no other unique params to check.
+    if (isset($_GET['wsfunction']) && 'core_user_delete_users' === $_GET['wsfunction']) {
         $required = 1;
     }
 
@@ -379,7 +381,7 @@ function auth_edwiserbridge_get_existing_services() {
     // No method to fetch all the enabled webservices in the Moodle Webservice class so fetching directly from DB.
     $services = $DB->get_records('external_services', ['enabled' => 1], 'id ASC', 'id,name');
 
-    // Maintain original return format
+    // Maintain original return format.
     $settingsarr[''] = get_string('existing_service_lbl', 'auth_edwiserbridge');
     $settingsarr['create'] = ' - ' . get_string('new_web_new_service', 'auth_edwiserbridge') . ' - ';
 
@@ -391,7 +393,7 @@ function auth_edwiserbridge_get_existing_services() {
 }
 
 /**
- * Gets the list of service tokens for the given service ID. 
+ * Gets the list of service tokens for the given service ID.
  *
  * This function fetches the list of external tokens from the Moodle database and
  * creates an associative array where the keys are the token values and the values
@@ -440,14 +442,14 @@ function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') 
             'id' => $token['id'] ?? '',
             'token' => $token['token'] ?? '',
             'display' => (isset($token['id']) && $token['id'] != $serviceid) ? 'style="display:none"' : '',
-            'selected' => (isset($token['token']) && $token['token'] == $existingtoken) ? 'selected' : ''
+            'selected' => (isset($token['token']) && $token['token'] == $existingtoken) ? 'selected' : '',
         ];
     }
 
     $data = [
         'token_dropdown_lbl' => get_string('token_dropdown_lbl', 'auth_edwiserbridge'),
         'tokens' => $tokens,
-        'copy_btn_text' => get_string('copy', 'auth_edwiserbridge')
+        'copy_btn_text' => get_string('copy', 'auth_edwiserbridge'),
     ];
 
     $output = $PAGE->get_renderer('core');
@@ -457,7 +459,7 @@ function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') 
 }
 
 /**
- * Gets the list of service tokens for the given service ID. 
+ * Gets the list of service tokens for the given service ID.
  * Functionality to get count of not available services which are required for Edwiser-Bridge.
  *
  * @param int $serviceid The ID of the external service.
@@ -466,7 +468,7 @@ function auth_edwiserbridge_create_token_field($serviceid, $existingtoken = '') 
 function auth_edwiserbridge_get_service_list($serviceid) {
     $webservicemanager = new \webservice();
     $service = $webservicemanager->get_external_service_by_id($serviceid);
-    
+
     if (!$service) {
         return 0;
     }
@@ -623,35 +625,18 @@ function auth_edwiserbridge_pluginfile(
  * external_services_functions table.
  */
 function auth_edwiserbridge_check_and_update_webservice_functions() {
-    global $DB;
-
     $webservicemanager = new \webservice();
-    $eb_connection_settings = get_config('auth_edwiserbridge', 'eb_connection_settings');
-    $connections = !empty($eb_connection_settings) ? json_decode($eb_connection_settings, true) : [];
+    $ebconnectionsettings = get_config('auth_edwiserbridge', 'eb_connection_settings');
+    $connections = !empty($ebconnectionsettings) ? json_decode($ebconnectionsettings, true) : [];
     if (!empty($connections)) {
         foreach ($connections as $connection) {
-            // Skip connections with no token stored at all.
-            if (empty($connection['wp_token'])) {
-                continue;
-            }
-
-            // webservice::get_user_ws_token() runs its lookup with MUST_EXIST
-            // and throws a dml_missing_record_exception (invalidrecord) if the
-            // token row is gone - e.g. a stale/orphaned connection left behind
-            // after a site was reconnected or its token was regenerated/deleted
-            // in Manage tokens. Check the record exists first so a single bad
-            // connection can't abort the whole plugin upgrade.
-            if (!$DB->record_exists('external_tokens', ['token' => $connection['wp_token']])) {
-                continue;
-            }
-
             $token = $webservicemanager->get_user_ws_token($connection['wp_token']);
             $serviceid = $token ? $token->externalserviceid : '';
-    
+
             if (empty($serviceid)) {
                 continue;
             }
-    
+
             $basefunctions = [
                 'core_user_create_users',
                 'core_user_delete_users',
@@ -673,10 +658,8 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
                 'auth_edwiserbridge_enable_plugin_settings',
                 'auth_edwiserbridge_get_users',
                 'auth_edwiserbridge_get_courses',
-                'auth_edwiserbridge_setup_wizard_save_and_continue',
-                'auth_edwiserbridge_setup_test_connection'
             ];
-            // Define required functions
+            // Define required functions.
             $ssofunctions = ['auth_edwiserbridge_verify_sso_token'];
             $bulkpurchasefunctions = [
                 'core_cohort_add_cohort_members',
@@ -687,11 +670,11 @@ function auth_edwiserbridge_check_and_update_webservice_functions() {
                 'core_cohort_get_cohorts',
                 'auth_edwiserbridge_manage_cohort_enrollment',
                 'auth_edwiserbridge_delete_cohort',
-                'auth_edwiserbridge_manage_user_cohort_enrollment'
+                'auth_edwiserbridge_manage_user_cohort_enrollment',
             ];
-    
+
             $webservicefunctions = array_merge($ssofunctions, $basefunctions, $bulkpurchasefunctions);
-    
+
             foreach ($webservicefunctions as $functionname) {
                 if (!$webservicemanager->service_function_exists($functionname, $serviceid)) {
                     $webservicemanager->add_external_function_to_service($functionname, $serviceid);
@@ -744,7 +727,7 @@ function auth_edwiserbridge_check_plugin_update() {
     global $CFG;
 
     include_once($CFG->libdir . '/filelib.php'); // Include Moodle's filelib for the `curl` class.
-    
+
     $useragent = 'Moodle/' . $CFG->version . ' (' . $CFG->wwwroot . ') Edwiser Bridge Update Checker';
 
     // Set up Moodle's curl instance.
@@ -780,7 +763,6 @@ function auth_edwiserbridge_check_plugin_update() {
     $pluginsdata['edwiserbridge'] = get_string('mdl_edwiser_bridge_txt_not_avbl', 'auth_edwiserbridge');
     if (isset($authplugin['edwiserbridge'])) {
         $pluginsdata['edwiserbridge'] = $authplugin['edwiserbridge']->release;
-        // $pluginsdata['edwiserbridge'] = '3.0.0';
     }
 
     if (
@@ -808,25 +790,25 @@ function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
     $renderer = $PAGE->get_renderer('core');
 
     if (isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check == true) {
-        // Mustache rendering data
+        // Mustache rendering data.
         $templatecontext = [
             'pluginupdatenotificationtitle' => get_string('plugin_update_notification_title', 'auth_edwiserbridge'),
             'pluginupdatenotificationbody' => get_string('plugin_update_notification_body', 'auth_edwiserbridge'),
             'pluginupdatenotificationchangelog' => get_string('plugin_update_notification_changelog', 'auth_edwiserbridge'),
-            'changelogurl' => 'https://wordpress.org/plugins/edwiser-bridge/#developers', // Replace with actual changelog URL
+            'changelogurl' => 'https://wordpress.org/plugins/edwiser-bridge/#developers', // Replace with actual changelog URL.
             'downloadurl' => $updatedata->url,
             'plugindownloadhelptext' => get_string('mdl_edwiser_bridge_txt_download_help', 'auth_edwiserbridge'),
             'plugindownload' => get_string('plugin_download', 'auth_edwiserbridge'),
-            'updateurl' => 'UPDATE_URL', // Replace with actual update URL
+            'updateurl' => 'UPDATE_URL', // Replace with actual update URL.
             'pluginupdatehelptext' => get_string('plugin_update_help_text', 'auth_edwiserbridge'),
             'pluginupdate' => get_string('plugin_update', 'auth_edwiserbridge'),
-            'dismissurl' => 'DISMISS_URL', // Replace with actual dismiss URL
+            'dismissurl' => 'DISMISS_URL', // Replace with actual dismiss URL.
         ];
 
-        // Rendering Mustache template with data
+        // Rendering Mustache template with data.
         $msg = $renderer->render_from_template('auth_edwiserbridge/plugin_update_notification', $templatecontext);
 
-        // Set configurations
+        // Set configurations.
         set_config('edwiserbridge_update_msg', $msg, 'auth_edwiserbridge');
         set_config('edwiserbridge_update_available', 1, 'auth_edwiserbridge');
         set_config('edwiserbridge_dismiss_update_notification', 0, 'auth_edwiserbridge');
@@ -836,7 +818,8 @@ function auth_edwiserbridge_prepare_plugin_update_notification($updatedata) {
 
 /**
  * Shows the plugin update notification if an update is available and the user has not dismissed the notification.
- * This function checks the configuration settings, retrieves the update message and URLs, and adds the notification to the Moodle interface.
+ * This function checks the configuration settings, retrieves the update message and URLs, and adds the notification
+ * to the Moodle interface.
  *
  * @return void
  */
@@ -844,7 +827,6 @@ function auth_edwiserbridge_show_plugin_update_notification() {
     global $PAGE, $ME, $CFG;
 
     if (isset($CFG->enable_auto_update_check) && $CFG->enable_auto_update_check == true) {
-
         // To resolve duplicate notification issue.
         global $ebnotice;
         if (isset($ebnotice) && $ebnotice) {
@@ -852,7 +834,11 @@ function auth_edwiserbridge_show_plugin_update_notification() {
         }
         $ebnotice = true;
 
-        if (isset($PAGE) && $PAGE->pagelayout == 'admin' && strpos($ME, 'installaddon/index.php') == false && strpos($ME, 'setup_wizard.php') == false ) {
+        if (
+            isset($PAGE) && $PAGE->pagelayout == 'admin'
+            && strpos($ME, 'installaddon/index.php') == false
+            && strpos($ME, 'setup_wizard.php') == false
+        ) {
             $updateavailable = get_config('auth_edwiserbridge', 'edwiserbridge_update_available');
             $dismiss = get_config('auth_edwiserbridge', 'edwiserbridge_dismiss_update_notification', 0);
             if ($updateavailable && ! $dismiss) {
@@ -932,44 +918,24 @@ function auth_edwiserbridge_decrypt_string($base64, $key) {
     if (!$base64) {
         return '';
     }
-    $data = str_replace(['-', '_'], ['+', '/'], $base64); // Convert URL-safe Base64 back to standard Base64
+    $data = str_replace(['-', '_'], ['+', '/'], $base64); // Convert URL-safe Base64 back to standard Base64.
 
-    // Base64 length must be evenly divisible by 4, so we pad if necessary
+    // Base64 length must be evenly divisible by 4, so we pad if necessary.
     $mod4 = strlen($data) % 4;
     if ($mod4) {
         $data .= substr('====', $mod4);
     }
-    // Decode the Base64 data
+    // Decode the Base64 data.
     $crypttext = base64_decode($data);
-    if (false === $crypttext) {
-        return '';
-    }
 
+    // AES-256-ECB does not use an IV, so we don't need to split the data.
+    // Directly decrypt the data.
+    $encmethod = 'AES-256-ECB'; // Use AES-256-ECB encryption method.
     $enckey = openssl_digest($key, 'SHA256', true); // Hash the key to 256 bits using SHA-256.
-    $method = 'AES-256-GCM';
-
-    // GCM payload: nonce (12 bytes) + ciphertext + tag (16 bytes).
-    $noncelen = 12;
-    $taglen   = 16;
-    $total    = strlen($crypttext);
-
-    if ($total > ($noncelen + $taglen)) {
-        $nonce      = substr($crypttext, 0, $noncelen);
-        $tag        = substr($crypttext, -$taglen);
-        $ciphertext = substr($crypttext, $noncelen, -$taglen);
-
-        $decryptedtoken = openssl_decrypt($ciphertext, $method, $enckey, OPENSSL_RAW_DATA, $nonce, $tag);
-        if (false !== $decryptedtoken) {
-            return trim($decryptedtoken);
-        }
-    }
-
-    // Legacy fallback for old AES-256-ECB tokens.
-    $legacymethod = 'AES-256-ECB';
-    $decryptedtoken = openssl_decrypt($crypttext, $legacymethod, $enckey, 0);
-
+    // Decrypt the token with AES-256-ECB (no IV required).
+    $decryptedtoken = openssl_decrypt($crypttext, $encmethod, $enckey, 0);
     // Return the decrypted value, trimmed of any extra spaces or characters.
-    return is_string($decryptedtoken) ? trim($decryptedtoken) : '';
+    return trim($decryptedtoken);
 }
 
 /**
@@ -1032,8 +998,10 @@ function auth_edwiserbridge_remove_user_session($userid) {
 /**
  * Redirect the user to the root URL of the Moodle site.
  *
- * This function is used to redirect the user to the root URL of the Moodle site, which is stored in the $CFG->wwwroot global variable.
- * The current URL that the user wants to access is stored in the $SESSION->wantsurl global variable, and this function uses the redirect() function to redirect the user to the root URL.
+ * This function is used to redirect the user to the root URL of the Moodle site, which is stored in the
+ * $CFG->wwwroot global variable. The current URL that the user wants to access is stored in the
+ * $SESSION->wantsurl global variable, and this function uses the redirect() function to redirect the user
+ * to the root URL.
  */
 function auth_edwiserbridge_redirect_to_root() {
     global $CFG, $SESSION;

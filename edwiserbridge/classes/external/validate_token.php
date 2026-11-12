@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -38,56 +40,65 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_validate_token
  */
 trait validate_token {
-
-    public static function auth_edwiserbridge_validate_token($wpurl, $wptoken) { 
+    /**
+     * Validates the WordPress token against the stored connection settings.
+     *
+     * @param string $wpurl WordPress site URL.
+     * @param string $wptoken WordPress token to validate.
+     * @return array Array with token_mismatch and is_authorized flags.
+     */
+    public static function auth_edwiserbridge_validate_token($wpurl, $wptoken) {
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_validate_token_parameters(),
-            array(
+            [
                 'wp_url' => $wpurl,
                 "wp_token" => $wptoken,
-            )
+            ]
         );
 
         $defaultvalues = auth_edwiserbridge_get_connection_settings();
 
-        $is_authorized = false;
-        $token_match = false;
+        $isauthorized = false;
+        $tokenmatch = false;
         foreach ($defaultvalues['eb_connection_settings'] as $site => $value) {
             if ($value['wp_token'] == $params["wp_token"]) {
-                $token_match = true;
+                $tokenmatch = true;
             }
         }
-        // get user id by token 
+        // Get user id by token.
         global $DB, $CFG;
-        $userid = $DB->get_field('external_tokens', 'userid', array('token' => $params["wp_token"]));
-        // $roleid = $DB->get_records('role_assignments', ['userid' => $userid]);
+        $userid = $DB->get_field('external_tokens', 'userid', ['token' => $params["wp_token"]]);
         $userroles = get_user_roles($systemcontext, $userid);
-        $manager_id = $DB->get_field('role', 'id', ['archetype' => 'manager']);
-        // $roleid = $DB->get_field('mdl_role', 'archetype', ['id' => $roleid]);
-        if ( ! empty($userroles) ) {
+        $managerid = $DB->get_field('role', 'id', ['archetype' => 'manager']);
+        if (! empty($userroles)) {
             foreach ($userroles as $role) {
                 $roleid = $role->roleid;
-                if ( $roleid == $manager_id ) {
-                    $is_authorized = true;
+                if ($roleid == $managerid) {
+                    $isauthorized = true;
                     break;
                 }
             }
         }
-        $site_admins = $CFG->siteadmins;
-        
-        if ( in_array( $userid, explode(',', $site_admins) ) ) {
-            $is_authorized = true;
-        }   
+        $siteadmins = $CFG->siteadmins;
 
-        return array( "token_mismatch" => ! $token_match, 'is_authorized' => $is_authorized );
+        if (in_array($userid, explode(',', $siteadmins))) {
+            $isauthorized = true;
+        }
+
+        return [ "token_mismatch" => ! $tokenmatch, 'is_authorized' => $isauthorized ];
     }
 
 
+    /**
+     * Returns the parameters for the auth_edwiserbridge_validate_token external function.
+     *
+     * @return external_function_parameters The parameters for the function.
+     */
     public static function auth_edwiserbridge_validate_token_parameters() {
         return new external_function_parameters([
             'wp_url' => new external_value(
@@ -105,6 +116,11 @@ trait validate_token {
         ]);
     }
 
+    /**
+     * Returns the structure of the validate token response.
+     *
+     * @return external_single_structure The structure of the response.
+     */
     public static function auth_edwiserbridge_validate_token_returns() {
         return new external_single_structure(
             [

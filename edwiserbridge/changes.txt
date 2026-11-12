@@ -99,16 +99,8 @@ Tweak
 
 Version 4.3.2
 Fix
-* Fixed SSO login authentication by adding user data validation checks before login process to prevent errors with invalid user objects.
-
-Version 4.3.5
-Fix
-* Added Moodle 5.3 compatibility with backward support for Moodle 5.2.
-* Replaced deprecated user_get_users_by_id() with a backward-compatible wrapper in classes/observer.php.
-* Fixed RequireJS "No define call" error in setup wizard by correcting AMD module name in settings.php.
-* Fixed setup wizard continue button failure by adding missing return statement in classes/external/setup_wizard_save_and_continue.php.
-* Replaced deprecated \external_generate_token() with \core_external\util::generate_token() for Moodle 5.3, with fallback for older versions.
-* Fixed PHP warnings caused by non-compound use statements across multiple classes.
+* Fixed SSO login authentication by adding user data validation checks
+  before login process to prevent errors with invalid user objects.
 
 Version 4.3.4
 Fix
@@ -117,3 +109,14 @@ Fix
 * Improved synchronization stability when multiple cron jobs run simultaneously.
 * Updated the sync process so WordPress sync triggers immediately, without depending on Moodle cron execution.
 * Cleared stuck adhoc sync tasks caused by Moodle cron not running properly.
+
+Version 4.3.5
+Fix
+* Added Moodle 5.3 compatibility with backward support for Moodle 5.2.
+* Replaced deprecated user_get_users_by_id() with a backward-compatible wrapper in classes/observer.php.
+* Fixed RequireJS "No define call" error in setup wizard by correcting AMD module name in settings.php.
+* Fixed setup wizard continue button failure by adding missing return statement
+  in classes/external/setup_wizard_save_and_continue.php.
+* Replaced deprecated \external_generate_token() with \core_external\util::generate_token()
+  for Moodle 5.3, with fallback for older versions.
+* Fixed PHP warnings caused by non-compound use statements across multiple classes.

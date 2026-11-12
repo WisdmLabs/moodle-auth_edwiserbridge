@@ -25,9 +25,9 @@
 
 namespace auth_edwiserbridge\local;
 
-require_once(__DIR__ . '/../../compat.php');
-
 defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../../compat.php');
 
 require_once($CFG->libdir . '/markdown/MarkdownInterface.php');
 require_once($CFG->libdir . '/markdown/Markdown.php');
@@ -35,8 +35,7 @@ require_once($CFG->libdir . '/markdown/Markdown.php');
 define('EB_PLUGINS_LIST', "https://edwiser.org/edwiserupdates.json");
 define('EB_PLUGIN_UPDATE', "https://edwiser.org/edwiserdemoimporter/bridge-free-plugin-info.json");
 
-// use core\plugin_manager as core_plugin_manager;
-use core\exception\moodle_exception as moodle_exception;
+use core\exception\moodle_exception;
 use Michelf\MarkDown;
 use core\component as core_component;
 use ZipArchive;
@@ -44,13 +43,12 @@ use moodle_url;
 use Exception;
 use stdClass;
 use curl;
-use core\output\html_writer as html_writer;
+use core\output\html_writer;
 
 /**
  * Class update
  */
 class update {
-
     /**
      * Edwiser plugins list
      * @var array
@@ -75,6 +73,10 @@ class update {
      */
     public static $cache = null;
 
+    /**
+     * Page object
+     * @var null
+     */
     public $page = null;
 
     /**
@@ -134,8 +136,10 @@ class update {
 
         if ($response) {
             $response = json_decode($response, true);
-            if ((isset($response['data']) && $response['data']['status'] == 404) ||
-                (isset($response['error']) && $response['error'] == true)) {
+            if (
+                (isset($response['data']) && $response['data']['status'] == 404) ||
+                (isset($response['error']) && $response['error'] == true)
+            ) {
                 $this->errors[] = get_string('errorfetching', 'auth_edwiserbridge', $response['message']);
                 return false;
             }
@@ -177,21 +181,21 @@ class update {
         $url = str_replace(["\r", "\n"], '', $url);
 
         if (!preg_match('|^https?://|i', $url)) {
-            $this->errors[] = 'Error fetching plugin ZIP: unsupported transport protocol: '.$url;
+            $this->errors[] = 'Error fetching plugin ZIP: unsupported transport protocol: ' . $url;
             return false;
         }
 
-        $pluginman->zipdirectory = make_temp_directory('core_plugin/code_manager').'/distfiles/';
+        $pluginman->zipdirectory = make_temp_directory('core_plugin/code_manager') . '/distfiles/';
 
         // The cache location for the file.
-        $distfile = $pluginman->zipdirectory.$name.'.zip';
+        $distfile = $pluginman->zipdirectory . $name . '.zip';
         if (file_exists($distfile)) {
             return $distfile;
         }
 
         // Download the file into a temporary location.
         $tempdir = make_request_directory();
-        $tempfile = $tempdir.'/plugin.zip';
+        $tempfile = $tempdir . '/plugin.zip';
         $result = $this->download_plugin_zip_file($url, $tempfile);
 
         if (!$result) {
@@ -232,7 +236,7 @@ class update {
         $root = explode('/', $root)[0];
         $file = $root . '/version.php';
         if (isset($zipcontents[$file]) && $zipcontents[$file] == 1 && file_exists($path . '/' . $file)) {
-            $plugin = new stdClass;
+            $plugin = new stdClass();
             require_once($path . '/' . $file);
             return $plugin;
         }
@@ -348,7 +352,7 @@ class update {
 
         $silent || mtrace(get_string('packagesvalidating', 'core_plugin', $plugin->component), ' ... ');
 
-        list($plugintype, $pluginname) = core_component::normalize_component($plugin->component);
+        [$plugintype, $pluginname] = core_component::normalize_component($plugin->component);
 
         $tmp = make_request_directory();
         $zipcontents = $this->unzip_plugin_file($pluginman, $zipfile, $tmp, $pluginname);
@@ -370,27 +374,27 @@ class update {
         if (!$silent) {
             foreach ($validator->get_messages() as $message) {
                 if ($message->level === $validator::WARNING || $message->level === $validator::ERROR && PHP_SAPI !== 'cli') {
-                    mtrace('  <strong>['.$validator->message_level_name($message->level).']</strong>', ' ');
+                    mtrace('  <strong>[' . $validator->message_level_name($message->level) . ']</strong>', ' ');
                 } else {
-                    mtrace('  ['.$validator->message_level_name($message->level).']', ' ');
+                    mtrace('  [' . $validator->message_level_name($message->level) . ']', ' ');
                 }
 
                 mtrace($validator->message_code_name($message->msgcode), ' ');
 
                 $info = $validator->message_code_info($message->msgcode, $message->addinfo);
                 if ($info) {
-                    mtrace('['.s($info).']', ' ');
+                    mtrace('[' . s($info) . ']', ' ');
                 } else if (is_string($message->addinfo)) {
-                    mtrace('['.s($message->addinfo, true).']', ' ');
+                    mtrace('[' . s($message->addinfo, true) . ']', ' ');
                 } else {
-                    mtrace('['.s(json_encode($message->addinfo, true)).']', ' ');
+                    mtrace('[' . s(json_encode($message->addinfo, true)) . ']', ' ');
                 }
 
                 if ($icon = $validator->message_help_icon($message->msgcode)) {
                     if (PHP_SAPI === 'cli') {
                         mtrace(
-                            PHP_EOL.'  ^^^ '.get_string('help').': '. get_string(
-                                $icon->identifier.'_help',
+                            PHP_EOL . '  ^^^ ' . get_string('help') . ': ' . get_string(
+                                $icon->identifier . '_help',
                                 $icon->component
                             ),
                             ''
@@ -413,15 +417,15 @@ class update {
      * Perform the installation of plugins.
      *
      * If used for installation of remote plugins from the Edwiser Plugins
-     * directory, the $plugins must be list of {@link \core\update\remote_info}
+     * directory, the $plugins must be list of {@see \core\update\remote_info}
      * object that represent installable remote plugins. The caller can use
-     * {@link self::filter_installable()} to prepare the list.
+     * {@see self::filter_installable()} to prepare the list.
      *
      * If used for installation of plugins from locally available ZIP files,
      * the $plugins should be list of objects with properties ->component and
      * ->zipfilepath.
      *
-     * The method uses {@link mtrace()} to produce direct output and can be
+     * The method uses {@see mtrace()} to produce direct output and can be
      * used in both web and cli interfaces.
      *
      * @param  \core\update\remote_info $plugin    list of plugins
@@ -515,11 +519,11 @@ class update {
         foreach ($zips as $zipfile => $plugin) {
             // Extract all ZIP packs do the dirroot.
             $silent || mtrace(get_string('packagesextracting', 'core_plugin', $plugin->component), ' ... ');
-            list($plugintype, $pluginname) = core_component::normalize_component($plugin->component);
+            [$plugintype, $pluginname] = core_component::normalize_component($plugin->component);
 
             $target = $pluginman->get_plugintype_root($plugintype);
             $plugininfo = $pluginman->get_plugin_info($plugin->component);
-            if (file_exists($target.'/'.$pluginname) && $plugininfo) {
+            if (file_exists($target . '/' . $pluginname) && $plugininfo) {
                 $pluginman->remove_plugin_folder($plugininfo);
             }
             if (!$this->unzip_plugin_file($pluginman, $zipfile, $target, $pluginname)) {
@@ -590,7 +594,7 @@ class update {
     public function upgrade_install_plugin(
         \core\update\remote_info $installable,
         $confirmed,
-        $heading='',
+        $heading = '',
         $continue = null,
         $download = null,
         $return = null
@@ -625,7 +629,6 @@ class update {
             } else {
                 redirect($mustgoto);
             }
-
         } else {
             $output = $PAGE->get_renderer('core', 'admin');
             echo $output->header();
@@ -704,7 +707,7 @@ class update {
                     continue;
                 }
                 // Force download.
-                send_file($zipfile, $plugin->component . '.zip', null , 0, false, true);
+                send_file($zipfile, $plugin->component . '.zip', null, 0, false, true);
             }
         }
     }

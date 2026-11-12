@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -33,7 +35,6 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 use core\context\system as context_system;
-// use core\plugin_manager as core_plugin_manager;
 
 /**
  * Trait implementing the external function auth_edwiserbridge_course_progress_data
@@ -50,12 +51,11 @@ trait get_edwiser_plugins_info {
      */
     public static function auth_edwiserbridge_get_edwiser_plugins_info() {
 
-        
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/site:config', $systemcontext);
-        
+
         $response    = [];
         $pluginman   = \core_plugin_manager::instance();
 

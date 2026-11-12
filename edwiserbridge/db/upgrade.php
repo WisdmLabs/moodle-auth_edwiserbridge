@@ -34,6 +34,7 @@ require_once($CFG->dirroot . '/auth/edwiserbridge/lib.php');
  * It checks for the Edwiser Bridge Pro dependency, enables the plugin in the default authentication method,
  * and updates the webservice functions as needed.
  *
+ * @param int $oldversion The version we are upgrading from.
  * @return bool True to continue the upgrade process.
  */
 function xmldb_auth_edwiserbridge_upgrade($oldversion) {
@@ -45,7 +46,6 @@ function xmldb_auth_edwiserbridge_upgrade($oldversion) {
     $migrationhelper = new \auth_edwiserbridge\local\migration_helper();
     $migrationhelper->execute_migration();
     auth_edwiserbridge_check_and_update_webservice_functions();
-    
 
     return true; // Return true to continue, it is must.
 }

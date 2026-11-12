@@ -26,6 +26,8 @@
 
 namespace auth_edwiserbridge\external;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../../compat.php');
 
 use core_external\external_function_parameters;
@@ -38,7 +40,6 @@ use core\context\system as context_system;
  * Trait implementing the external function auth_edwiserbridge_get_users
  */
 trait get_users {
-
     /**
      * Functionality to get users list in chunks.
      *
@@ -50,12 +51,12 @@ trait get_users {
      */
     public static function auth_edwiserbridge_get_users($offset, $limit, $searchstring, $totalusers) {
         global $DB;
-        
+
         // Validation for context is needed.
         $systemcontext = context_system::instance();
         self::validate_context($systemcontext);
         require_capability('moodle/user:viewalldetails', $systemcontext);
-        
+
         $params = self::validate_parameters(
             self::auth_edwiserbridge_get_users_parameters(),
             ['offset' => $offset, "limit" => $limit, "search_string" => $searchstring, "total_users" => $totalusers]
@@ -63,7 +64,7 @@ trait get_users {
 
         $query       = "SELECT id, username, firstname, lastname, email FROM {user} WHERE
         deleted = 0 AND confirmed = 1 AND username != 'guest'";
-        $count_query = "SELECT count(*) total_count FROM {user} WHERE
+        $countquery = "SELECT count(*) total_count FROM {user} WHERE
             deleted = 0 AND confirmed = 1 AND username != 'guest'";
         $paramsql    = [];
 
@@ -76,7 +77,7 @@ trait get_users {
         $users = $DB->get_records_sql($query, $paramsql, $offset, $limit);
         $usercount = 0;
         if (!empty($params['total_users'])) {
-            $usercount = $DB->get_record_sql($count_query);
+            $usercount = $DB->get_record_sql($countquery);
             $usercount = $usercount->total_count;
         }
 
@@ -132,7 +133,7 @@ trait get_users {
      *   - 'firstname': the user's first name
      *   - 'lastname': the user's last name
      *   - 'email': the user's email address
-     * 
+     *
      * @return external_function_parameters The return structure for the auth_edwiserbridge_get_users function.
      */
     public static function auth_edwiserbridge_get_users_returns() {
